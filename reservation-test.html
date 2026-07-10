@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>STEP ESTATE-9-R1｜実予約テスト｜DPRO 不動産・賃貸内見 LINE</title>
+  <title>STEP ESTATE-12｜実予約テスト｜DPRO 不動産・賃貸内見 LINE</title>
   <style>
     :root{
       --bg:#edf5f1;
@@ -360,7 +360,8 @@
   <header class="hero">
     <div class="wrap">
       <div class="badge-row">
-        <span class="badge">STEP ESTATE-9-R1</span>
+        <span class="badge">STEP ESTATE-12</span>
+        <span class="badge">全体導線ブラッシュアップ</span>
         <span class="badge">実予約テスト・反映確認</span>
         <span class="badge">管理コード 1234</span>
       </div>
@@ -372,8 +373,8 @@
       <nav class="hero-nav" aria-label="page links">
         <button type="button" onclick="runFullTest()">予約テストを実行</button>
         <button type="button" onclick="checkReflection()">反映確認</button>
-        <a href="owner.html?v=estate-5-r1" target="_blank" rel="noopener">PC管理画面</a>
-        <a href="owner-ipad.html?v=estate-7" target="_blank" rel="noopener">iPad画面</a>
+        <a href="owner.html?v=estate-12" target="_blank" rel="noopener">PC管理画面</a>
+        <a href="owner-ipad.html?v=estate-12" target="_blank" rel="noopener">iPad画面</a>
       </nav>
       <div class="summary-grid">
         <div class="summary-card">
@@ -509,7 +510,7 @@
 
           <div style="height:10px"></div>
           <label>希望・メモ</label>
-          <textarea id="customerNote">STEP ESTATE-9-R1 実予約テストです。管理画面とiPad画面への反映確認用です。</textarea>
+          <textarea id="customerNote">STEP ESTATE-12 実予約テストです。管理画面とiPad画面への反映確認用です。</textarea>
 
           <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
             <button class="btn secondary" onclick="findTestSlot()">空き枠を探す</button>
@@ -590,27 +591,27 @@
           <div class="url-list">
             <div class="url-row">
               <b>お客様画面</b>
-              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/index.html?v=estate-4-r1" readonly />
+              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/index.html?v=estate-12" readonly />
               <button onclick="openUrl(this)">開く</button>
             </div>
             <div class="url-row">
               <b>PC管理画面</b>
-              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner.html?v=estate-5-r1" readonly />
+              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner.html?v=estate-12" readonly />
               <button onclick="openUrl(this)">開く</button>
             </div>
             <div class="url-row">
               <b>iPad画面</b>
-              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner-ipad.html?v=estate-7" readonly />
+              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner-ipad.html?v=estate-12" readonly />
               <button onclick="openUrl(this)">開く</button>
             </div>
             <div class="url-row">
               <b>system-check</b>
-              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/system-check.html?v=estate-8" readonly />
+              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/system-check.html?v=estate-12" readonly />
               <button onclick="openUrl(this)">開く</button>
             </div>
             <div class="url-row">
               <b>予約テスト</b>
-              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/reservation-test.html?v=estate-9-r1" readonly />
+              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/reservation-test.html?v=estate-12" readonly />
               <button onclick="copyUrl(this)">コピー</button>
             </div>
           </div>
@@ -631,13 +632,13 @@
   </main>
 
   <footer class="footer">
-    DPRO 不動産・賃貸内見 LINE ｜ STEP ESTATE-9-R1 ｜ API: https://dpro-estate-line-api.dpromstk2000.workers.dev
+    DPRO 不動産・賃貸内見 LINE ｜ STEP ESTATE-12 ｜ API: https://dpro-estate-line-api.dpromstk2000.workers.dev
   </footer>
 
 <script>
 const DEFAULT_API_BASE = "https://dpro-estate-line-api.dpromstk2000.workers.dev";
-const OWNER_URL = "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner.html?v=estate-5-r1";
-const IPAD_URL = "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner-ipad.html?v=estate-7";
+const OWNER_URL = "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner.html?v=estate-12";
+const IPAD_URL = "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner-ipad.html?v=estate-12";
 
 let selectedProperty = null;
 let selectedSlot = null;
@@ -839,7 +840,7 @@ function buildReservationPayload(){
     low_initial_cost: true,
     near_station: false,
     workplace_or_school: "営業デモテスト",
-    other_request: "STEP ESTATE-9-R1 実予約テストから作成",
+    other_request: "STEP ESTATE-12 実予約テストから作成",
     property_id: selectedProperty.id,
     reservation_date: selectedSlot.date,
     reservation_time: selectedSlot.time,
@@ -848,7 +849,7 @@ function buildReservationPayload(){
     meeting_place: $("reservationType").value.includes("現地")
       ? `${selectedProperty.property_name} 現地前`
       : "DPRO不動産 志免・宇美・須恵デモ店",
-    customer_note: $("customerNote").value || "STEP ESTATE-9-R1 実予約テスト"
+    customer_note: $("customerNote").value || "STEP ESTATE-12 実予約テスト"
   };
 }
 
@@ -963,7 +964,7 @@ function setCreatedReservation(data){
 }
 
 async function runFullTest(){
-  setMessage("mainMessage","warn","STEP ESTATE-9-R1 実予約テストを実行中です。");
+  setMessage("mainMessage","warn","STEP ESTATE-12 実予約テストを実行中です。");
   try{
     await checkApi();
     await findTestSlot();
@@ -972,7 +973,7 @@ async function runFullTest(){
     setMessage("mainMessage","ok","実予約テスト・管理画面反映確認OKです。PC管理画面とiPad画面を開いて見た目も確認してください。");
     $("statusTop").textContent = "反映OK";
   }catch(e){
-    setMessage("mainMessage","ng","STEP ESTATE-9-R1 テストエラー：" + e.message);
+    setMessage("mainMessage","ng","STEP ESTATE-12 テストエラー：" + e.message);
     $("statusTop").textContent = "要確認";
   }
 }
