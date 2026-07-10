@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>DPRO 不動産・賃貸内見 LINE｜PC管理画面 STEP ESTATE-5</title>
+  <title>DPRO 不動産・賃貸内見 LINE｜PC管理画面 STEP ESTATE-5-R1</title>
   <style>
     :root{
       --bg:#eef4f2;
@@ -78,20 +78,23 @@
     .sectionGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.list{display:grid;gap:10px}.item{border:1px solid var(--line);background:#fff;border-radius:16px;padding:13px}.itemHead{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.itemTitle{font-weight:950;font-size:15px;line-height:1.45}.itemMeta{font-size:12px;color:var(--muted);line-height:1.65;margin-top:4px}.itemNote{margin-top:9px;padding:9px;border-radius:12px;background:#f8fafc;border:1px solid #edf2f7;font-size:12px;color:#42524d;line-height:1.7}.itemActions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.smallBtn{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 10px;font-size:12px;font-weight:900;color:#33443e}.smallBtn:hover{background:#f7faf8}.smallBtn.main{background:var(--soft);border-color:#cbe9dc;color:var(--main2)}.smallBtn.warn{background:var(--warn-soft);border-color:#f5d99b;color:#92400e}.smallBtn.danger{background:var(--danger-soft);border-color:#ffcaca;color:#991b1b}.smallBtn.blue{background:var(--blue-soft);border-color:#d6e2ff;color:#1d4ed8}
     .twoCol{display:grid;grid-template-columns:1fr 1fr;gap:10px}.threeCol{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.tableWrap{overflow:auto;border:1px solid var(--line);border-radius:16px}.dataTable{width:100%;border-collapse:collapse;min-width:760px;background:#fff}.dataTable th,.dataTable td{border-bottom:1px solid #edf2f7;padding:10px;text-align:left;font-size:13px;vertical-align:top}.dataTable th{background:#f8fafc;color:#40534d;font-size:12px;font-weight:950;white-space:nowrap}.dataTable tr:last-child td{border-bottom:0}.muted{color:var(--muted)}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.hidden{display:none!important}.toast{position:fixed;right:16px;bottom:16px;z-index:50;background:#10231d;color:#fff;border-radius:16px;padding:13px 15px;box-shadow:0 18px 40px rgba(0,0,0,.18);max-width:min(460px,calc(100% - 32px));font-size:13px;line-height:1.6;transform:translateY(20px);opacity:0;pointer-events:none;transition:.18s}.toast.show{transform:translateY(0);opacity:1}.toast.error{background:#7f1d1d}.toast.ok{background:#064e3b}
     .copyBox{white-space:pre-wrap;line-height:1.75;background:#fbfdfc;border:1px solid var(--line);border-radius:14px;padding:13px;min-height:170px;font-size:13px}.urlBox{display:grid;gap:7px;font-size:12px}.urlBox code{display:block;background:#f8fafc;border:1px solid var(--line);padding:9px;border-radius:10px;overflow:auto;color:#33443e}.empty{padding:18px;border:1px dashed #cddad5;border-radius:16px;background:#fbfdfc;color:var(--muted);font-weight:800;text-align:center}.footer{padding:28px 0;text-align:center;color:#74827d;font-size:12px}.mobileOnly{display:none}
-    @media(max-width:1100px){.grid{grid-template-columns:1fr}.rightStack{position:static}.statusBar{grid-template-columns:1fr 1fr}.heroActions{grid-template-columns:1fr 1fr}.sectionGrid{grid-template-columns:1fr}.kpi{grid-template-columns:1fr 1fr}}
-    @media(max-width:720px){.wrap,.heroInner{width:min(100% - 18px,720px)}.hero{border-radius:0 0 22px 22px}.hero h1{font-size:32px}.heroActions,.statusBar,.login,.twoCol,.threeCol,.kpi{grid-template-columns:1fr}.cardHead{padding:15px}.cardBody{padding:14px}.mobileOnly{display:inline}.pcOnly{display:none}.itemHead{display:grid}.btn,.heroBtn{width:100%}.btnRow .btn,.btnRow .smallBtn{width:auto}.tabs{overflow:auto;flex-wrap:nowrap;padding-bottom:2px}.tab{white-space:nowrap}.dataTable{min-width:680px}}
+    .demoFlow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.flowStep{border:1px solid var(--line);border-radius:16px;background:#fff;padding:13px;min-height:112px}.flowNo{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:999px;background:var(--main);color:#fff;font-weight:950;font-size:13px;margin-bottom:8px}.flowTitle{font-weight:950;font-size:14px;margin-bottom:5px}.flowText{font-size:12px;color:var(--muted);line-height:1.65}
+    .customerCards,.propertyCards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}.personCard,.estateCard{border:1px solid var(--line);background:#fff;border-radius:17px;padding:14px;box-shadow:0 8px 18px rgba(22,43,36,.05)}.personTop,.estateTop{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.personName,.estateName{font-size:16px;font-weight:950;line-height:1.45}.personLine,.estateAddr{font-size:12px;color:var(--muted);line-height:1.65;margin-top:3px}.infoGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.infoChip{background:#f8fafc;border:1px solid #edf2f7;border-radius:12px;padding:8px;font-size:12px;line-height:1.5}.infoChip b{display:block;font-size:11px;color:#51615c;margin-bottom:3px}.cardMemo{margin-top:10px;padding:9px;border-radius:12px;background:#fbfdfc;border:1px solid var(--line);font-size:12px;line-height:1.65;color:#42524d}.tableHelp{font-size:12px;color:var(--muted);line-height:1.6;margin-top:10px}.targetMini{border:1px solid #cbe9dc;background:var(--soft2);border-radius:14px;padding:10px;margin-top:10px;font-size:12px;line-height:1.7;color:#33443e}.targetMini strong{font-size:13px;color:var(--main2)}.quickDemo{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.quickDemo .smallBtn{background:#fff}.estatePrice{font-size:20px;font-weight:950;color:var(--main2);letter-spacing:-.03em}.estateTags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.tag{display:inline-flex;padding:5px 8px;border-radius:999px;background:#f1f5f9;border:1px solid #e2e8f0;font-size:11px;font-weight:850;color:#40534d}.ownerNote{border-left:4px solid var(--main);background:#f8fffb;border-radius:14px;padding:12px 13px;font-size:13px;color:#33443e;line-height:1.7;margin-top:12px}
+
+    @media(max-width:1100px){.grid{grid-template-columns:1fr}.rightStack{position:static}.statusBar{grid-template-columns:1fr 1fr}.heroActions{grid-template-columns:1fr 1fr}.sectionGrid{grid-template-columns:1fr}.kpi{grid-template-columns:1fr 1fr}.demoFlow{grid-template-columns:1fr 1fr}.customerCards,.propertyCards{grid-template-columns:1fr}}
+    @media(max-width:720px){.wrap,.heroInner{width:min(100% - 18px,720px)}.hero{border-radius:0 0 22px 22px}.hero h1{font-size:32px}.heroActions,.statusBar,.login,.twoCol,.threeCol,.kpi,.demoFlow,.customerCards,.propertyCards,.infoGrid{grid-template-columns:1fr}.cardHead{padding:15px}.cardBody{padding:14px}.mobileOnly{display:inline}.pcOnly{display:none}.itemHead{display:grid}.btn,.heroBtn{width:100%}.btnRow .btn,.btnRow .smallBtn{width:auto}.tabs{overflow:auto;flex-wrap:nowrap;padding-bottom:2px}.tab{white-space:nowrap}.dataTable{min-width:680px}}
   </style>
 </head>
 <body>
   <header class="hero">
     <div class="heroInner">
       <div class="topline">
-        <span class="badge">STEP ESTATE-5</span>
-        <span class="badge">PC管理画面 owner.html</span>
+        <span class="badge">STEP ESTATE-5-R1</span>
+        <span class="badge">PC管理画面 owner.html 改善版</span>
         <span class="badge">管理コード 1234</span>
       </div>
-      <h1>内見予約・顧客・追客を<br class="mobileOnly">まとめて管理</h1>
-      <p>LINEから入った賃貸内見予約を、今日の案内予定・希望条件・物件ステータス・LINE文面コピーまで一画面で確認できます。初期デモは志免・宇美・須恵エリアです。</p>
+      <h1>今日の内見・顧客・物件を<br class="mobileOnly">見やすく管理</h1>
+      <p>LINEから入った賃貸内見予約を、今日の案内予定・希望条件・物件ステータス・追客文面コピーまで一画面で確認できます。R1では顧客検索と物件管理をカード表示にして、営業デモでも見やすくしました。</p>
       <div class="heroActions">
         <button class="heroBtn" onclick="scrollToId('todayCard')">今日やること</button>
         <button class="heroBtn" onclick="scrollToId('reservationCard')">内見予約</button>
@@ -118,6 +121,27 @@
           <div class="field"><label>Cloudflare Worker API</label><input class="input mono" id="apiBaseInput" value="https://dpro-estate-line-api.dpromstk2000.workers.dev" readonly></div>
           <div class="field"><label>管理コード</label><input class="input" id="adminCodeInput" value="1234" inputmode="numeric" autocomplete="one-time-code"></div>
           <div class="field"><label>&nbsp;</label><button class="btn" onclick="loginAndLoad()">管理画面を開く</button></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="demoGuideCard">
+      <div class="cardHead">
+        <div><h2 class="cardTitle">営業デモで見る順番</h2><p class="cardSub">オーナー様には、細かい設定より先に「今日の予定・顧客・物件・文面コピー」を順番に見せると伝わりやすいです。</p></div>
+        <span class="pill warn">まずここ</span>
+      </div>
+      <div class="cardBody">
+        <div class="demoFlow">
+          <div class="flowStep"><div class="flowNo">1</div><div class="flowTitle">今日やること</div><div class="flowText">本日の内見・追客・空室確認を朝すぐ確認できます。</div></div>
+          <div class="flowStep"><div class="flowNo">2</div><div class="flowTitle">内見予約</div><div class="flowText">予約ステータスを変更し、内見後フォローまで作れます。</div></div>
+          <div class="flowStep"><div class="flowNo">3</div><div class="flowTitle">顧客カルテ</div><div class="flowText">希望エリア・家賃・間取りをカードで見やすく確認できます。</div></div>
+          <div class="flowStep"><div class="flowNo">4</div><div class="flowTitle">LINE文面コピー</div><div class="flowText">予約確認・追加提案・未返信フォロー文面をすぐ作れます。</div></div>
+        </div>
+        <div class="quickDemo">
+          <button class="smallBtn main" onclick="scrollToId('todayCard')">今日やることへ</button>
+          <button class="smallBtn blue" onclick="scrollToId('reservationCard')">内見予約へ</button>
+          <button class="smallBtn" onclick="scrollToId('customerCard')">顧客検索へ</button>
+          <button class="smallBtn warn" onclick="scrollToId('propertyCard')">物件管理へ</button>
         </div>
       </div>
     </section>
@@ -187,7 +211,8 @@
               <div class="field"><label>ステータス</label><select class="select" id="customerStatusFilter"><option value="">すべて</option><option>初回問い合わせ</option><option>希望条件確認中</option><option>物件提案済み</option><option>内見予約済み</option><option>内見済み</option><option>申込検討中</option><option>申込希望</option><option>見送り</option><option>長期フォロー</option></select></div>
               <div class="field"><label>&nbsp;</label><button class="btn secondary" onclick="searchCustomers()">検索</button></div>
             </div>
-            <div class="tableWrap" style="margin-top:12px"><table class="dataTable"><thead><tr><th>顧客</th><th>連絡先</th><th>ステータス</th><th>希望条件</th><th>操作</th></tr></thead><tbody id="customerTableBody"><tr><td colspan="5">未読込</td></tr></tbody></table></div>
+            <div class="ownerNote">R1では横スクロール表ではなく、営業中に見やすいカード表示に変更しています。希望条件と次アクションをその場で確認できます。</div>
+            <div class="customerCards" id="customerCards"><div class="empty">未読込</div></div>
           </div>
         </section>
 
@@ -200,7 +225,8 @@
             <div class="tabs" id="propertyTabs">
               <button class="tab active" data-area="" onclick="setPropertyArea('')">すべて</button>
             </div>
-            <div class="tableWrap" style="margin-top:12px"><table class="dataTable"><thead><tr><th>物件</th><th>エリア</th><th>家賃</th><th>間取り</th><th>状態</th><th>操作</th></tr></thead><tbody id="propertyTableBody"><tr><td colspan="6">未読込</td></tr></tbody></table></div>
+            <div class="ownerNote">物件はカード表示で、家賃・間取り・空室状態・内見可否をすぐ確認できます。ステータス変更もカード内で操作できます。</div>
+            <div class="propertyCards" id="propertyCards"><div class="empty">未読込</div></div>
           </div>
         </section>
       </div>
@@ -213,7 +239,8 @@
           </div>
           <div class="cardBody">
             <div class="field"><label>文面テンプレート</label><select class="select" id="templateSelect" onchange="refreshMessagePreview()"><option value="reservation_received">内見予約受付文面</option></select></div>
-            <div class="field" style="margin-top:10px"><label>対象</label><select class="select" id="messageTargetSelect" onchange="refreshMessagePreview()"><option value="">予約を選択してください</option></select></div>
+            <div class="field" style="margin-top:10px"><label>対象予約・顧客</label><select class="select" id="messageTargetSelect" onchange="refreshMessagePreview()"><option value="">予約を選択してください</option></select></div>
+            <div class="targetMini" id="targetMini">予約一覧の「文面作成」または顧客カードの「提案文面」を押してください。</div>
             <div class="copyBox" id="messagePreview" style="margin-top:12px">予約一覧から「文面作成」を押すと、ここにLINE送信用の文面が表示されます。</div>
             <div class="btnRow" style="margin-top:10px"><button class="btn" onclick="copyCurrentMessage()">文面をコピー</button><button class="btn secondary" onclick="refreshMessagePreview()">再作成</button></div>
           </div>
@@ -234,14 +261,14 @@
           </div>
           <div class="cardBody urlBox">
             <div><strong>お客様用 index.html</strong><code>https://dpromstk2000-lab.github.io/dpro-estate-line-liff/index.html?v=estate-4-r1</code></div>
-            <div><strong>PC管理画面 owner.html</strong><code>https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner.html?v=estate-5</code></div>
+            <div><strong>PC管理画面 owner.html</strong><code>https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner.html?v=estate-5-r1</code></div>
             <div><strong>Worker health</strong><code>https://dpro-estate-line-api.dpromstk2000.workers.dev/api/health</code></div>
             <div><strong>管理チェック</strong><code>https://dpro-estate-line-api.dpromstk2000.workers.dev/api/admin/system-check?admin_code=1234</code></div>
           </div>
         </section>
       </aside>
     </div>
-    <div class="footer">DPRO 不動産・賃貸内見 LINE｜STEP ESTATE-5｜API: https://dpro-estate-line-api.dpromstk2000.workers.dev</div>
+    <div class="footer">DPRO 不動産・賃貸内見 LINE｜STEP ESTATE-5-R1｜API: https://dpro-estate-line-api.dpromstk2000.workers.dev</div>
   </main>
 
   <div class="toast" id="toast"></div>
@@ -435,14 +462,39 @@
     }
 
     function renderCustomers(){
-      const body = document.getElementById('customerTableBody');
-      if(!state.customers.length){ body.innerHTML = '<tr><td colspan="5">顧客データはありません。</td></tr>'; return; }
-      body.innerHTML = state.customers.map(c=>{
-        const pref = Array.isArray(c.preference) ? c.preference[0] : c.preference;
-        const desired = pref?.desired_areas ? (Array.isArray(pref.desired_areas) ? pref.desired_areas.join('・') : pref.desired_areas) : '-';
-        const floors = pref?.floor_plan ? (Array.isArray(pref.floor_plan) ? pref.floor_plan.join('・') : pref.floor_plan) : '-';
-        return `<tr><td><strong>${escapeHtml(c.customer_name || '名前未入力')}様</strong><br><span class="muted">LINE：${escapeHtml(c.line_display_name || '-')}</span></td><td>${escapeHtml(c.phone || '-')}<br><span class="muted">${escapeHtml(c.email || '')}</span></td><td>${statusPill(c.customer_status)}</td><td>エリア：${escapeHtml(desired)}<br>家賃：${pref?.max_rent ? yen(pref.max_rent) : '-'}<br>間取り：${escapeHtml(floors)}</td><td><button class="smallBtn main" onclick="selectCustomerForSuggestion('${c.id}')">提案文面</button><button class="smallBtn" onclick="touchCustomer('${c.id}')">連絡済み</button></td></tr>`;
-      }).join('');
+      const box = document.getElementById('customerCards');
+      if(!state.customers.length){ box.innerHTML = '<div class="empty">顧客データはありません。</div>'; return; }
+      box.innerHTML = state.customers.map(customerCardHtml).join('');
+    }
+
+    function customerCardHtml(c){
+      const pref = Array.isArray(c.preference) ? c.preference[0] : c.preference;
+      const desired = pref?.desired_areas ? (Array.isArray(pref.desired_areas) ? pref.desired_areas.join('・') : pref.desired_areas) : '-';
+      const floors = pref?.floor_plan ? (Array.isArray(pref.floor_plan) ? pref.floor_plan.join('・') : pref.floor_plan) : '-';
+      const options = [];
+      if(pref?.parking_required) options.push('駐車場');
+      if(pref?.pet_required) options.push('ペット相談');
+      if(pref?.two_people) options.push('2人入居');
+      if(pref?.low_initial_cost) options.push('初期費用相談');
+      if(pref?.near_station) options.push('駅・バス停近く');
+      return `<div class="personCard">
+        <div class="personTop">
+          <div><div class="personName">${escapeHtml(c.customer_name || '名前未入力')}様</div><div class="personLine">LINE：${escapeHtml(c.line_display_name || '-')} / TEL：${escapeHtml(c.phone || '-')}</div></div>
+          ${statusPill(c.customer_status)}
+        </div>
+        <div class="infoGrid">
+          <div class="infoChip"><b>希望エリア</b>${escapeHtml(desired)}</div>
+          <div class="infoChip"><b>家賃上限</b>${pref?.max_rent ? yen(pref.max_rent) : '-'}</div>
+          <div class="infoChip"><b>間取り</b>${escapeHtml(floors)}</div>
+          <div class="infoChip"><b>入居時期</b>${escapeHtml(pref?.move_in_timing || '-')}</div>
+        </div>
+        <div class="cardMemo">${escapeHtml(options.length ? options.join('・') : '追加条件なし')} ${pref?.other_request ? ' / ' + escapeHtml(pref.other_request) : ''}</div>
+        <div class="itemActions">
+          <button class="smallBtn main" onclick="selectCustomerForSuggestion('${c.id}')">提案文面</button>
+          <button class="smallBtn blue" onclick="touchCustomer('${c.id}')">連絡済み</button>
+          <button class="smallBtn" onclick="scrollToId('reservationCard')">予約一覧を見る</button>
+        </div>
+      </div>`;
     }
 
     async function searchCustomers(){
@@ -461,10 +513,34 @@
       const tabs = document.getElementById('propertyTabs');
       tabs.innerHTML = `<button class="tab ${state.propertyArea===''?'active':''}" data-area="" onclick="setPropertyArea('')">すべて</button>` + areas.map(a=>`<button class="tab ${state.propertyArea===a.area_name?'active':''}" data-area="${escapeHtml(a.area_name)}" onclick="setPropertyArea('${escapeHtml(a.area_name)}')">${escapeHtml(a.area_label || a.area_name)}</button>`).join('');
       const rows = state.properties.filter(p => !state.propertyArea || p.area_name === state.propertyArea);
-      const body = document.getElementById('propertyTableBody');
-      if(!rows.length){ body.innerHTML = '<tr><td colspan="6">該当する物件はありません。</td></tr>'; return; }
-      body.innerHTML = rows.map(p=>`<tr><td><strong>${escapeHtml(p.property_name)}</strong><br><span class="muted">${escapeHtml(p.address || p.property_code || '')}</span></td><td>${escapeHtml(p.area_name || '-')}</td><td>${yen(p.rent_amount)}<br><span class="muted">管理費 ${yen(p.management_fee)}</span></td><td>${escapeHtml(p.floor_plan || '-')}<br><span class="muted">${escapeHtml(p.room_size || '')}</span></td><td>${statusPill(p.property_status)}<br>${p.viewing_available ? '<span class="pill blue">内見可</span>' : '<span class="pill gray">内見不可</span>'}</td><td><button class="smallBtn main" onclick="updatePropertyStatus('${p.id}','募集中',true)">募集中</button><button class="smallBtn warn" onclick="updatePropertyStatus('${p.id}','確認中',true)">確認中</button><button class="smallBtn danger" onclick="updatePropertyStatus('${p.id}','成約済み',false)">成約済み</button></td></tr>`).join('');
+      const box = document.getElementById('propertyCards');
+      if(!rows.length){ box.innerHTML = '<div class="empty">該当する物件はありません。</div>'; return; }
+      box.innerHTML = rows.map(propertyManageCardHtml).join('');
     }
+
+    function propertyManageCardHtml(p){
+      const tags = [p.area_name || '-', p.floor_plan || '-', p.parking_status || '', p.pet_allowed ? 'ペット相談可' : ''].filter(Boolean);
+      return `<div class="estateCard">
+        <div class="estateTop">
+          <div><div class="estateName">${escapeHtml(p.property_name)}</div><div class="estateAddr">${escapeHtml(p.address || p.property_code || '')}</div></div>
+          ${statusPill(p.property_status)}
+        </div>
+        <div class="infoGrid">
+          <div class="infoChip"><b>家賃</b><span class="estatePrice">${yen(p.rent_amount)}</span></div>
+          <div class="infoChip"><b>管理費</b>${yen(p.management_fee)}</div>
+          <div class="infoChip"><b>広さ</b>${escapeHtml(p.room_size || '-')}</div>
+          <div class="infoChip"><b>内見</b>${p.viewing_available ? '<span class="pill blue">内見可</span>' : '<span class="pill gray">内見不可</span>'}</div>
+        </div>
+        <div class="estateTags">${tags.map(t=>`<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>
+        <div class="cardMemo">${escapeHtml(p.internal_memo || p.public_memo || 'メモなし')}</div>
+        <div class="itemActions">
+          <button class="smallBtn main" onclick="updatePropertyStatus('${p.id}','募集中',true)">募集中</button>
+          <button class="smallBtn warn" onclick="updatePropertyStatus('${p.id}','確認中',true)">確認中</button>
+          <button class="smallBtn danger" onclick="updatePropertyStatus('${p.id}','成約済み',false)">成約済み</button>
+        </div>
+      </div>`;
+    }
+
     function setPropertyArea(area){ state.propertyArea = area; renderProperties(); }
 
     function renderFollowups(){ /* 今日やること側で表示。将来タブ拡張用。 */ }
@@ -497,10 +573,11 @@
       const templateKey = document.getElementById('templateSelect').value;
       state.selectedReservationId = reservationId;
       const r = findReservation(reservationId);
-      if(!r){ state.currentMessage = ''; document.getElementById('messagePreview').textContent = '予約一覧から「文面作成」を押すと、ここにLINE送信用の文面が表示されます。'; return; }
+      if(!r){ state.currentMessage = ''; document.getElementById('targetMini').textContent = '予約一覧の「文面作成」または顧客カードの「提案文面」を押してください。'; document.getElementById('messagePreview').textContent = '予約一覧から「文面作成」を押すと、ここにLINE送信用の文面が表示されます。'; return; }
       const t = findTemplate(templateKey);
       const c = r.customer || {};
       const p = r.property || {};
+      document.getElementById('targetMini').innerHTML = `<strong>${escapeHtml(c.customer_name || 'お客様')}様</strong><br>${formatDate(r.reservation_date)} ${formatTime(r.reservation_time)} / ${escapeHtml(p.property_name || '物件未定・条件相談')} / ${escapeHtml(r.meeting_type || '-')}`;
       const map = {
         customer_name: c.customer_name || 'お客様',
         reservation_date: formatDate(r.reservation_date),
@@ -565,6 +642,7 @@
       let body = template.body || '{{customer_name}}様\n\nご希望条件に近い物件がありましたのでご連絡しました。';
       body = body.replace(/\{\{customer_name\}\}/g, c?.customer_name || 'お客様').replace(/\{\{desired_areas\}\}/g, desired).replace(/\{\{max_rent\}\}/g, pref?.max_rent ? yen(pref.max_rent) : 'ご希望家賃').replace(/\{\{floor_plans\}\}/g, floors);
       state.currentMessage = body.trim();
+      document.getElementById('targetMini').innerHTML = `<strong>${escapeHtml(c?.customer_name || 'お客様')}様</strong><br>希望：${escapeHtml(desired)} / ${pref?.max_rent ? yen(pref.max_rent) : '家賃未設定'} / ${escapeHtml(floors)}`;
       document.getElementById('messagePreview').textContent = state.currentMessage;
       document.getElementById('templateSelect').value = 'property_suggestion';
       scrollToId('actionPanel');
