@@ -56,7 +56,7 @@
     }
 
     .page {
-      width: min(1040px, 100%);
+      width: min(1240px, 100%);
       margin: 0 auto;
       padding: 18px 14px 72px;
     }
@@ -166,7 +166,7 @@
 
     .grid {
       display: grid;
-      grid-template-columns: 1.05fr 0.95fr;
+      grid-template-columns: minmax(0, 1.28fr) minmax(340px, 0.72fr);
       gap: 16px;
       margin-top: 16px;
       align-items: start;
@@ -298,7 +298,31 @@
 
     .property-list {
       display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .property-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       gap: 10px;
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 15px;
+      background: #f7fbf9;
+      border: 1px solid rgba(31,111,91,0.13);
+      color: #365446;
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .property-toolbar small {
+      display: block;
+      color: var(--muted);
+      font-weight: 750;
+      margin-top: 2px;
     }
 
     .property-card {
@@ -311,8 +335,37 @@
     }
 
     .property-card.selected {
-      border-color: rgba(31,111,91,0.78);
-      box-shadow: 0 0 0 4px rgba(31,111,91,0.10);
+      border-color: rgba(31,111,91,0.86);
+      box-shadow: 0 0 0 4px rgba(31,111,91,0.12), 0 14px 28px rgba(20, 34, 58, 0.10);
+      background: linear-gradient(180deg, #ffffff 0%, #f4fbf8 100%);
+    }
+
+    .selected-ribbon {
+      position: absolute;
+      right: 12px;
+      top: 12px;
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 5px 9px;
+      color: #fff;
+      background: var(--main);
+      font-size: 11px;
+      font-weight: 950;
+      box-shadow: 0 8px 18px rgba(31,111,91,0.18);
+    }
+
+    .recommend-ribbon {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 4px 8px;
+      color: #7a4a06;
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      font-size: 11px;
+      font-weight: 950;
+      margin-bottom: 8px;
     }
 
     .property-card h3 {
@@ -474,6 +527,23 @@
       font-size: 13px;
     }
 
+    .reserve-guide {
+      margin: 0 0 14px;
+      padding: 12px 13px;
+      border-radius: 15px;
+      background: #f0f7f4;
+      border: 1px solid rgba(31,111,91,0.15);
+      color: #145345;
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .summary-box.strong {
+      background: #ffffff;
+      border-color: rgba(31,111,91,0.18);
+      box-shadow: 0 8px 18px rgba(20, 34, 58, 0.05);
+    }
+
     .summary-row {
       display: grid;
       grid-template-columns: 104px 1fr;
@@ -608,8 +678,13 @@
       }
 
       .date-tabs,
-      .slots {
+      .slots,
+      .property-list {
         grid-template-columns: repeat(2, 1fr);
+      }
+
+      .property-list {
+        grid-template-columns: 1fr;
       }
 
       .summary-row {
@@ -622,7 +697,7 @@
   <div class="page">
     <header class="hero">
       <div class="hero-inner">
-        <div class="version">STEP ESTATE-4 | お客様用 index.html | 志免・宇美・須恵</div>
+        <div class="version">STEP ESTATE-4-R1 | お客様用 index.html | PC見やすさ改善</div>
         <h1>LINEでかんたん<br>賃貸内見予約</h1>
         <p>希望エリア・家賃・間取りを入力して、気になる物件の内見や店舗相談を予約できます。デモでは志免・宇美・須恵エリアの物件を表示します。</p>
         <div class="hero-actions">
@@ -777,8 +852,16 @@
           </div>
 
           <div class="btn-row">
-            <button class="ghost-btn" type="button" id="filterByConditionBtn">希望条件で絞り込み</button>
+            <button class="ghost-btn" type="button" id="filterByConditionBtn">希望条件に近い物件を表示</button>
             <button class="danger-btn" type="button" id="clearPropertyBtn">物件未定で相談</button>
+          </div>
+
+          <div class="property-toolbar" id="propertyToolbar">
+            <div>
+              おすすめ物件を先に表示します
+              <small>条件に合う物件が多い場合は、まず3件だけ表示します。</small>
+            </div>
+            <button class="ghost-btn" type="button" id="showMorePropertiesBtn" style="min-height:40px;padding:8px 12px;white-space:nowrap;">もっと見る</button>
           </div>
 
           <div class="property-list" id="propertyList" style="margin-top:12px;">
@@ -794,6 +877,8 @@
             </div>
             <span class="badge">60分枠</span>
           </div>
+
+          <div class="reserve-guide" id="reserveGuide">物件を選んだら、内見希望日と時間を選んでください。物件未定の場合は「店舗で相談してから内見」で予約できます。</div>
 
           <div class="field">
             <label class="label" for="reservationDate">予約日 <span class="required">必須</span></label>
@@ -841,7 +926,7 @@
             <span class="badge">確認</span>
           </div>
 
-          <div class="summary-box" id="summaryBox"></div>
+          <div class="summary-box strong" id="summaryBox"></div>
           <button class="primary-btn" type="button" id="submitBtn" style="margin-top:12px;">この内容で内見予約する</button>
           <div class="hint">送信後、店舗側PC管理画面に予約が反映されます。</div>
 
@@ -878,18 +963,18 @@
     </main>
 
     <div class="footer-note">
-      DPRO 不動産・賃貸内見 LINE｜STEP ESTATE-4｜API: https://dpro-estate-line-api.dpromstk2000.workers.dev
+      DPRO 不動産・賃貸内見 LINE｜STEP ESTATE-4-R1｜API: https://dpro-estate-line-api.dpromstk2000.workers.dev
     </div>
   </div>
 
   <script>
     // =========================================================
     // DPRO 不動産・賃貸内見 LINEシステム
-    // STEP ESTATE-4：お客様用 index.html 完全版
+    // STEP ESTATE-4-R1：お客様用 index.html 完全版
     // API：STEP ESTATE-3 Worker
     // =========================================================
 
-    const STEP_VERSION = 'STEP ESTATE-4';
+    const STEP_VERSION = 'STEP ESTATE-4-R1';
     const API_BASE = 'https://dpro-estate-line-api.dpromstk2000.workers.dev';
     const SHOP_CODE = 'dpro_estate_demo';
 
@@ -904,6 +989,7 @@
       lineDisplayName: '',
       lastReservation: null,
       lastLineMessage: '',
+      showAllProperties: false,
     };
 
     const $ = (id) => document.getElementById(id);
@@ -950,11 +1036,12 @@
       });
 
       ['parkingRequired', 'petRequired', 'twoPeople', 'lowInitialCost', 'nearStation'].forEach((id) => {
-        $(id).addEventListener('change', updateSummary);
+        $(id).addEventListener('change', () => { updateSummary(); state.showAllProperties = false; renderProperties(false); });
       });
 
-      $('filterByConditionBtn').addEventListener('click', () => renderProperties(true));
+      $('filterByConditionBtn').addEventListener('click', () => { state.showAllProperties = false; renderProperties(true); });
       $('clearPropertyBtn').addEventListener('click', () => selectProperty(null));
+      $('showMorePropertiesBtn').addEventListener('click', () => { state.showAllProperties = !state.showAllProperties; renderProperties(false); });
       $('submitBtn').addEventListener('click', submitReservation);
       $('copyLineBtn').addEventListener('click', copyLineMessage);
       $('newReserveBtn').addEventListener('click', resetAfterComplete);
@@ -1059,6 +1146,7 @@
         label.innerHTML = `<input type="checkbox" name="desiredArea" value="${escapeHtml(value)}" ${checked ? 'checked' : ''} />${escapeHtml(area.area_label || value)}`;
         label.querySelector('input').addEventListener('change', () => {
           updateSummary();
+          state.showAllProperties = false;
           renderProperties(false);
         });
         wrap.appendChild(label);
@@ -1079,6 +1167,8 @@
 
     function renderProperties(applyConditionFilter) {
       const wrap = $('propertyList');
+      const toolbar = $('propertyToolbar');
+      const showMoreBtn = $('showMorePropertiesBtn');
       let list = [...state.properties];
 
       const selectedAreas = getCheckedValues('desiredArea').filter(v => !v.includes('まだ') && !v.includes('その他'));
@@ -1095,40 +1185,75 @@
         if (pet) list = list.filter(p => Boolean(p.pet_allowed));
       }
 
-      $('propertyCount').textContent = `物件 ${list.length}件`;
+      list.sort((a, b) => propertyScore(b, selectedAreas, maxRent, floorPlans, parking, pet) - propertyScore(a, selectedAreas, maxRent, floorPlans, parking, pet));
 
-      if (!list.length) {
+      const total = list.length;
+      const visibleLimit = 3;
+      let visibleList = state.showAllProperties ? list : list.slice(0, visibleLimit);
+
+      if (state.selectedProperty && !visibleList.some(p => p.id === state.selectedProperty.id)) {
+        const selectedInList = list.find(p => p.id === state.selectedProperty.id);
+        if (selectedInList) visibleList = [selectedInList, ...visibleList].slice(0, state.showAllProperties ? list.length : visibleLimit + 1);
+      }
+
+      $('propertyCount').textContent = state.showAllProperties || total <= visibleLimit
+        ? `物件 ${total}件`
+        : `おすすめ ${Math.min(visibleLimit, total)}件 / 全${total}件`;
+
+      if (toolbar) toolbar.classList.toggle('hidden', total <= visibleLimit);
+      if (showMoreBtn) showMoreBtn.textContent = state.showAllProperties ? '3件表示に戻す' : `もっと見る（全${total}件）`;
+
+      if (!total) {
+        if (toolbar) toolbar.classList.add('hidden');
         wrap.innerHTML = '<div class="notice warn">条件に合う物件がありません。条件をゆるめるか「物件未定で相談」を選んでください。</div>';
         return;
       }
 
       wrap.innerHTML = '';
-      list.forEach((property) => {
+      visibleList.forEach((property, index) => {
         const card = document.createElement('article');
-        card.className = 'property-card' + (state.selectedProperty?.id === property.id ? ' selected' : '');
+        const isSelected = state.selectedProperty?.id === property.id;
+        card.className = 'property-card' + (isSelected ? ' selected' : '');
         const rent = property.rent_amount ? `${Math.round(Number(property.rent_amount) / 1000) / 10}万円` : '相談';
         const fee = property.management_fee ? `管理費 ${formatYen(property.management_fee)}` : '管理費込み/確認中';
         const pets = property.pet_allowed ? 'ペット相談' : 'ペット不可/要確認';
-        const parking = property.parking_status || '駐車場確認';
+        const parkingText = property.parking_status || '駐車場確認';
         const status = property.viewing_available ? property.property_status || '募集中' : '内見確認中';
+        const recommendLabel = index < 3 && !isSelected ? '<span class="recommend-ribbon">おすすめ</span>' : '';
+        const selectedLabel = isSelected ? '<span class="selected-ribbon">選択中</span>' : '';
         card.innerHTML = `
+          ${selectedLabel}
+          ${recommendLabel}
           <h3>${escapeHtml(property.property_name || '物件名未設定')}</h3>
           <div class="rent">${escapeHtml(rent)} <span style="font-size:12px;color:#697386;font-weight:800;">${escapeHtml(fee)}</span></div>
           <div class="property-meta">
             <span class="meta">${escapeHtml(property.area_name || 'エリア未設定')}</span>
             <span class="meta">${escapeHtml(property.floor_plan || '間取り確認')}</span>
             <span class="meta">${escapeHtml(property.room_size || '広さ確認')}</span>
-            <span class="meta">${escapeHtml(parking)}</span>
+            <span class="meta">${escapeHtml(parkingText)}</span>
             <span class="meta">${escapeHtml(pets)}</span>
             <span class="meta">${escapeHtml(status)}</span>
           </div>
           <div class="hint">${escapeHtml(property.nearest_station || '最寄り確認中')}${property.walking_minutes ? ` 徒歩${property.walking_minutes}分` : ''}</div>
           <p class="public-memo">${escapeHtml(property.public_memo || '内見や詳細条件は店舗へご相談ください。')}</p>
-          <button class="select-property-btn" type="button">${state.selectedProperty?.id === property.id ? '選択中' : 'この物件を選ぶ'}</button>
+          <button class="select-property-btn" type="button">${isSelected ? 'この物件で内見予約中' : 'この物件を選ぶ'}</button>
         `;
         card.querySelector('button').addEventListener('click', () => selectProperty(property));
         wrap.appendChild(card);
       });
+    }
+
+    function propertyScore(property, selectedAreas, maxRent, floorPlans, parking, pet) {
+      let score = 0;
+      if (selectedAreas.length && selectedAreas.includes(property.area_name)) score += 50;
+      if (maxRent && Number(property.rent_amount || 0) <= maxRent) score += 30;
+      if (floorPlans.length && floorPlans.includes(property.floor_plan)) score += 20;
+      if (parking && String(property.parking_status || '').includes('あり')) score += 12;
+      if (pet && property.pet_allowed) score += 12;
+      if (property.viewing_available) score += 10;
+      if ((property.property_status || '') === '募集中') score += 6;
+      score += Math.max(0, 10 - Number(property.display_order || 0));
+      return score;
     }
 
     function autoSelectFromQuery() {
@@ -1146,7 +1271,18 @@
       syncMeetingPlace();
       renderProperties(false);
       updateSummary();
-      if (scroll) document.getElementById('reserve').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      updateReserveGuide();
+      if (scroll) document.getElementById('reserveGuide').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function updateReserveGuide() {
+      const guide = $('reserveGuide');
+      if (!guide) return;
+      if (state.selectedProperty) {
+        guide.textContent = `選択中：${state.selectedProperty.property_name}。この物件の内見希望日と時間を選んでください。`;
+      } else {
+        guide.textContent = '物件未定の相談予約です。希望条件をもとに店舗で物件提案を受けたい日時を選んでください。';
+      }
     }
 
     async function loadSlots(date) {
