@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>STEP ESTATE-8｜system-check｜DPRO 不動産・賃貸内見 LINE</title>
+  <title>STEP ESTATE-12｜system-check｜DPRO 不動産・賃貸内見 LINE</title>
   <style>
     :root{
       --bg:#edf5f1;
@@ -354,7 +354,8 @@
   <header class="hero">
     <div class="wrap">
       <div class="badge-row">
-        <span class="badge">STEP ESTATE-8</span>
+        <span class="badge">STEP ESTATE-12</span>
+        <span class="badge">全体導線ブラッシュアップ</span>
         <span class="badge">営業前 system-check.html</span>
         <span class="badge">管理コード 1234</span>
       </div>
@@ -366,8 +367,8 @@
       <nav class="hero-nav" aria-label="page links">
         <button type="button" onclick="runAllChecks()">一括チェック</button>
         <button type="button" onclick="prepareDemo()">営業前デモ準備</button>
-        <a href="index.html?v=estate-4-r1" target="_blank" rel="noopener">お客様画面</a>
-        <a href="owner.html?v=estate-5-r1" target="_blank" rel="noopener">PC管理画面</a>
+        <a href="index.html?v=estate-12" target="_blank" rel="noopener">お客様画面</a>
+        <a href="owner.html?v=estate-12" target="_blank" rel="noopener">PC管理画面</a>
       </nav>
       <div class="summary-grid">
         <div class="summary-card">
@@ -491,28 +492,44 @@
           <div class="url-list">
             <div class="url-row">
               <b>お客様画面</b>
-              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/index.html?v=estate-4-r1" readonly />
+              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/index.html?v=estate-12" readonly />
               <button onclick="openUrl(this)">開く</button>
             </div>
             <div class="url-row">
               <b>PC管理画面</b>
-              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner.html?v=estate-5-r1" readonly />
+              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner.html?v=estate-12" readonly />
               <button onclick="openUrl(this)">開く</button>
             </div>
             <div class="url-row">
               <b>iPad画面</b>
-              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner-ipad.html?v=estate-7" readonly />
+              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner-ipad.html?v=estate-12" readonly />
               <button onclick="openUrl(this)">開く</button>
             </div>
             <div class="url-row">
               <b>店舗設定</b>
-              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner-settings.html?v=estate-6" readonly />
+              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner-settings.html?v=estate-12" readonly />
               <button onclick="openUrl(this)">開く</button>
             </div>
             <div class="url-row">
               <b>system-check</b>
-              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/system-check.html?v=estate-8" readonly />
+              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/system-check.html?v=estate-12" readonly />
               <button onclick="copyUrl(this)">コピー</button>
+            </div>
+            
+            <div class="url-row">
+              <b>予約テスト</b>
+              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/reservation-test.html?v=estate-12" readonly />
+              <button onclick="openUrl(this)">開く</button>
+            </div>
+            <div class="url-row">
+              <b>マイページ</b>
+              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/member.html?v=estate-12" readonly />
+              <button onclick="openUrl(this)">開く</button>
+            </div>
+            <div class="url-row">
+              <b>物件詳細</b>
+              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/property.html?v=estate-12" readonly />
+              <button onclick="openUrl(this)">開く</button>
             </div>
             <div class="url-row">
               <b>Worker health</b>
@@ -590,17 +607,17 @@
   </main>
 
   <footer class="footer">
-    DPRO 不動産・賃貸内見 LINE ｜ STEP ESTATE-8 ｜ API: https://dpro-estate-line-api.dpromstk2000.workers.dev
+    DPRO 不動産・賃貸内見 LINE ｜ STEP ESTATE-12 ｜ API: https://dpro-estate-line-api.dpromstk2000.workers.dev
   </footer>
 
 <script>
 const DEFAULT_API_BASE = "https://dpro-estate-line-api.dpromstk2000.workers.dev";
 const PAGE_URLS = {
-  customer: "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/index.html?v=estate-4-r1",
-  owner: "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner.html?v=estate-5-r1",
-  ipad: "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner-ipad.html?v=estate-7",
-  settings: "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner-settings.html?v=estate-6",
-  systemCheck: "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/system-check.html?v=estate-8"
+  customer: "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/index.html?v=estate-12",
+  owner: "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner.html?v=estate-12",
+  ipad: "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner-ipad.html?v=estate-12",
+  settings: "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner-settings.html?v=estate-12",
+  systemCheck: "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/system-check.html?v=estate-12"
 };
 
 const $ = (id)=>document.getElementById(id);
