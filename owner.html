@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DPRO 不動産・賃貸内見 LINE｜PC管理画面 STEP ESTATE-5</title>
+  <style>
+    :root{
+      --bg:#eef4f2;
+      --bg2:#f8faf8;
+      --card:#ffffff;
+      --ink:#13231f;
+      --muted:#61716b;
+      --line:#dce8e4;
+      --main:#0d6b55;
+      --main2:#145948;
+      --soft:#eaf7f2;
+      --soft2:#f4fbf8;
+      --warn:#f59e0b;
+      --warn-soft:#fff7e6;
+      --danger:#dc2626;
+      --danger-soft:#fff0f0;
+      --blue:#2563eb;
+      --blue-soft:#eef4ff;
+      --shadow:0 16px 38px rgba(22,43,36,.10);
+      --radius:20px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,"Hiragino Sans","Yu Gothic",Meiryo,sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(25,111,88,.12), transparent 34%),
+        radial-gradient(circle at bottom right, rgba(184,140,58,.11), transparent 28%),
+        linear-gradient(180deg,#f7faf8 0%, var(--bg) 100%);
+      min-height:100vh;
+    }
+    button,input,select,textarea{font:inherit}
+    button{cursor:pointer}
+    a{color:inherit}
+    .wrap{width:min(1440px,calc(100% - 32px));margin:0 auto;padding:20px 0 46px}
+    .hero{
+      position:relative;
+      overflow:hidden;
+      background:linear-gradient(135deg,#084c3f 0%,#0f735a 55%,#7f8844 100%);
+      color:#fff;
+      border-radius:0 0 28px 28px;
+      box-shadow:var(--shadow);
+    }
+    .hero:after{
+      content:"";position:absolute;right:-50px;top:-75px;width:230px;height:230px;border-radius:50%;
+      background:rgba(255,255,255,.12);
+    }
+    .heroInner{width:min(1440px,calc(100% - 32px));margin:0 auto;padding:22px 0 20px;position:relative;z-index:1}
+    .topline{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+    .badge{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:rgba(255,255,255,.16);font-size:12px;font-weight:800;border:1px solid rgba(255,255,255,.16)}
+    .hero h1{font-size:clamp(28px,3.8vw,52px);line-height:1.04;margin:0 0 8px;font-weight:950;letter-spacing:-.04em}
+    .hero p{margin:0;color:rgba(255,255,255,.88);line-height:1.75;font-size:14px;max-width:900px}
+    .heroActions{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}
+    .heroBtn{height:42px;border:1px solid rgba(255,255,255,.24);border-radius:12px;background:rgba(255,255,255,.12);color:#fff;font-weight:900}
+    .heroBtn:hover{background:rgba(255,255,255,.20)}
+    .statusBar{display:grid;grid-template-columns:1.5fr .9fr .9fr .9fr;gap:12px;margin-top:16px}
+    .miniCard{background:rgba(255,255,255,.95);color:var(--ink);border-radius:16px;padding:13px 14px;border:1px solid rgba(255,255,255,.4);box-shadow:0 8px 18px rgba(0,0,0,.06)}
+    .miniCard .label{font-size:12px;color:var(--muted);font-weight:800;margin-bottom:5px}.miniCard .value{font-weight:950;font-size:16px}
+    .grid{display:grid;grid-template-columns:1.08fr .92fr;gap:18px;align-items:start;margin-top:18px}
+    .leftStack,.rightStack{display:grid;gap:16px}
+    .rightStack{position:sticky;top:16px}
+    .card{background:rgba(255,255,255,.95);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+    .cardHead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:18px 18px 12px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,#fff,#fbfdfc)}
+    .cardTitle{margin:0;font-size:20px;font-weight:950;letter-spacing:-.02em}.cardSub{margin:4px 0 0;font-size:12px;color:var(--muted);line-height:1.6}
+    .cardBody{padding:16px 18px 18px}.pill{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:999px;background:var(--soft);color:var(--main2);font-size:12px;font-weight:900;white-space:nowrap}.pill.warn{background:var(--warn-soft);color:#92400e}.pill.danger{background:var(--danger-soft);color:#991b1b}.pill.blue{background:var(--blue-soft);color:#1d4ed8}.pill.gray{background:#f1f5f9;color:#475569}
+    .login{display:grid;grid-template-columns:1fr 170px 140px;gap:10px}.field{display:grid;gap:6px}.field label{font-size:12px;font-weight:900;color:#33443e}.input,.select,.textarea{width:100%;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);padding:11px 12px;outline:none}.input:focus,.select:focus,.textarea:focus{border-color:rgba(13,107,85,.45);box-shadow:0 0 0 4px rgba(13,107,85,.10)}.textarea{min-height:110px;resize:vertical;line-height:1.65}
+    .btn{border:0;border-radius:12px;padding:11px 14px;font-weight:950;background:var(--main);color:#fff;box-shadow:0 8px 18px rgba(13,107,85,.16)}.btn:hover{background:#0b5f4c}.btn.secondary{background:#edf6f2;color:var(--main2);border:1px solid #cbe9dc;box-shadow:none}.btn.light{background:#fff;color:var(--main2);border:1px solid var(--line);box-shadow:none}.btn.warn{background:#f59e0b}.btn.danger{background:#dc2626}.btn.blue{background:#2563eb}.btn:disabled{opacity:.55;cursor:not-allowed}
+    .btnRow{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.tabs{display:flex;gap:8px;flex-wrap:wrap}.tab{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 12px;font-size:13px;font-weight:900;color:#33443e}.tab.active{background:var(--main);color:#fff;border-color:var(--main)}
+    .kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.kpiBox{border:1px solid var(--line);background:#fff;border-radius:16px;padding:14px}.kpiBox .num{font-size:30px;font-weight:950;letter-spacing:-.04em}.kpiBox .name{font-size:12px;color:var(--muted);font-weight:900}.kpiBox.today{background:var(--soft2);border-color:#cceadc}.kpiBox.warn{background:var(--warn-soft);border-color:#f9dfaa}.kpiBox.danger{background:var(--danger-soft);border-color:#ffd2d2}
+    .sectionGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.list{display:grid;gap:10px}.item{border:1px solid var(--line);background:#fff;border-radius:16px;padding:13px}.itemHead{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.itemTitle{font-weight:950;font-size:15px;line-height:1.45}.itemMeta{font-size:12px;color:var(--muted);line-height:1.65;margin-top:4px}.itemNote{margin-top:9px;padding:9px;border-radius:12px;background:#f8fafc;border:1px solid #edf2f7;font-size:12px;color:#42524d;line-height:1.7}.itemActions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.smallBtn{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 10px;font-size:12px;font-weight:900;color:#33443e}.smallBtn:hover{background:#f7faf8}.smallBtn.main{background:var(--soft);border-color:#cbe9dc;color:var(--main2)}.smallBtn.warn{background:var(--warn-soft);border-color:#f5d99b;color:#92400e}.smallBtn.danger{background:var(--danger-soft);border-color:#ffcaca;color:#991b1b}.smallBtn.blue{background:var(--blue-soft);border-color:#d6e2ff;color:#1d4ed8}
+    .twoCol{display:grid;grid-template-columns:1fr 1fr;gap:10px}.threeCol{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.tableWrap{overflow:auto;border:1px solid var(--line);border-radius:16px}.dataTable{width:100%;border-collapse:collapse;min-width:760px;background:#fff}.dataTable th,.dataTable td{border-bottom:1px solid #edf2f7;padding:10px;text-align:left;font-size:13px;vertical-align:top}.dataTable th{background:#f8fafc;color:#40534d;font-size:12px;font-weight:950;white-space:nowrap}.dataTable tr:last-child td{border-bottom:0}.muted{color:var(--muted)}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.hidden{display:none!important}.toast{position:fixed;right:16px;bottom:16px;z-index:50;background:#10231d;color:#fff;border-radius:16px;padding:13px 15px;box-shadow:0 18px 40px rgba(0,0,0,.18);max-width:min(460px,calc(100% - 32px));font-size:13px;line-height:1.6;transform:translateY(20px);opacity:0;pointer-events:none;transition:.18s}.toast.show{transform:translateY(0);opacity:1}.toast.error{background:#7f1d1d}.toast.ok{background:#064e3b}
+    .copyBox{white-space:pre-wrap;line-height:1.75;background:#fbfdfc;border:1px solid var(--line);border-radius:14px;padding:13px;min-height:170px;font-size:13px}.urlBox{display:grid;gap:7px;font-size:12px}.urlBox code{display:block;background:#f8fafc;border:1px solid var(--line);padding:9px;border-radius:10px;overflow:auto;color:#33443e}.empty{padding:18px;border:1px dashed #cddad5;border-radius:16px;background:#fbfdfc;color:var(--muted);font-weight:800;text-align:center}.footer{padding:28px 0;text-align:center;color:#74827d;font-size:12px}.mobileOnly{display:none}
+    @media(max-width:1100px){.grid{grid-template-columns:1fr}.rightStack{position:static}.statusBar{grid-template-columns:1fr 1fr}.heroActions{grid-template-columns:1fr 1fr}.sectionGrid{grid-template-columns:1fr}.kpi{grid-template-columns:1fr 1fr}}
+    @media(max-width:720px){.wrap,.heroInner{width:min(100% - 18px,720px)}.hero{border-radius:0 0 22px 22px}.hero h1{font-size:32px}.heroActions,.statusBar,.login,.twoCol,.threeCol,.kpi{grid-template-columns:1fr}.cardHead{padding:15px}.cardBody{padding:14px}.mobileOnly{display:inline}.pcOnly{display:none}.itemHead{display:grid}.btn,.heroBtn{width:100%}.btnRow .btn,.btnRow .smallBtn{width:auto}.tabs{overflow:auto;flex-wrap:nowrap;padding-bottom:2px}.tab{white-space:nowrap}.dataTable{min-width:680px}}
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="heroInner">
+      <div class="topline">
+        <span class="badge">STEP ESTATE-5</span>
+        <span class="badge">PC管理画面 owner.html</span>
+        <span class="badge">管理コード 1234</span>
+      </div>
+      <h1>内見予約・顧客・追客を<br class="mobileOnly">まとめて管理</h1>
+      <p>LINEから入った賃貸内見予約を、今日の案内予定・希望条件・物件ステータス・LINE文面コピーまで一画面で確認できます。初期デモは志免・宇美・須恵エリアです。</p>
+      <div class="heroActions">
+        <button class="heroBtn" onclick="scrollToId('todayCard')">今日やること</button>
+        <button class="heroBtn" onclick="scrollToId('reservationCard')">内見予約</button>
+        <button class="heroBtn" onclick="scrollToId('customerCard')">顧客検索</button>
+        <button class="heroBtn" onclick="scrollToId('propertyCard')">物件管理</button>
+      </div>
+      <div class="statusBar">
+        <div class="miniCard"><div class="label">店舗</div><div class="value" id="shopName">未読込</div></div>
+        <div class="miniCard"><div class="label">API</div><div class="value mono">dpro-estate-line-api</div></div>
+        <div class="miniCard"><div class="label">本日</div><div class="value" id="todayLabel">-</div></div>
+        <div class="miniCard"><div class="label">状態</div><div class="value" id="loadState">未接続</div></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="card" id="loginCard">
+      <div class="cardHead">
+        <div><h2 class="cardTitle">管理コード確認</h2><p class="cardSub">デモ初期値は 1234 です。入力後、PC管理画面の情報を読み込みます。</p></div>
+        <span class="pill">最初だけ確認</span>
+      </div>
+      <div class="cardBody">
+        <div class="login">
+          <div class="field"><label>Cloudflare Worker API</label><input class="input mono" id="apiBaseInput" value="https://dpro-estate-line-api.dpromstk2000.workers.dev" readonly></div>
+          <div class="field"><label>管理コード</label><input class="input" id="adminCodeInput" value="1234" inputmode="numeric" autocomplete="one-time-code"></div>
+          <div class="field"><label>&nbsp;</label><button class="btn" onclick="loginAndLoad()">管理画面を開く</button></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="grid">
+      <div class="leftStack">
+        <section class="card" id="summaryCard">
+          <div class="cardHead">
+            <div><h2 class="cardTitle">ダッシュボード</h2><p class="cardSub">朝、店舗側が最初に確認する全体状況です。</p></div>
+            <div class="btnRow"><button class="btn secondary" onclick="loadAll()">最新に更新</button><button class="btn warn" onclick="prepareDemo()">営業前デモ準備</button></div>
+          </div>
+          <div class="cardBody">
+            <div class="kpi" id="kpiArea">
+              <div class="kpiBox today"><div class="num">-</div><div class="name">本日の内見</div></div>
+              <div class="kpiBox"><div class="num">-</div><div class="name">明日の予定</div></div>
+              <div class="kpiBox warn"><div class="num">-</div><div class="name">本日対応の追客</div></div>
+              <div class="kpiBox danger"><div class="num">-</div><div class="name">空室確認</div></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card" id="todayCard">
+          <div class="cardHead">
+            <div><h2 class="cardTitle">今日やること</h2><p class="cardSub">内見予定、未対応の追客、空室確認が必要な物件を優先表示します。</p></div>
+            <span class="pill" id="todayPill">今日</span>
+          </div>
+          <div class="cardBody">
+            <div class="sectionGrid">
+              <div>
+                <div class="btnRow" style="justify-content:space-between;margin-bottom:10px"><strong>本日の内見予定</strong><span class="pill blue" id="todayCount">0件</span></div>
+                <div class="list" id="todayReservationsList"><div class="empty">未読込</div></div>
+              </div>
+              <div>
+                <div class="btnRow" style="justify-content:space-between;margin-bottom:10px"><strong>本日対応の追客</strong><span class="pill warn" id="followCount">0件</span></div>
+                <div class="list" id="dueFollowupsList"><div class="empty">未読込</div></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card" id="reservationCard">
+          <div class="cardHead">
+            <div><h2 class="cardTitle">内見予約一覧</h2><p class="cardSub">予約ステータス変更、文面作成、フォロー作成をここから行います。</p></div>
+            <span class="pill">予約管理</span>
+          </div>
+          <div class="cardBody">
+            <div class="tabs" id="reservationTabs">
+              <button class="tab active" data-filter="all" onclick="setReservationFilter('all')">すべて</button>
+              <button class="tab" data-filter="today" onclick="setReservationFilter('today')">本日</button>
+              <button class="tab" data-filter="tomorrow" onclick="setReservationFilter('tomorrow')">明日</button>
+              <button class="tab" data-filter="予約受付" onclick="setReservationFilter('予約受付')">予約受付</button>
+              <button class="tab" data-filter="確認済み" onclick="setReservationFilter('確認済み')">確認済み</button>
+              <button class="tab" data-filter="申込検討中" onclick="setReservationFilter('申込検討中')">申込検討中</button>
+            </div>
+            <div class="list" id="reservationList" style="margin-top:12px"><div class="empty">未読込</div></div>
+          </div>
+        </section>
+
+        <section class="card" id="customerCard">
+          <div class="cardHead">
+            <div><h2 class="cardTitle">顧客検索</h2><p class="cardSub">名前・電話番号・LINE名・ステータスで検索できます。</p></div>
+            <span class="pill">顧客カルテ</span>
+          </div>
+          <div class="cardBody">
+            <div class="login" style="grid-template-columns:1fr 160px 120px">
+              <div class="field"><label>検索ワード</label><input class="input" id="customerSearchInput" placeholder="例：山田 / 090 / 申込検討中"></div>
+              <div class="field"><label>ステータス</label><select class="select" id="customerStatusFilter"><option value="">すべて</option><option>初回問い合わせ</option><option>希望条件確認中</option><option>物件提案済み</option><option>内見予約済み</option><option>内見済み</option><option>申込検討中</option><option>申込希望</option><option>見送り</option><option>長期フォロー</option></select></div>
+              <div class="field"><label>&nbsp;</label><button class="btn secondary" onclick="searchCustomers()">検索</button></div>
+            </div>
+            <div class="tableWrap" style="margin-top:12px"><table class="dataTable"><thead><tr><th>顧客</th><th>連絡先</th><th>ステータス</th><th>希望条件</th><th>操作</th></tr></thead><tbody id="customerTableBody"><tr><td colspan="5">未読込</td></tr></tbody></table></div>
+          </div>
+        </section>
+
+        <section class="card" id="propertyCard">
+          <div class="cardHead">
+            <div><h2 class="cardTitle">物件管理</h2><p class="cardSub">空室状況・内見可否・公開状態を一覧で確認します。詳細編集は次STEP以降で拡張します。</p></div>
+            <span class="pill">志免・宇美・須恵</span>
+          </div>
+          <div class="cardBody">
+            <div class="tabs" id="propertyTabs">
+              <button class="tab active" data-area="" onclick="setPropertyArea('')">すべて</button>
+            </div>
+            <div class="tableWrap" style="margin-top:12px"><table class="dataTable"><thead><tr><th>物件</th><th>エリア</th><th>家賃</th><th>間取り</th><th>状態</th><th>操作</th></tr></thead><tbody id="propertyTableBody"><tr><td colspan="6">未読込</td></tr></tbody></table></div>
+          </div>
+        </section>
+      </div>
+
+      <aside class="rightStack">
+        <section class="card" id="actionPanel">
+          <div class="cardHead">
+            <div><h2 class="cardTitle">LINE文面コピー</h2><p class="cardSub">選んだ予約・顧客に合わせて文面を作成し、LINE公式へ貼り付けます。</p></div>
+            <span class="pill">コピー型</span>
+          </div>
+          <div class="cardBody">
+            <div class="field"><label>文面テンプレート</label><select class="select" id="templateSelect" onchange="refreshMessagePreview()"><option value="reservation_received">内見予約受付文面</option></select></div>
+            <div class="field" style="margin-top:10px"><label>対象</label><select class="select" id="messageTargetSelect" onchange="refreshMessagePreview()"><option value="">予約を選択してください</option></select></div>
+            <div class="copyBox" id="messagePreview" style="margin-top:12px">予約一覧から「文面作成」を押すと、ここにLINE送信用の文面が表示されます。</div>
+            <div class="btnRow" style="margin-top:10px"><button class="btn" onclick="copyCurrentMessage()">文面をコピー</button><button class="btn secondary" onclick="refreshMessagePreview()">再作成</button></div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="cardHead">
+            <div><h2 class="cardTitle">空室確認が必要な物件</h2><p class="cardSub">確認中・申込ありの物件を優先表示します。</p></div>
+            <span class="pill danger" id="needCheckCount">0件</span>
+          </div>
+          <div class="cardBody"><div class="list" id="needCheckPropertiesList"><div class="empty">未読込</div></div></div>
+        </section>
+
+        <section class="card">
+          <div class="cardHead">
+            <div><h2 class="cardTitle">画面URL</h2><p class="cardSub">営業中にそのまま開けるURLです。</p></div>
+            <span class="pill">固定URL</span>
+          </div>
+          <div class="cardBody urlBox">
+            <div><strong>お客様用 index.html</strong><code>https://dpromstk2000-lab.github.io/dpro-estate-line-liff/index.html?v=estate-4-r1</code></div>
+            <div><strong>PC管理画面 owner.html</strong><code>https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner.html?v=estate-5</code></div>
+            <div><strong>Worker health</strong><code>https://dpro-estate-line-api.dpromstk2000.workers.dev/api/health</code></div>
+            <div><strong>管理チェック</strong><code>https://dpro-estate-line-api.dpromstk2000.workers.dev/api/admin/system-check?admin_code=1234</code></div>
+          </div>
+        </section>
+      </aside>
+    </div>
+    <div class="footer">DPRO 不動産・賃貸内見 LINE｜STEP ESTATE-5｜API: https://dpro-estate-line-api.dpromstk2000.workers.dev</div>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const API_BASE = 'https://dpro-estate-line-api.dpromstk2000.workers.dev';
+    const PAGE_BASE = 'https://dpromstk2000-lab.github.io/dpro-estate-line-liff';
+    const STORAGE_KEY = 'dpro_estate_admin_code';
+    const state = {
+      adminCode: localStorage.getItem(STORAGE_KEY) || '1234',
+      dashboard: null,
+      templates: [],
+      reservations: [],
+      customers: [],
+      properties: [],
+      followups: [],
+      reservationFilter: 'all',
+      propertyArea: '',
+      selectedReservationId: '',
+      currentMessage: '',
+      loading: false
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('adminCodeInput').value = state.adminCode;
+      document.getElementById('todayLabel').textContent = formatDate(todayYmd());
+      loginAndLoad();
+    });
+
+    function scrollToId(id){ const el = document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth', block:'start'}); }
+    function todayYmd(){ const d = new Date(); const f = new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit'}); return f.format(d); }
+    function addDays(ymd, days){ const [y,m,d] = ymd.split('-').map(Number); const date = new Date(Date.UTC(y,m-1,d)); date.setUTCDate(date.getUTCDate()+days); return date.toISOString().slice(0,10); }
+    function escapeHtml(value){ return String(value ?? '').replace(/[&<>'"]/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[s])); }
+    function yen(n){ if(n===null || n===undefined || n==='') return '未入力'; const num = Number(n); if(!Number.isFinite(num)) return String(n); return (num/10000).toFixed(num % 10000 === 0 ? 0 : 1) + '万円'; }
+    function formatDate(ymd){ if(!ymd) return '-'; const [y,m,d] = String(ymd).split('-'); return `${y}/${Number(m)}/${Number(d)}`; }
+    function formatTime(t){ if(!t) return '-'; return String(t).slice(0,5); }
+    function normalizeText(v){ return String(v ?? '').trim(); }
+    function statusPill(status){
+      const s = String(status || '未設定');
+      let cls = 'gray';
+      if(['予約受付','未対応','本日対応'].includes(s)) cls = 'warn';
+      if(['確認済み','内見済み','申込検討中','申込希望','募集中'].includes(s)) cls = 'blue';
+      if(['キャンセル','見送り','成約済み','非公開'].includes(s)) cls = 'danger';
+      return `<span class="pill ${cls}">${escapeHtml(s)}</span>`;
+    }
+    function toast(message, type='ok'){
+      const el = document.getElementById('toast');
+      el.textContent = message; el.className = `toast ${type} show`;
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(()=>{ el.className = `toast ${type}`; }, 3200);
+    }
+    function setLoading(isLoading){ state.loading = isLoading; document.getElementById('loadState').textContent = isLoading ? '読込中' : '接続OK'; }
+
+    async function api(path, options={}){
+      const url = new URL(API_BASE + path);
+      if(options.query){ Object.entries(options.query).forEach(([k,v])=>{ if(v!==undefined && v!==null && v!=='') url.searchParams.set(k,v); }); }
+      const method = options.method || 'GET';
+      const headers = {'Content-Type':'application/json','X-DPRO-Admin-Code': state.adminCode};
+      const fetchOptions = {method, headers};
+      if(options.body){ fetchOptions.body = JSON.stringify({...options.body, admin_code: state.adminCode}); }
+      const res = await fetch(url.toString(), fetchOptions);
+      const text = await res.text();
+      let data = null;
+      try{ data = text ? JSON.parse(text) : null; }catch{ data = {ok:false, error:text}; }
+      if(!res.ok || (data && data.ok === false)){
+        const msg = data?.error || data?.message || `APIエラー ${res.status}`;
+        throw new Error(msg);
+      }
+      return data;
+    }
+
+    async function loginAndLoad(){
+      state.adminCode = normalizeText(document.getElementById('adminCodeInput').value || '1234');
+      localStorage.setItem(STORAGE_KEY, state.adminCode);
+      try{
+        setLoading(true);
+        await api('/api/admin/login', {method:'POST', body:{code:state.adminCode}});
+        await loadAll();
+        toast('管理コードを確認しました。');
+      }catch(e){ setLoading(false); toast(e.message || '管理コード確認に失敗しました。','error'); }
+    }
+
+    async function loadAll(){
+      if(!state.adminCode) return loginAndLoad();
+      try{
+        setLoading(true);
+        const today = todayYmd();
+        const to = addDays(today, 14);
+        const [dashboard, templates, reservations, customers, properties, followups] = await Promise.all([
+          api('/api/admin/dashboard'),
+          api('/api/admin/templates'),
+          api('/api/admin/reservations', {query:{from:today, to, limit:120}}),
+          api('/api/admin/customers', {query:{limit:80}}),
+          api('/api/admin/properties', {query:{include_private:'true', limit:200}}),
+          api('/api/admin/followups', {query:{limit:120}})
+        ]);
+        state.dashboard = dashboard;
+        state.templates = templates.message_templates || [];
+        state.reservations = reservations.reservations || [];
+        state.customers = customers.customers || [];
+        state.properties = properties.properties || [];
+        state.followups = followups.followups || [];
+        renderAll();
+        setLoading(false);
+      }catch(e){ setLoading(false); toast(e.message || '読み込みに失敗しました。','error'); console.error(e); }
+    }
+
+    function renderAll(){
+      const d = state.dashboard || {};
+      document.getElementById('shopName').textContent = d.shop?.shop_name || 'DPRO不動産 デモ店';
+      document.getElementById('todayLabel').textContent = formatDate(d.today || todayYmd());
+      renderKpi(); renderTodayTasks(); renderReservations(); renderCustomers(); renderProperties(); renderFollowups(); renderTemplates(); renderTargetSelect();
+    }
+
+    function renderKpi(){
+      const c = state.dashboard?.counts || {};
+      document.getElementById('kpiArea').innerHTML = `
+        <div class="kpiBox today"><div class="num">${c.today_reservations ?? 0}</div><div class="name">本日の内見</div></div>
+        <div class="kpiBox"><div class="num">${c.tomorrow_reservations ?? 0}</div><div class="name">明日の予定</div></div>
+        <div class="kpiBox warn"><div class="num">${c.due_followups ?? 0}</div><div class="name">本日対応の追客</div></div>
+        <div class="kpiBox danger"><div class="num">${c.need_check_properties ?? 0}</div><div class="name">空室確認</div></div>`;
+    }
+
+    function renderTodayTasks(){
+      const todayList = state.dashboard?.today_reservations || [];
+      const dueList = state.dashboard?.due_followups || [];
+      const needCheck = state.dashboard?.need_check_properties || [];
+      document.getElementById('todayCount').textContent = `${todayList.length}件`;
+      document.getElementById('followCount').textContent = `${dueList.length}件`;
+      document.getElementById('needCheckCount').textContent = `${needCheck.length}件`;
+      document.getElementById('todayPill').textContent = formatDate(state.dashboard?.today || todayYmd());
+      document.getElementById('todayReservationsList').innerHTML = todayList.length ? todayList.map(r => reservationCardHtml(r, true)).join('') : '<div class="empty">本日の内見予定はありません。</div>';
+      document.getElementById('dueFollowupsList').innerHTML = dueList.length ? dueList.map(f => followupCardHtml(f)).join('') : '<div class="empty">本日対応の追客はありません。</div>';
+      document.getElementById('needCheckPropertiesList').innerHTML = needCheck.length ? needCheck.map(p => propertyMiniHtml(p)).join('') : '<div class="empty">空室確認が必要な物件はありません。</div>';
+    }
+
+    function reservationCardHtml(r, compact=false){
+      const customer = r.customer || {};
+      const property = r.property || {};
+      const title = `${formatDate(r.reservation_date)} ${formatTime(r.reservation_time)}｜${customer.customer_name || '名前未入力'}様`;
+      const propName = property.property_name || '物件未定・条件相談';
+      const meta = `${propName} / ${r.meeting_type || '-'} / ${r.meeting_place || '-'} / 担当：${r.staff?.staff_name || '未設定'}`;
+      return `<div class="item">
+        <div class="itemHead"><div><div class="itemTitle">${escapeHtml(title)}</div><div class="itemMeta">${escapeHtml(meta)}</div></div>${statusPill(r.status)}</div>
+        ${!compact ? `<div class="itemNote">希望・メモ：${escapeHtml(r.customer_note || r.internal_note || customer.memo || '未入力')}</div>` : ''}
+        <div class="itemActions">
+          <button class="smallBtn main" onclick="selectReservationForMessage('${r.id}','before_viewing')">文面作成</button>
+          <button class="smallBtn blue" onclick="updateReservationStatus('${r.id}','確認済み','内見予約済み')">確認済み</button>
+          <button class="smallBtn blue" onclick="updateReservationStatus('${r.id}','内見済み','内見済み')">内見済み</button>
+          <button class="smallBtn warn" onclick="updateReservationStatus('${r.id}','申込検討中','申込検討中')">申込検討中</button>
+          <button class="smallBtn" onclick="createFollowupFromReservation('${r.id}',3)">3日後フォロー</button>
+          <button class="smallBtn danger" onclick="updateReservationStatus('${r.id}','キャンセル','見送り')">キャンセル</button>
+        </div>
+      </div>`;
+    }
+
+    function followupCardHtml(f){
+      const c = f.customer || {};
+      return `<div class="item">
+        <div class="itemHead"><div><div class="itemTitle">${escapeHtml(c.customer_name || '顧客未設定')}様｜${escapeHtml(f.followup_type || 'フォロー')}</div><div class="itemMeta">${formatDate(f.followup_date)} ${formatTime(f.followup_time)} / ${escapeHtml(f.priority || '通常')}</div></div>${statusPill(f.status)}</div>
+        <div class="itemNote">${escapeHtml(f.memo || 'メモなし')}</div>
+        <div class="itemActions"><button class="smallBtn main" onclick="completeFollowup('${f.id}')">対応済みにする</button><button class="smallBtn" onclick="selectCustomerForSuggestion('${c.id || ''}')">提案文面</button></div>
+      </div>`;
+    }
+
+    function propertyMiniHtml(p){
+      return `<div class="item"><div class="itemHead"><div><div class="itemTitle">${escapeHtml(p.property_name)}</div><div class="itemMeta">${escapeHtml(p.area_name || '-')} / ${yen(p.rent_amount)} / ${escapeHtml(p.floor_plan || '-')}</div></div>${statusPill(p.property_status)}</div><div class="itemNote">${escapeHtml(p.internal_memo || '空室状況を確認してください。')}</div></div>`;
+    }
+
+    function setReservationFilter(filter){
+      state.reservationFilter = filter;
+      document.querySelectorAll('#reservationTabs .tab').forEach(b=>b.classList.toggle('active', b.dataset.filter === filter));
+      renderReservations();
+    }
+
+    function getFilteredReservations(){
+      const f = state.reservationFilter;
+      const today = state.dashboard?.today || todayYmd();
+      const tomorrow = state.dashboard?.tomorrow || addDays(today,1);
+      return state.reservations.filter(r=>{
+        if(f === 'all') return true;
+        if(f === 'today') return r.reservation_date === today;
+        if(f === 'tomorrow') return r.reservation_date === tomorrow;
+        return r.status === f;
+      });
+    }
+
+    function renderReservations(){
+      const rows = getFilteredReservations();
+      document.getElementById('reservationList').innerHTML = rows.length ? rows.map(r=>reservationCardHtml(r)).join('') : '<div class="empty">該当する内見予約はありません。</div>';
+    }
+
+    function renderCustomers(){
+      const body = document.getElementById('customerTableBody');
+      if(!state.customers.length){ body.innerHTML = '<tr><td colspan="5">顧客データはありません。</td></tr>'; return; }
+      body.innerHTML = state.customers.map(c=>{
+        const pref = Array.isArray(c.preference) ? c.preference[0] : c.preference;
+        const desired = pref?.desired_areas ? (Array.isArray(pref.desired_areas) ? pref.desired_areas.join('・') : pref.desired_areas) : '-';
+        const floors = pref?.floor_plan ? (Array.isArray(pref.floor_plan) ? pref.floor_plan.join('・') : pref.floor_plan) : '-';
+        return `<tr><td><strong>${escapeHtml(c.customer_name || '名前未入力')}様</strong><br><span class="muted">LINE：${escapeHtml(c.line_display_name || '-')}</span></td><td>${escapeHtml(c.phone || '-')}<br><span class="muted">${escapeHtml(c.email || '')}</span></td><td>${statusPill(c.customer_status)}</td><td>エリア：${escapeHtml(desired)}<br>家賃：${pref?.max_rent ? yen(pref.max_rent) : '-'}<br>間取り：${escapeHtml(floors)}</td><td><button class="smallBtn main" onclick="selectCustomerForSuggestion('${c.id}')">提案文面</button><button class="smallBtn" onclick="touchCustomer('${c.id}')">連絡済み</button></td></tr>`;
+      }).join('');
+    }
+
+    async function searchCustomers(){
+      try{
+        const q = document.getElementById('customerSearchInput').value;
+        const status = document.getElementById('customerStatusFilter').value;
+        const data = await api('/api/admin/customers', {query:{q, status, limit:100}});
+        state.customers = data.customers || [];
+        renderCustomers();
+        toast(`顧客を${state.customers.length}件表示しました。`);
+      }catch(e){ toast(e.message || '顧客検索に失敗しました。','error'); }
+    }
+
+    function renderProperties(){
+      const areas = state.dashboard?.areas || [];
+      const tabs = document.getElementById('propertyTabs');
+      tabs.innerHTML = `<button class="tab ${state.propertyArea===''?'active':''}" data-area="" onclick="setPropertyArea('')">すべて</button>` + areas.map(a=>`<button class="tab ${state.propertyArea===a.area_name?'active':''}" data-area="${escapeHtml(a.area_name)}" onclick="setPropertyArea('${escapeHtml(a.area_name)}')">${escapeHtml(a.area_label || a.area_name)}</button>`).join('');
+      const rows = state.properties.filter(p => !state.propertyArea || p.area_name === state.propertyArea);
+      const body = document.getElementById('propertyTableBody');
+      if(!rows.length){ body.innerHTML = '<tr><td colspan="6">該当する物件はありません。</td></tr>'; return; }
+      body.innerHTML = rows.map(p=>`<tr><td><strong>${escapeHtml(p.property_name)}</strong><br><span class="muted">${escapeHtml(p.address || p.property_code || '')}</span></td><td>${escapeHtml(p.area_name || '-')}</td><td>${yen(p.rent_amount)}<br><span class="muted">管理費 ${yen(p.management_fee)}</span></td><td>${escapeHtml(p.floor_plan || '-')}<br><span class="muted">${escapeHtml(p.room_size || '')}</span></td><td>${statusPill(p.property_status)}<br>${p.viewing_available ? '<span class="pill blue">内見可</span>' : '<span class="pill gray">内見不可</span>'}</td><td><button class="smallBtn main" onclick="updatePropertyStatus('${p.id}','募集中',true)">募集中</button><button class="smallBtn warn" onclick="updatePropertyStatus('${p.id}','確認中',true)">確認中</button><button class="smallBtn danger" onclick="updatePropertyStatus('${p.id}','成約済み',false)">成約済み</button></td></tr>`).join('');
+    }
+    function setPropertyArea(area){ state.propertyArea = area; renderProperties(); }
+
+    function renderFollowups(){ /* 今日やること側で表示。将来タブ拡張用。 */ }
+
+    function renderTemplates(){
+      const select = document.getElementById('templateSelect');
+      select.innerHTML = state.templates.length ? state.templates.map(t=>`<option value="${escapeHtml(t.template_key)}">${escapeHtml(t.title)}</option>`).join('') : '<option value="reservation_received">文面テンプレート未読込</option>';
+    }
+
+    function renderTargetSelect(){
+      const select = document.getElementById('messageTargetSelect');
+      select.innerHTML = '<option value="">予約を選択してください</option>' + state.reservations.map(r=>`<option value="${r.id}">${formatDate(r.reservation_date)} ${formatTime(r.reservation_time)}｜${escapeHtml(r.customer?.customer_name || '名前未入力')}様</option>`).join('');
+      if(state.selectedReservationId) select.value = state.selectedReservationId;
+      refreshMessagePreview();
+    }
+
+    function findReservation(id){ return state.reservations.find(r=>String(r.id)===String(id)); }
+    function findTemplate(key){ return state.templates.find(t=>t.template_key === key) || state.templates[0] || {body:'{{customer_name}}様\n\nDPRO不動産です。'}; }
+
+    function selectReservationForMessage(reservationId, templateKey='reservation_received'){
+      state.selectedReservationId = reservationId;
+      document.getElementById('messageTargetSelect').value = reservationId;
+      if(templateKey) document.getElementById('templateSelect').value = templateKey;
+      refreshMessagePreview();
+      scrollToId('actionPanel');
+    }
+
+    function refreshMessagePreview(){
+      const reservationId = document.getElementById('messageTargetSelect').value || state.selectedReservationId;
+      const templateKey = document.getElementById('templateSelect').value;
+      state.selectedReservationId = reservationId;
+      const r = findReservation(reservationId);
+      if(!r){ state.currentMessage = ''; document.getElementById('messagePreview').textContent = '予約一覧から「文面作成」を押すと、ここにLINE送信用の文面が表示されます。'; return; }
+      const t = findTemplate(templateKey);
+      const c = r.customer || {};
+      const p = r.property || {};
+      const map = {
+        customer_name: c.customer_name || 'お客様',
+        reservation_date: formatDate(r.reservation_date),
+        reservation_time: formatTime(r.reservation_time),
+        property_name: p.property_name || '物件未定・条件相談',
+        meeting_type: r.meeting_type || '未設定',
+        meeting_place: r.meeting_place || '未設定',
+        staff_name: r.staff?.staff_name || '担当者',
+        desired_areas: p.area_name || 'ご希望エリア',
+        max_rent: p.rent_amount ? yen(p.rent_amount) : 'ご希望家賃',
+        floor_plans: p.floor_plan || 'ご希望間取り'
+      };
+      let body = t.body || '';
+      body = body.replace(/\{\{\s*([a-zA-Z0-9_]+)\s*\}\}/g, (_, key)=> map[key] ?? '');
+      state.currentMessage = body.trim();
+      document.getElementById('messagePreview').textContent = state.currentMessage;
+    }
+
+    async function copyCurrentMessage(){
+      const text = state.currentMessage || document.getElementById('messagePreview').textContent;
+      if(!text || text.includes('予約一覧から')){ toast('コピーする文面がありません。','error'); return; }
+      try{ await navigator.clipboard.writeText(text); toast('LINE文面をコピーしました。'); }
+      catch{
+        const area = document.createElement('textarea'); area.value = text; document.body.appendChild(area); area.select(); document.execCommand('copy'); area.remove(); toast('LINE文面をコピーしました。');
+      }
+    }
+
+    async function updateReservationStatus(id, status, customerStatus){
+      try{
+        await api('/api/admin/reservations', {method:'PATCH', body:{reservation_id:id, status, customer_status:customerStatus}});
+        toast(`予約を「${status}」に更新しました。`);
+        await loadAll();
+      }catch(e){ toast(e.message || '予約更新に失敗しました。','error'); }
+    }
+
+    async function createFollowupFromReservation(id, days){
+      const r = findReservation(id);
+      if(!r || !r.customer?.id){ toast('フォロー作成に必要な顧客情報がありません。','error'); return; }
+      try{
+        await api('/api/admin/followups', {method:'POST', body:{customer_id:r.customer.id, reservation_id:r.id, followup_type:`${days}日後フォロー`, followup_date:addDays(todayYmd(), days), followup_time:'10:00', priority:'通常', memo:`${r.customer.customer_name || 'お客様'}様へ${days}日後に内見後フォロー。`, message_template_key:'property_suggestion'}});
+        toast(`${days}日後フォローを作成しました。`);
+        await loadAll();
+      }catch(e){ toast(e.message || 'フォロー作成に失敗しました。','error'); }
+    }
+
+    async function completeFollowup(id){
+      try{ await api('/api/admin/followups', {method:'PATCH', body:{followup_id:id, complete:true, status:'対応済み'}}); toast('追客を対応済みにしました。'); await loadAll(); }
+      catch(e){ toast(e.message || '追客更新に失敗しました。','error'); }
+    }
+
+    async function touchCustomer(id){
+      try{ await api('/api/admin/customers', {method:'PATCH', body:{customer_id:id, touch_contact:true}}); toast('最終連絡日を更新しました。'); await loadAll(); }
+      catch(e){ toast(e.message || '顧客更新に失敗しました。','error'); }
+    }
+
+    function selectCustomerForSuggestion(customerId){
+      const c = state.customers.find(x=>String(x.id)===String(customerId));
+      const template = findTemplate('property_suggestion');
+      const pref = Array.isArray(c?.preference) ? c.preference[0] : c?.preference;
+      const desired = pref?.desired_areas ? (Array.isArray(pref.desired_areas) ? pref.desired_areas.join('・') : pref.desired_areas) : 'ご希望エリア';
+      const floors = pref?.floor_plan ? (Array.isArray(pref.floor_plan) ? pref.floor_plan.join('・') : pref.floor_plan) : 'ご希望間取り';
+      let body = template.body || '{{customer_name}}様\n\nご希望条件に近い物件がありましたのでご連絡しました。';
+      body = body.replace(/\{\{customer_name\}\}/g, c?.customer_name || 'お客様').replace(/\{\{desired_areas\}\}/g, desired).replace(/\{\{max_rent\}\}/g, pref?.max_rent ? yen(pref.max_rent) : 'ご希望家賃').replace(/\{\{floor_plans\}\}/g, floors);
+      state.currentMessage = body.trim();
+      document.getElementById('messagePreview').textContent = state.currentMessage;
+      document.getElementById('templateSelect').value = 'property_suggestion';
+      scrollToId('actionPanel');
+    }
+
+    async function updatePropertyStatus(id, status, viewing){
+      try{
+        await api('/api/admin/properties', {method:'PATCH', body:{property_id:id, property_status:status, viewing_available:viewing, is_public:status !== '成約済み' && status !== '非公開'}});
+        toast(`物件を「${status}」に更新しました。`);
+        await loadAll();
+      }catch(e){ toast(e.message || '物件更新に失敗しました。','error'); }
+    }
+
+    async function prepareDemo(){
+      if(!confirm('営業前デモデータを再作成します。志免・宇美・須恵のデモ予約・顧客・追客が初期状態に戻ります。実行しますか？')) return;
+      try{ setLoading(true); await api('/api/admin/demo/prepare', {method:'POST', body:{}}); toast('営業前デモデータを準備しました。'); await loadAll(); }
+      catch(e){ setLoading(false); toast(e.message || '営業前デモ準備に失敗しました。','error'); }
+    }
+  </script>
+</body>
+</html>
