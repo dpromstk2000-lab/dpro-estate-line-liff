@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>STEP ESTATE-9｜実予約テスト｜DPRO 不動産・賃貸内見 LINE</title>
+  <title>STEP ESTATE-9-R1｜実予約テスト｜DPRO 不動産・賃貸内見 LINE</title>
   <style>
     :root{
       --bg:#edf5f1;
@@ -360,7 +360,7 @@
   <header class="hero">
     <div class="wrap">
       <div class="badge-row">
-        <span class="badge">STEP ESTATE-9</span>
+        <span class="badge">STEP ESTATE-9-R1</span>
         <span class="badge">実予約テスト・反映確認</span>
         <span class="badge">管理コード 1234</span>
       </div>
@@ -509,7 +509,7 @@
 
           <div style="height:10px"></div>
           <label>希望・メモ</label>
-          <textarea id="customerNote">STEP ESTATE-9 実予約テストです。管理画面とiPad画面への反映確認用です。</textarea>
+          <textarea id="customerNote">STEP ESTATE-9-R1 実予約テストです。管理画面とiPad画面への反映確認用です。</textarea>
 
           <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
             <button class="btn secondary" onclick="findTestSlot()">空き枠を探す</button>
@@ -610,7 +610,7 @@
             </div>
             <div class="url-row">
               <b>予約テスト</b>
-              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/reservation-test.html?v=estate-9" readonly />
+              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/reservation-test.html?v=estate-9-r1" readonly />
               <button onclick="copyUrl(this)">コピー</button>
             </div>
           </div>
@@ -631,7 +631,7 @@
   </main>
 
   <footer class="footer">
-    DPRO 不動産・賃貸内見 LINE ｜ STEP ESTATE-9 ｜ API: https://dpro-estate-line-api.dpromstk2000.workers.dev
+    DPRO 不動産・賃貸内見 LINE ｜ STEP ESTATE-9-R1 ｜ API: https://dpro-estate-line-api.dpromstk2000.workers.dev
   </footer>
 
 <script>
@@ -839,7 +839,7 @@ function buildReservationPayload(){
     low_initial_cost: true,
     near_station: false,
     workplace_or_school: "営業デモテスト",
-    other_request: "STEP ESTATE-9 実予約テストから作成",
+    other_request: "STEP ESTATE-9-R1 実予約テストから作成",
     property_id: selectedProperty.id,
     reservation_date: selectedSlot.date,
     reservation_time: selectedSlot.time,
@@ -848,7 +848,7 @@ function buildReservationPayload(){
     meeting_place: $("reservationType").value.includes("現地")
       ? `${selectedProperty.property_name} 現地前`
       : "DPRO不動産 志免・宇美・須恵デモ店",
-    customer_note: $("customerNote").value || "STEP ESTATE-9 実予約テスト"
+    customer_note: $("customerNote").value || "STEP ESTATE-9-R1 実予約テスト"
   };
 }
 
@@ -885,6 +885,68 @@ async function createTestReservation(){
   }
 }
 
+function normalizeLineMessage(value){
+  if(value === null || typeof value === "undefined") return "";
+  if(typeof value === "string") return value;
+  if(Array.isArray(value)){
+    return value.map(normalizeLineMessage).filter(Boolean).join("\n");
+  }
+  if(typeof value === "object"){
+    const keys = [
+      "text",
+      "message",
+      "body",
+      "content",
+      "preview",
+      "line_message",
+      "line_message_text",
+      "reservation_message",
+      "copy_text"
+    ];
+    for(const key of keys){
+      if(typeof value[key] !== "undefined"){
+        const normalized = normalizeLineMessage(value[key]);
+        if(normalized) return normalized;
+      }
+    }
+    if(value.title || value.subject || value.template_name){
+      const parts = [];
+      if(value.title) parts.push(value.title);
+      if(value.subject) parts.push(value.subject);
+      if(value.template_name) parts.push(value.template_name);
+      if(value.body) parts.push(normalizeLineMessage(value.body));
+      if(value.text) parts.push(normalizeLineMessage(value.text));
+      return parts.filter(Boolean).join("\n");
+    }
+    return JSON.stringify(value, null, 2);
+  }
+  return String(value);
+}
+
+function buildFallbackLineMessage(data){
+  const reservation = data.reservation || {};
+  const customer = data.customer || {};
+  const property = data.property || selectedProperty || {};
+  const customerName = customer.customer_name || $("customerName").value || "お客様";
+  const propertyName = property.property_name || selectedProperty?.property_name || "ご希望物件";
+  const date = reservation.reservation_date || selectedSlot?.date || "-";
+  const time = String(reservation.reservation_time || selectedSlot?.time || "-").slice(0,5);
+  const meeting = reservation.meeting_type || $("reservationType").value || "店舗で相談してから内見";
+  const place = reservation.meeting_place || (meeting.includes("現地") ? `${propertyName} 現地前` : "DPRO不動産 志免・宇美・須恵デモ店");
+  return `${customerName}様
+
+DPRO不動産です。
+内見予約を受け付けました。
+
+日時：${date} ${time}
+物件：${propertyName}
+集合方法：${meeting}
+集合場所：${place}
+
+変更やキャンセルがある場合は、お早めにLINEでお知らせください。
+当日はお気をつけてお越しください。`;
+}
+
 function setCreatedReservation(data){
   const reservation = data.reservation || {};
   const customer = data.customer || {};
@@ -895,12 +957,13 @@ function setCreatedReservation(data){
   $("createdProperty").textContent = property.property_name || "希望条件相談";
   $("createdDateTime").textContent = `${reservation.reservation_date || selectedSlot?.date || "-"} ${String(reservation.reservation_time || selectedSlot?.time || "-").slice(0,5)}`;
   $("createdStatus").textContent = reservation.status || "未取得";
-  $("linePreview").textContent = data.line_message_preview || "文面プレビューなし";
+  const lineText = normalizeLineMessage(data.line_message_preview || data.line_message || data.message_preview || data.message);
+  $("linePreview").textContent = lineText || buildFallbackLineMessage(data);
   setPill("createdPill","ok","作成済み");
 }
 
 async function runFullTest(){
-  setMessage("mainMessage","warn","STEP ESTATE-9 実予約テストを実行中です。");
+  setMessage("mainMessage","warn","STEP ESTATE-9-R1 実予約テストを実行中です。");
   try{
     await checkApi();
     await findTestSlot();
@@ -909,7 +972,7 @@ async function runFullTest(){
     setMessage("mainMessage","ok","実予約テスト・管理画面反映確認OKです。PC管理画面とiPad画面を開いて見た目も確認してください。");
     $("statusTop").textContent = "反映OK";
   }catch(e){
-    setMessage("mainMessage","ng","STEP ESTATE-9 テストエラー：" + e.message);
+    setMessage("mainMessage","ng","STEP ESTATE-9-R1 テストエラー：" + e.message);
     $("statusTop").textContent = "要確認";
   }
 }
