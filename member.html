@@ -1,0 +1,923 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>STEP ESTATE-10｜お客様マイページ｜DPRO 不動産・賃貸内見 LINE</title>
+  <style>
+    :root{
+      --bg:#edf5f1;
+      --bg2:#fff7e8;
+      --main:#0b6b57;
+      --main2:#064f42;
+      --sub:#7b9250;
+      --mint:#e7f7f0;
+      --line:#dfe9e5;
+      --text:#18322d;
+      --muted:#6b7c78;
+      --card:#ffffff;
+      --danger:#d94b4b;
+      --danger-bg:#fff0f0;
+      --warn:#e5961a;
+      --warn-bg:#fff7e5;
+      --ok:#078b63;
+      --ok-bg:#e9fbf2;
+      --shadow:0 18px 45px rgba(17,45,38,.12);
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP","Hiragino Sans","Yu Gothic",sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(11,107,87,.10), transparent 34%),
+        radial-gradient(circle at bottom right, rgba(229,150,26,.16), transparent 34%),
+        linear-gradient(135deg,var(--bg),#f8fbfa 52%,var(--bg2));
+      min-height:100vh;
+    }
+    button,input,select,textarea{font:inherit}
+    a{color:inherit}
+    .hero{
+      background:linear-gradient(135deg,var(--main2),var(--main),var(--sub));
+      color:#fff;
+      padding:24px 18px 30px;
+      position:relative;
+      overflow:hidden;
+      border-bottom-left-radius:22px;
+      border-bottom-right-radius:22px;
+      box-shadow:var(--shadow);
+    }
+    .hero:after{
+      content:"";
+      position:absolute;
+      right:-54px;
+      top:-76px;
+      width:210px;
+      height:210px;
+      border-radius:999px;
+      background:rgba(255,255,255,.16);
+    }
+    .wrap{
+      width:min(980px,calc(100% - 24px));
+      margin:0 auto;
+      position:relative;
+      z-index:1;
+    }
+    .badge-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    .badge{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:5px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.18);
+      color:#fff;
+      font-size:12px;
+      font-weight:900;
+      backdrop-filter:blur(8px);
+    }
+    .hero h1{
+      margin:14px 0 8px;
+      font-size:clamp(28px,6vw,44px);
+      line-height:1.08;
+      letter-spacing:-.05em;
+    }
+    .hero p{
+      margin:0;
+      max-width:760px;
+      color:rgba(255,255,255,.92);
+      font-weight:750;
+      line-height:1.75;
+      font-size:14px;
+    }
+    .hero-nav{
+      margin-top:20px;
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:8px;
+    }
+    .hero-nav a,.hero-nav button{
+      border:1px solid rgba(255,255,255,.24);
+      background:rgba(255,255,255,.12);
+      color:#fff;
+      border-radius:10px;
+      padding:12px 10px;
+      text-align:center;
+      text-decoration:none;
+      font-weight:950;
+      cursor:pointer;
+    }
+    .summary-grid{
+      margin-top:12px;
+      display:grid;
+      grid-template-columns:1.3fr 1fr 1fr;
+      gap:10px;
+    }
+    .summary-card{
+      background:rgba(255,255,255,.92);
+      color:var(--text);
+      border-radius:12px;
+      padding:13px 14px;
+      min-height:64px;
+    }
+    .summary-card .label{font-size:11px;color:var(--muted);font-weight:900}
+    .summary-card .value{font-size:15px;font-weight:950;margin-top:4px;word-break:break-all}
+    main.wrap{padding:18px 0 42px}
+    .grid{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:16px;
+      align-items:start;
+    }
+    .card{
+      background:rgba(255,255,255,.94);
+      border:1px solid rgba(223,233,229,.95);
+      border-radius:var(--radius);
+      box-shadow:0 10px 30px rgba(17,45,38,.08);
+      padding:18px;
+      margin-bottom:16px;
+    }
+    .card-head{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:flex-start;
+      margin-bottom:12px;
+    }
+    h2{margin:0;font-size:20px;letter-spacing:-.04em}
+    h3{margin:0;font-size:16px;letter-spacing:-.03em}
+    .desc{
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.7;
+      font-weight:750;
+      margin-top:4px;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:24px;
+      padding:4px 9px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:950;
+      background:var(--mint);
+      color:var(--main);
+      white-space:nowrap;
+    }
+    .pill.ok{background:var(--ok-bg);color:var(--ok)}
+    .pill.ng{background:var(--danger-bg);color:var(--danger)}
+    .pill.warn{background:var(--warn-bg);color:var(--warn)}
+    .search-row{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:10px;
+      align-items:end;
+    }
+    label{
+      display:block;
+      font-size:12px;
+      color:var(--muted);
+      font-weight:900;
+      margin-bottom:6px;
+    }
+    input,select,textarea{
+      width:100%;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:12px;
+      padding:12px 13px;
+      color:var(--text);
+      outline:none;
+      font-weight:800;
+      min-height:44px;
+    }
+    textarea{resize:vertical;min-height:120px;line-height:1.75}
+    input:focus,select:focus,textarea:focus{
+      border-color:rgba(11,107,87,.45);
+      box-shadow:0 0 0 4px rgba(11,107,87,.10);
+    }
+    .btn{
+      border:0;
+      border-radius:12px;
+      background:var(--main);
+      color:#fff;
+      padding:12px 14px;
+      min-height:44px;
+      font-weight:950;
+      cursor:pointer;
+      box-shadow:0 6px 16px rgba(11,107,87,.18);
+      white-space:nowrap;
+    }
+    .btn.secondary{background:#e8f4ef;color:var(--main);box-shadow:none}
+    .btn.orange{background:#f39b16;box-shadow:0 6px 16px rgba(243,155,22,.18)}
+    .btn.danger{background:#d94b4b;box-shadow:0 6px 16px rgba(217,75,75,.15)}
+    .btn:disabled{opacity:.48;cursor:not-allowed;box-shadow:none}
+    .alert{
+      padding:13px 14px;
+      border-radius:14px;
+      font-size:13px;
+      line-height:1.65;
+      font-weight:850;
+      margin:10px 0 0;
+    }
+    .alert.ok{background:var(--ok-bg);color:#0b6b57;border:1px solid #c8efdd}
+    .alert.ng{background:var(--danger-bg);color:var(--danger);border:1px solid #ffd0d0}
+    .alert.warn{background:var(--warn-bg);color:#9a6300;border:1px solid #ffe0a6}
+    .customer-box{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+    .info-cell{
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:14px;
+      padding:12px;
+    }
+    .info-cell b{
+      display:block;
+      font-size:11px;
+      color:var(--muted);
+      margin-bottom:5px;
+    }
+    .info-cell span{
+      font-weight:950;
+      word-break:break-all;
+    }
+    .reservation-list{
+      display:grid;
+      gap:12px;
+    }
+    .reservation-card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+      position:relative;
+    }
+    .reservation-card.active{
+      border-color:rgba(11,107,87,.35);
+      background:linear-gradient(180deg,#fff,#f5fcf9);
+    }
+    .reservation-card.cancelled{
+      opacity:.74;
+      background:#fafafa;
+    }
+    .reservation-top{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:flex-start;
+      margin-bottom:10px;
+    }
+    .date-chip{
+      width:86px;
+      min-width:86px;
+      background:var(--main);
+      color:#fff;
+      border-radius:13px;
+      padding:9px 7px;
+      text-align:center;
+      font-weight:950;
+      line-height:1.25;
+    }
+    .date-chip .date{display:block;font-size:12px}
+    .date-chip .time{display:block;font-size:20px}
+    .reservation-title{
+      font-size:16px;
+      font-weight:950;
+      margin:0 0 3px;
+      letter-spacing:-.03em;
+    }
+    .reservation-sub{
+      color:var(--muted);
+      font-size:12px;
+      font-weight:800;
+      line-height:1.6;
+    }
+    .detail-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:8px;
+      margin-top:10px;
+    }
+    .detail{
+      background:#f8fbfa;
+      border:1px solid #edf3f0;
+      border-radius:12px;
+      padding:10px;
+      min-height:52px;
+    }
+    .detail b{
+      display:block;
+      font-size:11px;
+      color:var(--muted);
+      margin-bottom:4px;
+    }
+    .detail span{
+      font-size:13px;
+      font-weight:900;
+      line-height:1.45;
+    }
+    .actions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:12px;
+    }
+    .small-btn{
+      border:0;
+      border-radius:999px;
+      padding:8px 11px;
+      font-size:12px;
+      font-weight:950;
+      cursor:pointer;
+      background:#e8f4ef;
+      color:var(--main);
+    }
+    .small-btn.orange{background:#fff0da;color:#a56400}
+    .small-btn.red{background:#ffe8e8;color:#c03939}
+    .message-box{
+      border:1px solid var(--line);
+      background:#f8fbfa;
+      border-radius:14px;
+      padding:12px;
+      white-space:pre-wrap;
+      line-height:1.75;
+      font-size:13px;
+      font-weight:750;
+      min-height:160px;
+    }
+    .url-list{display:grid;gap:8px}
+    .url-row{
+      display:grid;
+      grid-template-columns:96px 1fr auto;
+      gap:8px;
+      align-items:center;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:12px;
+      padding:8px;
+    }
+    .url-row b{font-size:12px}
+    .url-row input{min-height:36px;padding:8px 10px;font-size:12px;background:#f8fbfa}
+    .url-row button{
+      border:0;background:#e8f4ef;color:var(--main);
+      border-radius:9px;padding:8px 10px;font-weight:950;cursor:pointer;
+    }
+    .step-row{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:10px;
+    }
+    .step-card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+    }
+    .num{
+      width:28px;height:28px;border-radius:999px;background:var(--main);color:#fff;
+      display:inline-flex;align-items:center;justify-content:center;
+      font-weight:950;margin-bottom:10px;
+    }
+    .step-card b{display:block;font-size:14px;margin-bottom:5px}
+    .step-card p{margin:0;font-size:12px;line-height:1.6;color:var(--muted);font-weight:750}
+    .sticky-side{position:sticky;top:14px}
+    .footer{
+      text-align:center;
+      color:#7a8b87;
+      font-size:11px;
+      font-weight:800;
+      padding:10px 0 24px;
+    }
+    .empty{
+      border:1px dashed var(--line);
+      background:#fff;
+      border-radius:18px;
+      padding:22px;
+      text-align:center;
+      color:var(--muted);
+      font-weight:850;
+      line-height:1.8;
+    }
+    @media (max-width:880px){
+      .grid{grid-template-columns:1fr}
+      .sticky-side{position:static}
+      .summary-grid{grid-template-columns:1fr}
+      .hero-nav{grid-template-columns:1fr}
+      .search-row{grid-template-columns:1fr}
+      .customer-box{grid-template-columns:1fr}
+      .detail-grid{grid-template-columns:1fr}
+      .step-row{grid-template-columns:1fr}
+      .url-row{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <div class="badge-row">
+        <span class="badge">STEP ESTATE-10</span>
+        <span class="badge">お客様マイページ member.html</span>
+        <span class="badge">予約確認・連絡文面</span>
+      </div>
+      <h1>予約確認・変更連絡を<br>LINEからかんたんに</h1>
+      <p>
+        予約後のお客様が、電話番号で内見予約を確認できます。変更・キャンセルの連絡文面をコピーして、
+        LINEでそのまま店舗へ送れるようにします。
+      </p>
+      <nav class="hero-nav" aria-label="page links">
+        <button type="button" onclick="loadMember()">予約を確認する</button>
+        <a href="index.html?v=estate-4-r1">内見予約へ</a>
+        <a href="tel:0920001234">店舗へ電話</a>
+      </nav>
+      <div class="summary-grid">
+        <div class="summary-card">
+          <div class="label">店舗</div>
+          <div class="value" id="shopNameTop">DPRO不動産 志免・宇美・須恵デモ店</div>
+        </div>
+        <div class="summary-card">
+          <div class="label">API</div>
+          <div class="value">dpro-estate-line-api</div>
+        </div>
+        <div class="summary-card">
+          <div class="label">状態</div>
+          <div class="value" id="statusTop">未確認</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="card">
+      <div class="card-head">
+        <div>
+          <h2>予約確認</h2>
+          <div class="desc">予約時に入力した電話番号を入れてください。ハイフンなしでも確認できます。</div>
+        </div>
+        <span class="pill" id="searchPill">未確認</span>
+      </div>
+      <div class="search-row">
+        <div>
+          <label>電話番号</label>
+          <input id="phoneInput" inputmode="tel" placeholder="例：09012345678" />
+        </div>
+        <button class="btn" onclick="loadMember()">予約を確認する</button>
+      </div>
+      <div id="mainMessage" class="alert warn">電話番号を入力して予約を確認してください。</div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <div>
+          <h2>お客様が使う順番</h2>
+          <div class="desc">営業デモでは「予約後もLINEから確認できる」と説明できます。</div>
+        </div>
+        <span class="pill ok">かんたん</span>
+      </div>
+      <div class="step-row">
+        <div class="step-card">
+          <span class="num">1</span>
+          <b>電話番号で確認</b>
+          <p>予約時の電話番号を入力して、内見予約を表示します。</p>
+        </div>
+        <div class="step-card">
+          <span class="num">2</span>
+          <b>予約内容を見る</b>
+          <p>日時、物件、集合方法、集合場所を確認できます。</p>
+        </div>
+        <div class="step-card">
+          <span class="num">3</span>
+          <b>LINEで連絡</b>
+          <p>変更・キャンセル・質問文面をコピーしてLINEで送れます。</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="grid">
+      <div>
+        <section class="card" id="customerSection">
+          <div class="card-head">
+            <div>
+              <h2>お客様情報</h2>
+              <div class="desc">予約と希望条件に紐づく情報です。</div>
+            </div>
+            <span class="pill" id="customerPill">未表示</span>
+          </div>
+          <div id="customerBox" class="empty">まだ表示していません。</div>
+        </section>
+
+        <section class="card">
+          <div class="card-head">
+            <div>
+              <h2>内見予約一覧</h2>
+              <div class="desc">今後の予約と過去の予約を確認できます。</div>
+            </div>
+            <span class="pill" id="reservationPill">未取得</span>
+          </div>
+          <div id="reservationList" class="reservation-list">
+            <div class="empty">予約確認後に表示されます。</div>
+          </div>
+        </section>
+      </div>
+
+      <aside class="sticky-side">
+        <section class="card">
+          <div class="card-head">
+            <div>
+              <h2>LINE連絡文面</h2>
+              <div class="desc">選択した予約に合わせて、店舗へ送る文面を作ります。</div>
+            </div>
+            <span class="pill ok">コピー</span>
+          </div>
+          <label>文面タイプ</label>
+          <select id="messageType" onchange="renderMessage()">
+            <option value="confirm">予約内容を確認したい</option>
+            <option value="change">予約日時を変更したい</option>
+            <option value="cancel">キャンセルしたい</option>
+            <option value="question">当日の持ち物を確認したい</option>
+            <option value="parking">駐車場・集合場所を確認したい</option>
+          </select>
+          <div style="height:10px"></div>
+          <div id="messagePreview" class="message-box">予約を選択すると文面が表示されます。</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+            <button class="btn" onclick="copyMessage()">文面コピー</button>
+            <button class="btn secondary" onclick="openLinePlaceholder()">LINEで送る</button>
+          </div>
+          <div id="copyMessageBox" class="alert warn">予約確認後に文面をコピーできます。</div>
+        </section>
+
+        <section class="card">
+          <div class="card-head">
+            <div>
+              <h2>画面URL</h2>
+              <div class="desc">営業確認用です。</div>
+            </div>
+            <span class="pill ok">URL</span>
+          </div>
+          <div class="url-list">
+            <div class="url-row">
+              <b>予約画面</b>
+              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/index.html?v=estate-4-r1" readonly />
+              <button onclick="openUrl(this)">開く</button>
+            </div>
+            <div class="url-row">
+              <b>マイページ</b>
+              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/member.html?v=estate-10" readonly />
+              <button onclick="copyUrl(this)">コピー</button>
+            </div>
+            <div class="url-row">
+              <b>PC管理</b>
+              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner.html?v=estate-5-r1" readonly />
+              <button onclick="openUrl(this)">開く</button>
+            </div>
+            <div class="url-row">
+              <b>iPad</b>
+              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner-ipad.html?v=estate-7" readonly />
+              <button onclick="openUrl(this)">開く</button>
+            </div>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="footer">
+    DPRO 不動産・賃貸内見 LINE ｜ STEP ESTATE-10 ｜ API: https://dpro-estate-line-api.dpromstk2000.workers.dev
+  </footer>
+
+<script>
+const API_BASE = "https://dpro-estate-line-api.dpromstk2000.workers.dev";
+let currentCustomer = null;
+let currentReservations = [];
+let selectedReservation = null;
+
+const $ = (id)=>document.getElementById(id);
+
+function escapeHtml(s){
+  return String(s ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+function normalizePhone(s){
+  return String(s || "").replace(/[^\d]/g,"");
+}
+function setPill(id, type, text){
+  const el = $(id);
+  el.className = "pill " + (type || "");
+  el.textContent = text;
+}
+function setMessage(id, type, text){
+  const el = $(id);
+  el.className = "alert " + type;
+  el.textContent = text;
+}
+function getParam(name){
+  return new URLSearchParams(location.search).get(name);
+}
+async function getJson(path){
+  const res = await fetch(API_BASE + path, { method:"GET", cache:"no-store" });
+  let data = null;
+  try{ data = await res.json(); }catch(e){ data = { ok:false, error:"JSONとして読めません", status:res.status }; }
+  if(!res.ok){
+    const msg = data && (data.error || data.message) ? (data.error || data.message) : `HTTP ${res.status}`;
+    throw new Error(msg);
+  }
+  return data;
+}
+async function postJson(path, body){
+  const res = await fetch(API_BASE + path, {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify(body || {})
+  });
+  let data = null;
+  try{ data = await res.json(); }catch(e){ data = { ok:false, error:"JSONとして読めません", status:res.status }; }
+  if(!res.ok){
+    const msg = data && (data.error || data.message) ? (data.error || data.message) : `HTTP ${res.status}`;
+    throw new Error(msg);
+  }
+  return data;
+}
+function reservationTimeText(r){
+  const date = r.reservation_date || "-";
+  const time = String(r.reservation_time || "-").slice(0,5);
+  return `${date} ${time}`;
+}
+function getCustomerFromReservation(r){
+  return r.customer || r.customer_info || {};
+}
+function getPropertyFromReservation(r){
+  return r.property || r.property_info || {};
+}
+function isCancelled(r){
+  return String(r.status || "").includes("キャンセル") || String(r.status || "").toLowerCase() === "cancelled";
+}
+function isPastReservation(r){
+  const d = r.reservation_date;
+  if(!d) return false;
+  const t = String(r.reservation_time || "00:00").slice(0,5);
+  const dt = new Date(`${d}T${t}:00+09:00`);
+  return dt.getTime() < Date.now();
+}
+async function loadMember(){
+  const phone = normalizePhone($("phoneInput").value || getParam("phone"));
+  if(!phone){
+    setPill("searchPill","ng","未入力");
+    setMessage("mainMessage","ng","電話番号を入力してください。");
+    return;
+  }
+  $("phoneInput").value = phone;
+  setPill("searchPill","warn","確認中");
+  setMessage("mainMessage","warn","予約情報を確認中です。");
+  $("statusTop").textContent = "確認中";
+
+  try{
+    const data = await getJson(`/api/public/member?phone=${encodeURIComponent(phone)}`);
+    if(!data || data.ok === false || data.found === false || !data.customer){
+      currentCustomer = null;
+      currentReservations = [];
+      selectedReservation = null;
+      renderCustomer();
+      renderReservations();
+      renderMessage();
+      setPill("searchPill","ng","見つかりません");
+      setMessage("mainMessage","ng","この電話番号の予約が見つかりませんでした。電話番号を確認するか、内見予約画面から予約してください。");
+      $("statusTop").textContent = "未登録";
+      return;
+    }
+
+    currentCustomer = data.customer;
+    currentReservations = Array.isArray(data.reservations) ? data.reservations : [];
+    selectedReservation = currentReservations.find(r => !isCancelled(r) && !isPastReservation(r)) || currentReservations[0] || null;
+
+    renderCustomer();
+    renderReservations();
+    renderMessage();
+
+    setPill("searchPill","ok","確認OK");
+    setMessage("mainMessage","ok",`予約情報を確認しました。${currentReservations.length}件の予約があります。`);
+    $("statusTop").textContent = "確認OK";
+  }catch(e){
+    setPill("searchPill","ng","エラー");
+    setMessage("mainMessage","ng","予約確認エラー：" + e.message);
+    $("statusTop").textContent = "要確認";
+  }
+}
+function renderCustomer(){
+  if(!currentCustomer){
+    $("customerBox").className = "empty";
+    $("customerBox").innerHTML = "まだ表示していません。";
+    setPill("customerPill","warn","未表示");
+    return;
+  }
+  $("customerBox").className = "customer-box";
+  $("customerBox").innerHTML = `
+    <div class="info-cell"><b>お名前</b><span>${escapeHtml(currentCustomer.customer_name || "未登録")}</span></div>
+    <div class="info-cell"><b>電話番号</b><span>${escapeHtml(currentCustomer.phone || "未登録")}</span></div>
+    <div class="info-cell"><b>LINE名</b><span>${escapeHtml(currentCustomer.line_display_name || "未取得")}</span></div>
+    <div class="info-cell"><b>連絡方法</b><span>${escapeHtml(currentCustomer.contact_method || "LINE")}</span></div>
+    <div class="info-cell"><b>ステータス</b><span>${escapeHtml(currentCustomer.customer_status || "確認中")}</span></div>
+    <div class="info-cell"><b>最終連絡</b><span>${escapeHtml(currentCustomer.last_contact_at || "未登録")}</span></div>
+  `;
+  setPill("customerPill","ok","表示OK");
+}
+function renderReservations(){
+  const el = $("reservationList");
+  if(!currentReservations.length){
+    el.innerHTML = `<div class="empty">予約が見つかりませんでした。<br>内見予約画面から予約できます。</div>`;
+    setPill("reservationPill","warn","0件");
+    return;
+  }
+
+  const sorted = [...currentReservations].sort((a,b)=>{
+    const ad = `${a.reservation_date || ""} ${a.reservation_time || ""}`;
+    const bd = `${b.reservation_date || ""} ${b.reservation_time || ""}`;
+    return ad.localeCompare(bd);
+  });
+
+  el.innerHTML = sorted.map(r=>{
+    const customer = getCustomerFromReservation(r);
+    const property = getPropertyFromReservation(r);
+    const active = selectedReservation && selectedReservation.id === r.id;
+    const cancelled = isCancelled(r);
+    const date = r.reservation_date || "-";
+    const time = String(r.reservation_time || "-").slice(0,5);
+    const propertyName = property.property_name || r.property_name || "希望条件相談";
+    const area = property.area_name || r.area_name || "-";
+    const rent = property.rent_amount ? `${Math.round(Number(property.rent_amount)/10000*10)/10}万円` : "-";
+    const floor = property.floor_plan || r.floor_plan || "-";
+    return `
+      <article class="reservation-card ${active ? "active" : ""} ${cancelled ? "cancelled" : ""}">
+        <div class="reservation-top">
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div class="date-chip">
+              <span class="date">${escapeHtml(date)}</span>
+              <span class="time">${escapeHtml(time)}</span>
+            </div>
+            <div>
+              <h3 class="reservation-title">${escapeHtml(propertyName)}</h3>
+              <div class="reservation-sub">
+                ${escapeHtml(area)} / ${escapeHtml(rent)} / ${escapeHtml(floor)}<br>
+                ${escapeHtml(r.meeting_type || "店舗で相談してから内見")}
+              </div>
+            </div>
+          </div>
+          <span class="pill ${cancelled ? "ng" : "ok"}">${escapeHtml(r.status || "予約受付")}</span>
+        </div>
+        <div class="detail-grid">
+          <div class="detail"><b>集合方法</b><span>${escapeHtml(r.meeting_type || "-")}</span></div>
+          <div class="detail"><b>集合場所</b><span>${escapeHtml(r.meeting_place || "-")}</span></div>
+          <div class="detail"><b>お客様メモ</b><span>${escapeHtml(r.customer_note || "-")}</span></div>
+          <div class="detail"><b>予約ID</b><span>${escapeHtml(r.id || "-")}</span></div>
+        </div>
+        <div class="actions">
+          <button class="small-btn" onclick="selectReservation('${escapeHtml(r.id)}')">この予約を選択</button>
+          <button class="small-btn orange" onclick="selectReservationAndType('${escapeHtml(r.id)}','change')">変更連絡</button>
+          <button class="small-btn orange" onclick="selectReservationAndType('${escapeHtml(r.id)}','question')">持ち物確認</button>
+          <button class="small-btn red" onclick="selectReservationAndType('${escapeHtml(r.id)}','cancel')">キャンセル連絡</button>
+        </div>
+      </article>
+    `;
+  }).join("");
+  setPill("reservationPill","ok",`${currentReservations.length}件`);
+}
+function selectReservation(id){
+  selectedReservation = currentReservations.find(r => String(r.id) === String(id)) || selectedReservation;
+  renderReservations();
+  renderMessage();
+  setMessage("copyMessageBox","ok","予約を選択しました。文面タイプを選んでコピーできます。");
+}
+function selectReservationAndType(id,type){
+  selectedReservation = currentReservations.find(r => String(r.id) === String(id)) || selectedReservation;
+  $("messageType").value = type;
+  renderReservations();
+  renderMessage();
+  setMessage("copyMessageBox","ok","連絡文面を作成しました。コピーしてLINEで送れます。");
+}
+function buildMessage(){
+  if(!selectedReservation || !currentCustomer){
+    return "予約を選択すると文面が表示されます。";
+  }
+  const type = $("messageType").value;
+  const r = selectedReservation;
+  const customerName = currentCustomer.customer_name || "お客様";
+  const property = getPropertyFromReservation(r);
+  const propertyName = property.property_name || r.property_name || "予約中の物件";
+  const dt = reservationTimeText(r);
+  const meeting = r.meeting_type || "店舗で相談してから内見";
+  const place = r.meeting_place || "未確認";
+
+  if(type === "confirm"){
+    return `DPRO不動産 様
+
+${customerName}です。
+以下の内見予約について確認です。
+
+日時：${dt}
+物件：${propertyName}
+集合方法：${meeting}
+集合場所：${place}
+
+この内容で間違いないか確認をお願いします。`;
+  }
+  if(type === "change"){
+    return `DPRO不動産 様
+
+${customerName}です。
+以下の内見予約について、日時の変更を相談したいです。
+
+現在の予約：
+日時：${dt}
+物件：${propertyName}
+
+別の日程で内見可能な時間を教えてください。
+よろしくお願いします。`;
+  }
+  if(type === "cancel"){
+    return `DPRO不動産 様
+
+${customerName}です。
+以下の内見予約について、キャンセルをお願いします。
+
+日時：${dt}
+物件：${propertyName}
+
+また改めて相談させてください。
+よろしくお願いします。`;
+  }
+  if(type === "parking"){
+    return `DPRO不動産 様
+
+${customerName}です。
+以下の内見予約について、駐車場と集合場所を確認したいです。
+
+日時：${dt}
+物件：${propertyName}
+集合方法：${meeting}
+集合場所：${place}
+
+車で行く場合の駐車場所も教えてください。`;
+  }
+  return `DPRO不動産 様
+
+${customerName}です。
+以下の内見予約について、当日の持ち物や注意点を教えてください。
+
+日時：${dt}
+物件：${propertyName}
+集合方法：${meeting}
+集合場所：${place}
+
+よろしくお願いします。`;
+}
+function renderMessage(){
+  $("messagePreview").textContent = buildMessage();
+}
+async function copyMessage(){
+  const text = $("messagePreview").textContent || "";
+  if(!selectedReservation){
+    setMessage("copyMessageBox","ng","先に予約を確認して、連絡したい予約を選択してください。");
+    return;
+  }
+  await navigator.clipboard.writeText(text);
+  setMessage("copyMessageBox","ok","LINE連絡文面をコピーしました。LINEに貼り付けて送ってください。");
+}
+function openLinePlaceholder(){
+  alert("文面をコピーして、LINEのトーク画面に貼り付けて送ってください。");
+}
+function openUrl(btn){
+  const input = btn.parentElement.querySelector("input");
+  if(input && input.value) window.open(input.value, "_blank", "noopener");
+}
+async function copyUrl(btn){
+  const input = btn.parentElement.querySelector("input");
+  if(!input) return;
+  await navigator.clipboard.writeText(input.value);
+  btn.textContent = "コピー済";
+  setTimeout(()=>btn.textContent="コピー", 1200);
+}
+
+document.addEventListener("DOMContentLoaded", ()=>{
+  const phone = getParam("phone");
+  if(phone){
+    $("phoneInput").value = normalizePhone(phone);
+    setTimeout(loadMember, 300);
+  }
+  const saved = localStorage.getItem("estate_last_phone");
+  if(!phone && saved){
+    $("phoneInput").value = saved;
+  }
+  $("phoneInput").addEventListener("change", ()=>{
+    const p = normalizePhone($("phoneInput").value);
+    if(p) localStorage.setItem("estate_last_phone", p);
+  });
+  $("phoneInput").addEventListener("keydown", (e)=>{
+    if(e.key === "Enter") loadMember();
+  });
+});
+</script>
+</body>
+</html>
