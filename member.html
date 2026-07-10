@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>STEP ESTATE-10｜お客様マイページ｜DPRO 不動産・賃貸内見 LINE</title>
+  <title>STEP ESTATE-10-R1｜お客様マイページ｜DPRO 不動産・賃貸内見 LINE</title>
   <style>
     :root{
       --bg:#edf5f1;
@@ -419,7 +419,7 @@
   <header class="hero">
     <div class="wrap">
       <div class="badge-row">
-        <span class="badge">STEP ESTATE-10</span>
+        <span class="badge">STEP ESTATE-10-R1</span>
         <span class="badge">お客様マイページ member.html</span>
         <span class="badge">予約確認・連絡文面</span>
       </div>
@@ -552,32 +552,30 @@
         <section class="card">
           <div class="card-head">
             <div>
-              <h2>画面URL</h2>
-              <div class="desc">営業確認用です。</div>
+              <h2>次にできること</h2>
+              <div class="desc">お客様向けの案内だけを表示します。管理画面リンクは表示しません。</div>
             </div>
-            <span class="pill ok">URL</span>
+            <span class="pill ok">お客様用</span>
           </div>
           <div class="url-list">
             <div class="url-row">
-              <b>予約画面</b>
-              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/index.html?v=estate-4-r1" readonly />
-              <button onclick="openUrl(this)">開く</button>
+              <b>内見予約</b>
+              <input value="新しく内見予約をする" readonly />
+              <button onclick="location.href='index.html?v=estate-4-r1'">開く</button>
             </div>
             <div class="url-row">
-              <b>マイページ</b>
-              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/member.html?v=estate-10" readonly />
-              <button onclick="copyUrl(this)">コピー</button>
+              <b>店舗電話</b>
+              <input value="092-000-1234" readonly />
+              <button onclick="location.href='tel:0920001234'">電話</button>
             </div>
             <div class="url-row">
-              <b>PC管理</b>
-              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner.html?v=estate-5-r1" readonly />
-              <button onclick="openUrl(this)">開く</button>
+              <b>住所確認</b>
+              <input value="DPRO不動産 志免・宇美・須恵デモ店" readonly />
+              <button onclick="copyShopInfo(this)">コピー</button>
             </div>
-            <div class="url-row">
-              <b>iPad</b>
-              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner-ipad.html?v=estate-7" readonly />
-              <button onclick="openUrl(this)">開く</button>
-            </div>
+          </div>
+          <div class="alert ok" style="margin-top:12px">
+            予約変更・キャンセル・質問は、上のLINE連絡文面をコピーして店舗へ送ってください。
           </div>
         </section>
       </aside>
@@ -585,7 +583,7 @@
   </main>
 
   <footer class="footer">
-    DPRO 不動産・賃貸内見 LINE ｜ STEP ESTATE-10 ｜ API: https://dpro-estate-line-api.dpromstk2000.workers.dev
+    DPRO 不動産・賃貸内見 LINE ｜ STEP ESTATE-10-R1 ｜ API: https://dpro-estate-line-api.dpromstk2000.workers.dev
   </footer>
 
 <script>
@@ -603,6 +601,27 @@ function escapeHtml(s){
 }
 function normalizePhone(s){
   return String(s || "").replace(/[^\d]/g,"");
+}
+function formatDateTimeForCustomer(value){
+  if(!value) return "未登録";
+  try{
+    const d = new Date(value);
+    if(Number.isNaN(d.getTime())) return String(value).replace("T"," ").slice(0,16);
+    return new Intl.DateTimeFormat("ja-JP", {
+      timeZone:"Asia/Tokyo",
+      year:"numeric",
+      month:"2-digit",
+      day:"2-digit",
+      hour:"2-digit",
+      minute:"2-digit"
+    }).format(d);
+  }catch(e){
+    return String(value).replace("T"," ").slice(0,16);
+  }
+}
+function shortReservationCode(id){
+  if(!id) return "確認中";
+  return String(id).replace(/-/g,"").slice(0,8).toUpperCase();
 }
 function setPill(id, type, text){
   const el = $(id);
@@ -720,7 +739,7 @@ function renderCustomer(){
     <div class="info-cell"><b>LINE名</b><span>${escapeHtml(currentCustomer.line_display_name || "未取得")}</span></div>
     <div class="info-cell"><b>連絡方法</b><span>${escapeHtml(currentCustomer.contact_method || "LINE")}</span></div>
     <div class="info-cell"><b>ステータス</b><span>${escapeHtml(currentCustomer.customer_status || "確認中")}</span></div>
-    <div class="info-cell"><b>最終連絡</b><span>${escapeHtml(currentCustomer.last_contact_at || "未登録")}</span></div>
+    <div class="info-cell"><b>最終連絡</b><span>${escapeHtml(formatDateTimeForCustomer(currentCustomer.last_contact_at))}</span></div>
   `;
   setPill("customerPill","ok","表示OK");
 }
@@ -771,7 +790,7 @@ function renderReservations(){
           <div class="detail"><b>集合方法</b><span>${escapeHtml(r.meeting_type || "-")}</span></div>
           <div class="detail"><b>集合場所</b><span>${escapeHtml(r.meeting_place || "-")}</span></div>
           <div class="detail"><b>お客様メモ</b><span>${escapeHtml(r.customer_note || "-")}</span></div>
-          <div class="detail"><b>予約ID</b><span>${escapeHtml(r.id || "-")}</span></div>
+          <div class="detail"><b>受付番号</b><span>${escapeHtml(shortReservationCode(r.id))}</span></div>
         </div>
         <div class="actions">
           <button class="small-btn" onclick="selectReservation('${escapeHtml(r.id)}')">この予約を選択</button>
@@ -896,6 +915,14 @@ async function copyUrl(btn){
   const input = btn.parentElement.querySelector("input");
   if(!input) return;
   await navigator.clipboard.writeText(input.value);
+  btn.textContent = "コピー済";
+  setTimeout(()=>btn.textContent="コピー", 1200);
+}
+async function copyShopInfo(btn){
+  const text = `DPRO不動産 志免・宇美・須恵デモ店
+TEL：092-000-1234
+営業時間：10:00〜18:00`;
+  await navigator.clipboard.writeText(text);
   btn.textContent = "コピー済";
   setTimeout(()=>btn.textContent="コピー", 1200);
 }
