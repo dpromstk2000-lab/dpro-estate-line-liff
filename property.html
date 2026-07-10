@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>STEP ESTATE-11｜物件詳細｜DPRO 不動産・賃貸内見 LINE</title>
+  <title>STEP ESTATE-11-R1｜物件詳細｜DPRO 不動産・賃貸内見 LINE</title>
   <style>
     :root{
       --bg:#edf5f1;
@@ -465,7 +465,7 @@
   <header class="hero">
     <div class="wrap">
       <div class="badge-row">
-        <span class="badge">STEP ESTATE-11</span>
+        <span class="badge">STEP ESTATE-11-R1</span>
         <span class="badge">物件詳細 property.html</span>
         <span class="badge">物件QR・チラシ導線</span>
       </div>
@@ -621,6 +621,7 @@
             </div>
             <button class="btn secondary" onclick="loadSlots()">空き時間を表示</button>
           </div>
+          <div class="alert ok" id="dateDisplayMessage">選択中の日付：未選択</div>
           <div class="slot-grid" id="slotGrid"></div>
 
           <div style="height:10px"></div>
@@ -699,12 +700,12 @@
   </main>
 
   <footer class="footer">
-    DPRO 不動産・賃貸内見 LINE ｜ STEP ESTATE-11 ｜ API: https://dpro-estate-line-api.dpromstk2000.workers.dev
+    DPRO 不動産・賃貸内見 LINE ｜ STEP ESTATE-11-R1 ｜ API: https://dpro-estate-line-api.dpromstk2000.workers.dev
   </footer>
 
 <script>
 const API_BASE = "https://dpro-estate-line-api.dpromstk2000.workers.dev";
-const PAGE_BASE = "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/property.html?v=estate-11";
+const PAGE_BASE = "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/property.html?v=estate-11-r1";
 let allProperties = [];
 let currentProperty = null;
 let selectedSlot = null;
@@ -776,6 +777,18 @@ function addDaysYmd(baseYmd, days){
   const dt = new Date(Date.UTC(y, m - 1, d + days, 12, 0, 0));
   return `${dt.getUTCFullYear()}-${String(dt.getUTCMonth()+1).padStart(2,"0")}-${String(dt.getUTCDate()).padStart(2,"0")}`;
 }
+function formatYmdJa(ymd, withWeekday = true){
+  if(!ymd) return "-";
+  const [y,m,d] = String(ymd).split("-").map(Number);
+  if(!y || !m || !d) return String(ymd).replaceAll("-", "/");
+  const dt = new Date(Date.UTC(y, m - 1, d, 12, 0, 0));
+  const weekdays = ["日","月","火","水","木","金","土"];
+  const base = `${y}/${String(m).padStart(2,"0")}/${String(d).padStart(2,"0")}`;
+  return withWeekday ? `${base}（${weekdays[dt.getUTCDay()]}）` : base;
+}
+function formatDateTimeJa(ymd, time){
+  return `${formatYmdJa(ymd, true)} ${String(time || "-").slice(0,5)}`;
+}
 function normalizePhone(s){
   return String(s || "").replace(/[^\d]/g,"");
 }
@@ -810,7 +823,7 @@ function buildFallbackLineMessage(data){
 DPRO不動産です。
 内見予約を受け付けました。
 
-日時：${date} ${time}
+日時：${formatDateTimeJa(date, time)}
 物件：${propertyName}
 集合方法：${meeting}
 集合場所：${place}
@@ -930,6 +943,9 @@ function updateMeetingPlace(){
 async function loadSlots(){
   const date = $("reservationDate").value;
   const grid = $("slotGrid");
+  if($("dateDisplayMessage")){
+    $("dateDisplayMessage").textContent = date ? `選択中の日付：${formatYmdJa(date, true)}` : "選択中の日付：未選択";
+  }
   grid.innerHTML = "";
   if(!date){
     grid.innerHTML = `<div class="alert warn" style="grid-column:1/-1;margin:0">予約日を選択してください。</div>`;
@@ -963,7 +979,7 @@ function selectSlot(time){
 }
 function updateSide(){
   $("sideProperty").textContent = currentProperty ? currentProperty.property_name : "未選択";
-  $("sideDateTime").textContent = selectedSlot ? `${selectedSlot.date} ${selectedSlot.time}` : "未選択";
+  $("sideDateTime").textContent = selectedSlot ? formatDateTimeJa(selectedSlot.date, selectedSlot.time) : "未選択";
   $("sideMeeting").textContent = $("meetingType").value;
   $("sidePlace").textContent = buildMeetingPlace();
 }
