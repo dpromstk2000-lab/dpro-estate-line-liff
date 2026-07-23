@@ -1,0 +1,26 @@
+DPRO 不動産・賃貸内見 LINE / ESTATE-NEXT-1 危険箇所台帳
+作成日時(JST): 2026-07-23T21:42:00+09:00
+保護タグ: dpro-estate-next-baseline-20260723
+保護SHA: b83c6b7b5853f23c7774f319ef16979f480c91e9
+
+[変更禁止・慎重変更対象]
+- index.html: 希望条件・物件検索・内見予約・予約確認の既存導線
+- property.html: 物件別URL・QR・物件指定予約
+- owner.html: 予約・顧客・物件・追客の管理API呼出し
+- member.html: 電話番号検索と予約履歴表示
+- owner-settings.html: 店舗・エリア・文面設定
+- system-check.html: health・system-check・demo_prepare
+
+[現状の注意点]
+- 注意 / public_internal_information: 公開画面にSTEP名・Worker URL・API表記が残っています。NEXT-2以降で非表示化します。
+- 注意 / initial_bulk_loading: PC管理画面は予約・顧客・物件・追客を同時取得しています。NEXT-2以降でタブ別遅延読込へ変更します。
+- 注意 / member_phone_only_lookup: 会員ページは電話番号検索を使用しています。NEXT-7でLIFF本人確認を優先します。
+- 注意 / settings_layout: 設定画面は縦長構成です。NEXT-2またはNEXT-6で左メニュー＋内容切替へ変更します。
+- OK / file_size: 150KB以上のファイルを記録しました。機能追加時も初期読込を増やさない方針です。
+
+[バックアップ・ロールバック]
+- 正常版タグ: dpro-estate-next-baseline-20260723
+- 確認例: git show dpro-estate-next-baseline-20260723:owner.html
+- 1ファイル復元例: git checkout dpro-estate-next-baseline-20260723 -- owner.html
+- 将来STEPの取消しは、原則として該当STEPのコミットをgit revertする。
+- Worker・Supabase・APIはNEXT-1では変更していない。

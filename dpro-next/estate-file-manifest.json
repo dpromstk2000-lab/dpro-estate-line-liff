@@ -1,0 +1,57 @@
+{
+  "repository": "dpromstk2000-lab/dpro-estate-line-liff",
+  "baseline_sha": "b83c6b7b5853f23c7774f319ef16979f480c91e9",
+  "baseline_tag": "dpro-estate-next-baseline-20260723",
+  "generated_at_jst": "2026-07-23T21:42:00+09:00",
+  "file_count": 8,
+  "files": [
+    {
+      "path": "index.html",
+      "bytes": 57727,
+      "sha256": "d4bbd41cb456b6096b5848f1efeb8d22435d6e574638e9144c88b0985e31325c",
+      "extension": ".html"
+    },
+    {
+      "path": "member.html",
+      "bytes": 32187,
+      "sha256": "1722c0e30eb41f6ba7c5f8acf1df95172b20ef3a77a0f9de45c687bc13f3fa8c",
+      "extension": ".html"
+    },
+    {
+      "path": "owner-ipad.html",
+      "bytes": 38174,
+      "sha256": "ec75bf4c185b7a40234906b69bfb0dd6b2a4f014833b0496f5c5fc635bd472f8",
+      "extension": ".html"
+    },
+    {
+      "path": "owner-settings.html",
+      "bytes": 43164,
+      "sha256": "02489e7e2a27969ad4f104addd73b92a288c5b2642efefa393f9589d51e8ee31",
+      "extension": ".html"
+    },
+    {
+      "path": "owner.html",
+      "bytes": 51273,
+      "sha256": "ab032a2b5897eb6b65b258ebab95ce34b89efc0c6864639e8c706c095cf6b3aa",
+      "extension": ".html"
+    },
+    {
+      "path": "property.html",
+      "bytes": 39623,
+      "sha256": "e1bf8eb5b0233cb38f888c661fc21c0891a15861a198943dd5bd3f35c554d640",
+      "extension": ".html"
+    },
+    {
+      "path": "reservation-test.html",
+      "bytes": 41451,
+      "sha256": "3206e826c24c9154aa8501edeeed4fd6474e36066dad4cb0643cde1fcca62779",
+      "extension": ".html"
+    },
+    {
+      "path": "system-check.html",
+      "bytes": 30230,
+      "sha256": "36727ae230ef3facbfd4f87a0d9296f9f35632e4522e2f37ec55d81fcc78cdcb",
+      "extension": ".html"
+    }
+  ]
+}

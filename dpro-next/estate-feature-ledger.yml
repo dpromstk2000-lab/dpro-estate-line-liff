@@ -1,0 +1,46 @@
+system: DPRO 不動産・賃貸内見 LINE
+baseline_version: STEP ESTATE-12
+baseline_tag: dpro-estate-next-baseline-20260723
+classification:
+  necessary:
+    - 今日やること
+    - 顧客・物件・内見予約・追客の維持
+    - 物件別QR導線
+    - 個別確認型LINE文面コピー
+    - PC・iPad・会員・設定・system-checkの役割分離
+  good_to_have:
+    - 申込案件単位
+    - 空室確認履歴
+    - 担当者と次アクション期限
+    - 前回希望条件で再相談
+  unnecessary_now:
+    - 家賃回収
+    - 入居者・修繕管理
+    - 電子契約・オンライン決済
+    - 一括自動LINE配信
+    - 大量画像の初期一括取得
+  future:
+    - 外部物件管理ソフト連携
+    - CSV顧客・物件取込
+    - 電子申込連携
+preserved_features:
+  - 希望条件入力
+  - 物件検索・おすすめ3件表示
+  - 物件別詳細URL・QR導線
+  - 内見予約
+  - PCオーナー画面
+  - 今日やること
+  - 顧客検索
+  - 物件ステータス変更
+  - 追客作成・完了
+  - LINE文面コピー
+  - iPadスタッフ画面
+  - 店舗・エリア・文面設定
+  - LINE会員予約確認
+  - system-check
+  - demo_prepare
+change_record:
+  worker: unchanged
+  supabase: unchanged
+  api: unchanged
+  application_html: unchanged

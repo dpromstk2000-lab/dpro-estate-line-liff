@@ -1,0 +1,609 @@
+{
+  "system": "DPRO 不動産・賃貸内見 LINE",
+  "repository": "dpromstk2000-lab/dpro-estate-line-liff",
+  "baseline_step": "STEP ESTATE-12",
+  "next_step_started": "ESTATE-NEXT-1",
+  "generated_at_jst": "2026-07-23T21:42:00+09:00",
+  "workflow_commit_sha": "6e50caafd75decf7fdc7c257980a9806d7301169",
+  "protected_baseline_sha": "b83c6b7b5853f23c7774f319ef16979f480c91e9",
+  "backup_tag": "dpro-estate-next-baseline-20260723",
+  "target_files": [
+    "index.html",
+    "property.html",
+    "member.html",
+    "owner.html",
+    "owner-ipad.html",
+    "owner-settings.html",
+    "system-check.html",
+    "reservation-test.html"
+  ],
+  "current_units": [
+    "顧客",
+    "物件",
+    "内見予約",
+    "追客",
+    "対応エリア",
+    "LINE文面テンプレート"
+  ],
+  "existing_features": [
+    "希望条件入力",
+    "物件検索・おすすめ3件表示",
+    "物件別詳細URL・QR導線",
+    "内見予約",
+    "PCオーナー画面",
+    "今日やること",
+    "顧客検索",
+    "物件ステータス変更",
+    "追客作成・完了",
+    "LINE文面コピー",
+    "iPadスタッフ画面",
+    "店舗・エリア・文面設定",
+    "LINE会員予約確認",
+    "system-check",
+    "demo_prepare"
+  ],
+  "preservation_policy": {
+    "application_files_changed_in_next_1": false,
+    "worker_changed": false,
+    "supabase_changed": false,
+    "api_changed": false,
+    "database_migration": false
+  },
+  "backup_and_rollback": {
+    "normal_version_tag": "dpro-estate-next-baseline-20260723",
+    "inspect": "git show dpro-estate-next-baseline-20260723:index.html",
+    "restore_selected_file": "git checkout dpro-estate-next-baseline-20260723 -- <file>",
+    "recommended_after_future_step": "問題のあるSTEPコミットをgit revertし、必要な場合だけタグから対象ファイルを復元する。"
+  },
+  "checks": {
+    "html": [
+      {
+        "file": "index.html",
+        "html_parse_ok": true,
+        "html_parse_error": "",
+        "id_count": 46,
+        "duplicate_ids": [],
+        "inline_scripts_checked": 1
+      },
+      {
+        "file": "member.html",
+        "html_parse_ok": true,
+        "html_parse_error": "",
+        "id_count": 13,
+        "duplicate_ids": [],
+        "inline_scripts_checked": 1
+      },
+      {
+        "file": "owner-ipad.html",
+        "html_parse_ok": true,
+        "html_parse_error": "",
+        "id_count": 33,
+        "duplicate_ids": [],
+        "inline_scripts_checked": 1
+      },
+      {
+        "file": "owner-settings.html",
+        "html_parse_ok": true,
+        "html_parse_error": "",
+        "id_count": 60,
+        "duplicate_ids": [],
+        "inline_scripts_checked": 1
+      },
+      {
+        "file": "owner.html",
+        "html_parse_ok": true,
+        "html_parse_error": "",
+        "id_count": 33,
+        "duplicate_ids": [],
+        "inline_scripts_checked": 1
+      },
+      {
+        "file": "property.html",
+        "html_parse_ok": true,
+        "html_parse_error": "",
+        "id_count": 35,
+        "duplicate_ids": [],
+        "inline_scripts_checked": 1
+      },
+      {
+        "file": "reservation-test.html",
+        "html_parse_ok": true,
+        "html_parse_error": "",
+        "id_count": 33,
+        "duplicate_ids": [],
+        "inline_scripts_checked": 1
+      },
+      {
+        "file": "system-check.html",
+        "html_parse_ok": true,
+        "html_parse_error": "",
+        "id_count": 15,
+        "duplicate_ids": [],
+        "inline_scripts_checked": 1
+      }
+    ],
+    "javascript_syntax": {
+      "ok": true,
+      "errors": []
+    },
+    "html_id_duplicates": {
+      "ok": true,
+      "duplicates": {}
+    },
+    "existing_feature_preservation": {
+      "ok": true,
+      "items": [
+        {
+          "file": "index.html",
+          "fragment": "STEP ESTATE-12",
+          "ok": true
+        },
+        {
+          "file": "index.html",
+          "fragment": "/api/public/settings",
+          "ok": true
+        },
+        {
+          "file": "index.html",
+          "fragment": "/api/public/properties",
+          "ok": true
+        },
+        {
+          "file": "index.html",
+          "fragment": "submitReservation",
+          "ok": true
+        },
+        {
+          "file": "index.html",
+          "fragment": "memberSearchBtn",
+          "ok": true
+        },
+        {
+          "file": "owner.html",
+          "fragment": "/api/admin/dashboard",
+          "ok": true
+        },
+        {
+          "file": "owner.html",
+          "fragment": "/api/admin/reservations",
+          "ok": true
+        },
+        {
+          "file": "owner.html",
+          "fragment": "/api/admin/customers",
+          "ok": true
+        },
+        {
+          "file": "owner.html",
+          "fragment": "/api/admin/properties",
+          "ok": true
+        },
+        {
+          "file": "owner.html",
+          "fragment": "/api/admin/followups",
+          "ok": true
+        },
+        {
+          "file": "owner.html",
+          "fragment": "prepareDemo",
+          "ok": true
+        },
+        {
+          "file": "owner-ipad.html",
+          "fragment": "/api/admin/dashboard",
+          "ok": true
+        },
+        {
+          "file": "owner-ipad.html",
+          "fragment": "todayReservations",
+          "ok": true
+        },
+        {
+          "file": "owner-ipad.html",
+          "fragment": "messagePreview",
+          "ok": true
+        },
+        {
+          "file": "owner-ipad.html",
+          "fragment": "demoBtn",
+          "ok": true
+        },
+        {
+          "file": "owner-ipad.html",
+          "fragment": "/api/admin/demo/prepare",
+          "ok": true
+        },
+        {
+          "file": "owner-settings.html",
+          "fragment": "saveBasicBtn",
+          "ok": true
+        },
+        {
+          "file": "owner-settings.html",
+          "fragment": "areaList",
+          "ok": true
+        },
+        {
+          "file": "owner-settings.html",
+          "fragment": "templateSelect",
+          "ok": true
+        },
+        {
+          "file": "owner-settings.html",
+          "fragment": "/api/admin/",
+          "ok": true
+        },
+        {
+          "file": "member.html",
+          "fragment": "/api/public/member",
+          "ok": true
+        },
+        {
+          "file": "member.html",
+          "fragment": "loadMember",
+          "ok": true
+        },
+        {
+          "file": "member.html",
+          "fragment": "normalizePhone",
+          "ok": true
+        },
+        {
+          "file": "member.html",
+          "fragment": "renderReservations",
+          "ok": true
+        },
+        {
+          "file": "property.html",
+          "fragment": "/api/public/properties",
+          "ok": true
+        },
+        {
+          "file": "property.html",
+          "fragment": "reserveProperty",
+          "ok": true
+        },
+        {
+          "file": "property.html",
+          "fragment": "propertyUrl",
+          "ok": true
+        },
+        {
+          "file": "property.html",
+          "fragment": "loadSlots",
+          "ok": true
+        },
+        {
+          "file": "system-check.html",
+          "fragment": "/api/health",
+          "ok": true
+        },
+        {
+          "file": "system-check.html",
+          "fragment": "/api/admin/system-check",
+          "ok": true
+        },
+        {
+          "file": "system-check.html",
+          "fragment": "runAllChecks",
+          "ok": true
+        },
+        {
+          "file": "system-check.html",
+          "fragment": "prepareDemo",
+          "ok": true
+        },
+        {
+          "file": "reservation-test.html",
+          "fragment": "dpro-estate-line-api.dpromstk2000.workers.dev",
+          "ok": true
+        },
+        {
+          "file": "reservation-test.html",
+          "fragment": "reservation",
+          "ok": true
+        }
+      ]
+    },
+    "estate_business_logic": {
+      "ok": true,
+      "items": [
+        {
+          "name": "customer_unit",
+          "ok": true,
+          "evidence": [
+            "customers",
+            "customer_status"
+          ]
+        },
+        {
+          "name": "property_unit",
+          "ok": true,
+          "evidence": [
+            "properties",
+            "property_status",
+            "viewing_available"
+          ]
+        },
+        {
+          "name": "reservation_unit",
+          "ok": true,
+          "evidence": [
+            "reservations",
+            "reservation_date",
+            "reservation_time"
+          ]
+        },
+        {
+          "name": "followup_unit",
+          "ok": true,
+          "evidence": [
+            "followups",
+            "followup_date"
+          ]
+        },
+        {
+          "name": "area_unit",
+          "ok": true,
+          "evidence": [
+            "areas",
+            "area_name"
+          ]
+        },
+        {
+          "name": "message_template_unit",
+          "ok": true,
+          "evidence": [
+            "message_templates",
+            "template_key"
+          ]
+        },
+        {
+          "name": "phone_handling",
+          "ok": true,
+          "evidence": [
+            "normalizePhone",
+            "type=\"tel\""
+          ]
+        },
+        {
+          "name": "past_date_ui_guard",
+          "ok": true,
+          "evidence": [
+            ".min = toYmd(today)",
+            "type=\"date\""
+          ]
+        },
+        {
+          "name": "demo_prepare",
+          "ok": true,
+          "evidence": [
+            "/api/admin/demo/prepare",
+            "prepareDemo"
+          ]
+        },
+        {
+          "name": "admin_system_check",
+          "ok": true,
+          "evidence": [
+            "/api/admin/system-check",
+            "runAllChecks"
+          ]
+        },
+        {
+          "name": "copy_before_send",
+          "ok": true,
+          "evidence": [
+            "navigator.clipboard",
+            "文面をコピー"
+          ]
+        }
+      ]
+    }
+  },
+  "api_endpoints": {
+    "index.html": [
+      "/api/public/available-slots?date=",
+      "/api/public/member?phone=",
+      "/api/public/properties?limit=80",
+      "/api/public/reserve",
+      "/api/public/settings"
+    ],
+    "property.html": [
+      "/api/public/available-slots?date=",
+      "/api/public/properties",
+      "/api/public/reserve",
+      "/api/public/settings"
+    ],
+    "member.html": [
+      "/api/public/member?phone="
+    ],
+    "owner.html": [
+      "/api/admin/customers",
+      "/api/admin/dashboard",
+      "/api/admin/demo/prepare",
+      "/api/admin/followups",
+      "/api/admin/login",
+      "/api/admin/properties",
+      "/api/admin/reservations",
+      "/api/admin/templates"
+    ],
+    "owner-ipad.html": [
+      "/api/admin/customers",
+      "/api/admin/dashboard",
+      "/api/admin/demo/prepare",
+      "/api/admin/followups",
+      "/api/admin/reservations",
+      "/api/admin/templates"
+    ],
+    "owner-settings.html": [
+      "/api/admin/areas",
+      "/api/admin/demo/prepare",
+      "/api/admin/settings",
+      "/api/admin/templates"
+    ],
+    "system-check.html": [
+      "/api/admin/dashboard?admin_code=",
+      "/api/admin/demo/prepare",
+      "/api/admin/demo/prepare?admin_code=",
+      "/api/admin/system-check?admin_code=",
+      "/api/health",
+      "/api/public/areas",
+      "/api/public/properties",
+      "/api/public/settings"
+    ],
+    "reservation-test.html": [
+      "/api/admin/dashboard?admin_code=",
+      "/api/admin/reservations?admin_code=",
+      "/api/admin/system-check?admin_code=",
+      "/api/health",
+      "/api/public/available-slots?date=",
+      "/api/public/member?phone=",
+      "/api/public/properties?area=",
+      "/api/public/reserve"
+    ]
+  },
+  "hardcoded_urls": {
+    "index.html": [
+      "https://dpro-estate-line-api.dpromstk2000.workers.dev"
+    ],
+    "property.html": [
+      "https://dpro-estate-line-api.dpromstk2000.workers.dev",
+      "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/index.html?v=estate-12",
+      "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/member.html?v=estate-12",
+      "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/property.html?v=estate-12"
+    ],
+    "member.html": [
+      "https://dpro-estate-line-api.dpromstk2000.workers.dev"
+    ],
+    "owner.html": [
+      "https://dpro-estate-line-api.dpromstk2000.workers.dev",
+      "https://dpro-estate-line-api.dpromstk2000.workers.dev/api/admin/system-check?admin_code=1234",
+      "https://dpro-estate-line-api.dpromstk2000.workers.dev/api/health",
+      "https://dpromstk2000-lab.github.io/dpro-estate-line-liff",
+      "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/index.html?v=estate-12",
+      "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner.html?v=estate-12"
+    ],
+    "owner-ipad.html": [
+      "https://dpro-estate-line-api.dpromstk2000.workers.dev",
+      "https://dpro-estate-line-api.dpromstk2000.workers.dev/api/admin/system-check?admin_code=1234",
+      "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/index.html?v=estate-12",
+      "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner-ipad.html?v=estate-12",
+      "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner-settings.html?v=estate-12",
+      "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner.html?v=estate-12"
+    ],
+    "owner-settings.html": [
+      "https://dpro-estate-line-api.dpromstk2000.workers.dev",
+      "https://dpro-estate-line-api.dpromstk2000.workers.dev/api/admin/system-check?admin_code=1234",
+      "https://dpro-estate-line-api.dpromstk2000.workers.dev/api/health",
+      "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/index.html?v=estate-12",
+      "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner-settings.html?v=estate-12",
+      "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner.html?v=estate-12"
+    ],
+    "system-check.html": [
+      "https://dpro-estate-line-api.dpromstk2000.workers.dev",
+      "https://dpro-estate-line-api.dpromstk2000.workers.dev/api/admin/system-check?admin_code=1234",
+      "https://dpro-estate-line-api.dpromstk2000.workers.dev/api/health",
+      "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/index.html?v=estate-12",
+      "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/member.html?v=estate-12",
+      "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner-ipad.html?v=estate-12",
+      "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner-settings.html?v=estate-12",
+      "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner.html?v=estate-12",
+      "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/property.html?v=estate-12",
+      "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/reservation-test.html?v=estate-12",
+      "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/system-check.html?v=estate-12"
+    ],
+    "reservation-test.html": [
+      "https://dpro-estate-line-api.dpromstk2000.workers.dev",
+      "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/index.html?v=estate-12",
+      "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner-ipad.html?v=estate-12",
+      "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner.html?v=estate-12",
+      "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/reservation-test.html?v=estate-12",
+      "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/system-check.html?v=estate-12"
+    ]
+  },
+  "admin_code_occurrences": {
+    "index.html": 2,
+    "property.html": 1,
+    "member.html": 5,
+    "owner.html": 6,
+    "owner-ipad.html": 9,
+    "owner-settings.html": 10,
+    "system-check.html": 5,
+    "reservation-test.html": 4
+  },
+  "risks": [
+    {
+      "level": "注意",
+      "key": "public_internal_information",
+      "detail": "公開画面にSTEP名・Worker URL・API表記が残っています。NEXT-2以降で非表示化します。",
+      "evidence": {
+        "index.html": [
+          "STEP ESTATE-12",
+          "dpro-estate-line-api\\.dpromstk2000\\.workers\\.dev",
+          "\\bAPI\\s*:"
+        ],
+        "property.html": [
+          "STEP ESTATE-12",
+          "dpro-estate-line-api\\.dpromstk2000\\.workers\\.dev",
+          "\\bAPI\\s*:"
+        ],
+        "member.html": [
+          "STEP ESTATE-12",
+          "dpro-estate-line-api\\.dpromstk2000\\.workers\\.dev",
+          "\\bAPI\\s*:"
+        ]
+      }
+    },
+    {
+      "level": "注意",
+      "key": "initial_bulk_loading",
+      "detail": "PC管理画面は予約・顧客・物件・追客を同時取得しています。NEXT-2以降でタブ別遅延読込へ変更します。",
+      "evidence": {
+        "index.html": [
+          80
+        ],
+        "property.html": [],
+        "member.html": [],
+        "owner.html": [
+          120,
+          80,
+          200,
+          120,
+          100
+        ],
+        "owner-ipad.html": [
+          100
+        ],
+        "owner-settings.html": [],
+        "system-check.html": [],
+        "reservation-test.html": [
+          20,
+          200
+        ]
+      }
+    },
+    {
+      "level": "注意",
+      "key": "member_phone_only_lookup",
+      "detail": "会員ページは電話番号検索を使用しています。NEXT-7でLIFF本人確認を優先します。",
+      "evidence": {
+        "member_endpoint": "/api/public/member?phone="
+      }
+    },
+    {
+      "level": "注意",
+      "key": "settings_layout",
+      "detail": "設定画面は縦長構成です。NEXT-2またはNEXT-6で左メニュー＋内容切替へ変更します。",
+      "evidence": {
+        "file": "owner-settings.html"
+      }
+    },
+    {
+      "level": "OK",
+      "key": "file_size",
+      "detail": "150KB以上のファイルを記録しました。機能追加時も初期読込を増やさない方針です。",
+      "evidence": []
+    }
+  ]
+}
