@@ -44,3 +44,32 @@ change_record:
   supabase: unchanged
   api: unchanged
   application_html: unchanged
+
+estate_next_2:
+  status: COMPLETE
+  completed_at_jst: "2026-07-23T22:20:13+09:00"
+  modified_files:
+    - owner.html
+    - owner-settings.html
+    - config.js
+  improvements:
+    - 今日やること中心のPC管理画面
+    - 日常運用の左メニュー切替
+    - 予約・顧客・物件・文面の遅延読込
+    - 30件単位の追加読込
+    - 設定画面の左メニュー切替
+    - 管理コードの端末保存削除
+    - 日常操作とデモ操作の分離
+    - 日常画面から内部API情報を非表示
+  preserved:
+    - 内見予約ステータス変更
+    - 追客作成・完了
+    - 顧客連絡済み更新
+    - 物件ステータス変更
+    - 個別確認型LINE文面コピー
+    - 店舗・予約・エリア・文面設定
+    - demo_prepare
+  change_record:
+    worker: unchanged
+    supabase: unchanged
+    api: unchanged

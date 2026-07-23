@@ -24,3 +24,15 @@ DPRO 不動産・賃貸内見 LINE / ESTATE-NEXT-1 危険箇所台帳
 - 1ファイル復元例: git checkout dpro-estate-next-baseline-20260723 -- owner.html
 - 将来STEPの取消しは、原則として該当STEPのコミットをgit revertする。
 - Worker・Supabase・APIはNEXT-1では変更していない。
+
+
+[ESTATE-NEXT-2 完了]
+- 完了日時(JST): 2026-07-23T22:20:13+09:00
+- PC管理画面の初期一括取得を廃止し、今日のダッシュボードのみ先に取得。
+- 予約・顧客・物件はメニューを開いた時に30件から取得。
+- 設定画面を左メニュー切替へ変更。
+- 管理コードをこの端末から削除できるボタンを常設。
+- 日常運用と営業前デモ準備を分離。
+- 日常画面からSTEP名・Worker URL・管理コード付きsystem-check URLを非表示。
+- Worker・Supabase・APIの変更なし。
+- ロールバックタグ: dpro-estate-next-2-before-20260723

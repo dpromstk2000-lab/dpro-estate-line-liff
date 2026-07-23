@@ -1,12 +1,23 @@
 system: DPRO 不動産・賃貸内見 LINE
 repository: dpromstk2000-lab/dpro-estate-line-liff
-previous_version: STEP ESTATE-12
-current_step: ESTATE-NEXT-1-COMPLETE
-next_step: ESTATE-NEXT-2
+previous_step: ESTATE-NEXT-1-COMPLETE
+current_step: ESTATE-NEXT-2-COMPLETE
+next_step: ESTATE-NEXT-3
 baseline_tag: dpro-estate-next-baseline-20260723
-baseline_sha: b83c6b7b5853f23c7774f319ef16979f480c91e9
-completed_at_jst: "2026-07-23T21:42:00+09:00"
-application_files_changed: false
+step_backup_tag: dpro-estate-next-2-before-20260723
+completed_at_jst: "2026-07-23T22:20:13+09:00"
+modified_files:
+- owner.html
+- owner-settings.html
+- config.js
+owner_today_first: true
+owner_left_menu: true
+settings_left_menu: true
+lazy_loading: true
+page_increment: 30
+admin_code_local_delete: true
+daily_demo_separated: true
+visible_internal_information_removed: true
 worker_changed: false
 supabase_changed: false
 api_changed: false
@@ -15,4 +26,4 @@ html_syntax_check: PASS
 javascript_syntax_check: PASS
 workflow_yml_syntax_check: PASS
 html_id_duplicate_check: PASS
-estate_business_logic_check: PASS
+local_http_check: PASS

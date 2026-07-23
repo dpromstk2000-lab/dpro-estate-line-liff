@@ -1,0 +1,48 @@
+{
+  "step": "ESTATE-NEXT-2",
+  "status": "PASS",
+  "modified_files": [
+    "owner.html",
+    "owner-settings.html",
+    "config.js"
+  ],
+  "worker_changed": false,
+  "supabase_changed": false,
+  "api_changed": false,
+  "checks": {
+    "html_and_inline_js": [
+      {
+        "file": "owner.html",
+        "id_count": 39,
+        "duplicate_ids": [],
+        "inline_scripts_checked": 1,
+        "bytes": 51266,
+        "sha256": "815b6047b2a691b7bacc67b2221167cb53fe7e5c26ba80e28935ab936c30d481"
+      },
+      {
+        "file": "owner-settings.html",
+        "id_count": 61,
+        "duplicate_ids": [],
+        "inline_scripts_checked": 1,
+        "bytes": 39276,
+        "sha256": "584c234c4f76b9edc9af6f8ae1b445884589ef3a7917df2188cdd28f68180a3f"
+      }
+    ],
+    "config_js_syntax": "PASS",
+    "duplicate_html_ids": "PASS",
+    "existing_owner_operations": "PASS",
+    "settings_operations": "PASS",
+    "today_first_navigation": "PASS",
+    "left_menu_switching": "PASS",
+    "lazy_loading_30_increment": "PASS",
+    "admin_code_local_delete": "PASS",
+    "daily_demo_separation": "PASS",
+    "visible_internal_information_removed": "PASS",
+    "admin_code_query_leak_removed": "PASS",
+    "file_size": {
+      "owner.html": 51266,
+      "owner-settings.html": 39276,
+      "config.js": 770
+    }
+  }
+}

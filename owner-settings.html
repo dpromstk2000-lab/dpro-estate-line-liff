@@ -1,1064 +1,340 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DPRO 不動産・賃貸内見 LINE｜STEP ESTATE-12 店舗設定</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="DPRO 不動産・賃貸内見 LINEの店舗設定画面です。">
+  <title>DPRO 不動産・賃貸内見 LINE｜店舗設定</title>
   <style>
-    :root {
-      --bg: #eef5f2;
-      --bg2: #f8faf8;
-      --main: #0f6b55;
-      --main2: #0b4f41;
-      --main3: #e8f6f1;
-      --accent: #f59e0b;
-      --accent2: #fff7e6;
-      --danger: #dc2626;
-      --danger-bg: #fff0f0;
-      --blue: #2563eb;
-      --blue-bg: #eff6ff;
-      --gray: #64748b;
-      --text: #14211d;
-      --muted: #6b7b76;
-      --line: #dfe8e4;
-      --card: #ffffff;
-      --shadow: 0 18px 45px rgba(15, 77, 64, 0.14);
-      --radius: 18px;
+    :root{
+      --bg:#eef5f2;--surface:#fff;--surface2:#f8fbfa;--text:#14231e;--muted:#64746e;--line:#dce8e3;
+      --main:#0d6b55;--main2:#095140;--soft:#e9f7f1;--blue:#2563eb;--blue-soft:#eef4ff;
+      --warn:#d97706;--warn-soft:#fff7e8;--danger:#c62828;--danger-soft:#fff0f0;
+      --shadow:0 16px 38px rgba(18,55,43,.10);--radius:20px;--sidebar:270px
     }
-
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      color: var(--text);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:
-        radial-gradient(circle at 15% 5%, rgba(15, 107, 85, 0.13), transparent 35%),
-        radial-gradient(circle at 85% 90%, rgba(245, 158, 11, 0.13), transparent 35%),
-        linear-gradient(135deg, #eef7f3 0%, #f7faf8 52%, #f3f0e6 100%);
-      min-height: 100vh;
-    }
-
-    button, input, textarea, select {
-      font: inherit;
-    }
-
-    button {
-      border: 0;
-      cursor: pointer;
-      transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
-    }
-
-    button:hover { transform: translateY(-1px); }
-    button:disabled { cursor: not-allowed; opacity: .55; transform: none; }
-
-    .hero {
-      color: white;
-      padding: 28px 20px 32px;
-      background:
-        radial-gradient(circle at 92% 0%, rgba(255,255,255,.22) 0 70px, transparent 72px),
-        linear-gradient(135deg, #064b3e 0%, #0f6b55 55%, #7b8b45 100%);
-      border-bottom-left-radius: 22px;
-      border-bottom-right-radius: 22px;
-      box-shadow: 0 18px 45px rgba(15, 77, 64, 0.23);
-    }
-
-    .hero-inner,
-    .wrap {
-      width: min(1120px, calc(100% - 32px));
-      margin: 0 auto;
-    }
-
-    .badge-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 5px 10px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.18);
-      color: #fff;
-      font-size: 12px;
-      font-weight: 800;
-      backdrop-filter: blur(8px);
-    }
-
-    h1 {
-      font-size: clamp(28px, 4vw, 46px);
-      line-height: 1.12;
-      margin: 14px 0 8px;
-      letter-spacing: -0.03em;
-    }
-
-    .hero p {
-      max-width: 760px;
-      margin: 0 0 18px;
-      color: rgba(255,255,255,.9);
-      line-height: 1.7;
-      font-weight: 600;
-    }
-
-    .hero-nav {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 18px;
-    }
-
-    .hero-nav a {
-      text-align: center;
-      text-decoration: none;
-      color: white;
-      font-weight: 800;
-      background: rgba(255,255,255,.16);
-      border: 1px solid rgba(255,255,255,.24);
-      border-radius: 10px;
-      padding: 11px 10px;
-    }
-
-    .status-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
-      margin-top: 18px;
-    }
-
-    .status-card {
-      background: rgba(255,255,255,.92);
-      color: var(--text);
-      padding: 13px 15px;
-      border-radius: 13px;
-      box-shadow: 0 12px 25px rgba(0,0,0,.08);
-      min-height: 74px;
-    }
-    .status-card .label { font-size: 11px; color: var(--muted); font-weight: 900; }
-    .status-card .value { font-size: 14px; font-weight: 900; margin-top: 4px; word-break: break-all; }
-
-    .wrap { padding: 22px 0 46px; }
-
-    .panel {
-      background: rgba(255,255,255,.94);
-      border: 1px solid rgba(223,232,228,.9);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 18px;
-      margin-bottom: 18px;
-    }
-
-    .panel-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 16px;
-      margin-bottom: 14px;
-    }
-
-    .panel h2 {
-      margin: 0 0 4px;
-      font-size: 20px;
-      letter-spacing: -0.02em;
-    }
-    .panel p.desc {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.65;
-      font-size: 13px;
-      font-weight: 650;
-    }
-
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 5px 10px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 900;
-      white-space: nowrap;
-    }
-    .pill.ok { background: var(--main3); color: var(--main2); }
-    .pill.warn { background: var(--accent2); color: #9a5b00; }
-    .pill.danger { background: var(--danger-bg); color: var(--danger); }
-    .pill.blue { background: var(--blue-bg); color: var(--blue); }
-    .pill.gray { background: #f1f5f9; color: #475569; }
-
-    .login-grid {
-      display: grid;
-      grid-template-columns: 1.4fr 170px 160px;
-      gap: 10px;
-      align-items: end;
-    }
-
-    label {
-      display: block;
-      margin: 0 0 6px;
-      color: #263b34;
-      font-size: 12px;
-      font-weight: 900;
-    }
-
-    input, select, textarea {
-      width: 100%;
-      border: 1px solid var(--line);
-      border-radius: 11px;
-      background: white;
-      color: var(--text);
-      padding: 11px 12px;
-      outline: none;
-      box-shadow: 0 1px 0 rgba(0,0,0,.02);
-    }
-
-    input:focus, select:focus, textarea:focus {
-      border-color: rgba(15,107,85,.45);
-      box-shadow: 0 0 0 4px rgba(15,107,85,.08);
-    }
-
-    textarea { min-height: 110px; resize: vertical; line-height: 1.6; }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 11px 15px;
-      border-radius: 11px;
-      background: var(--main);
-      color: #fff;
-      font-weight: 900;
-      text-decoration: none;
-      min-height: 43px;
-    }
-    .btn.sub { background: #e9f5f1; color: var(--main2); }
-    .btn.warn { background: var(--accent); color: #fff; }
-    .btn.danger { background: var(--danger); color: #fff; }
-    .btn.gray { background: #e2e8f0; color: #334155; }
-    .btn.blue { background: var(--blue); color: #fff; }
-    .btn.small { padding: 8px 11px; border-radius: 9px; min-height: 34px; font-size: 12px; }
-
-    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-    .grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
-    .form-row { margin-bottom: 12px; }
-
-    .holiday-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 3px;
-    }
-    .check-pill {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 11px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: #fff;
-      font-size: 12px;
-      font-weight: 850;
-      color: #40524d;
-      cursor: pointer;
-      user-select: none;
-    }
-    .check-pill input { width: auto; margin: 0; accent-color: var(--main); }
-
-    .notice {
-      border-radius: 13px;
-      padding: 12px 13px;
-      background: var(--main3);
-      color: #14513f;
-      line-height: 1.65;
-      font-size: 13px;
-      font-weight: 750;
-      margin-bottom: 12px;
-    }
-    .notice.warn { background: var(--accent2); color: #7c4a00; }
-    .notice.danger { background: var(--danger-bg); color: #991b1b; }
-    .notice.blue { background: var(--blue-bg); color: #1d4ed8; }
-
-    .main-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 360px;
-      gap: 18px;
-      align-items: start;
-    }
-    .side-sticky { position: sticky; top: 14px; }
-
-    .area-list, .template-list {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .area-card, .template-card, .summary-card {
-      border: 1px solid var(--line);
-      border-radius: 15px;
-      padding: 14px;
-      background: #fff;
-    }
-
-    .card-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-    .card-title { font-size: 16px; font-weight: 950; line-height: 1.35; }
-    .card-sub { color: var(--muted); font-size: 12px; font-weight: 750; line-height: 1.5; margin-top: 2px; }
-    .card-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-
-    .mini-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
-      margin-top: 10px;
-    }
-    .mini-box {
-      border-radius: 10px;
-      background: #f8fafc;
-      padding: 9px 10px;
-      min-height: 52px;
-    }
-    .mini-box .k { color: var(--muted); font-size: 11px; font-weight: 850; }
-    .mini-box .v { margin-top: 3px; font-size: 13px; font-weight: 900; word-break: break-all; }
-
-    .template-editor {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 11px;
-    }
-
-    .url-box {
-      display: grid;
-      gap: 9px;
-    }
-    .url-row {
-      display: grid;
-      grid-template-columns: 120px minmax(0, 1fr) 82px;
-      gap: 8px;
-      align-items: center;
-      border: 1px solid var(--line);
-      background: #fff;
-      border-radius: 11px;
-      padding: 8px;
-    }
-    .url-row strong { font-size: 12px; }
-    .url-row code {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      background: #f8fafc;
-      border-radius: 8px;
-      padding: 7px 8px;
-      font-size: 11px;
-      color: #334155;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .toast {
-      position: fixed;
-      right: 18px;
-      bottom: 18px;
-      z-index: 50;
-      display: none;
-      max-width: min(480px, calc(100vw - 36px));
-      padding: 13px 15px;
-      background: #052e26;
-      color: #fff;
-      border-radius: 13px;
-      box-shadow: 0 18px 45px rgba(0,0,0,.25);
-      font-weight: 850;
-      line-height: 1.55;
-    }
-    .toast.show { display: block; }
-    .toast.error { background: #7f1d1d; }
-
-    .footer {
-      text-align: center;
-      color: #6b7b76;
-      font-size: 12px;
-      padding: 22px 0 34px;
-      font-weight: 700;
-    }
-
-    .hide { display: none !important; }
-
-    @media (max-width: 980px) {
-      .hero-nav, .status-grid, .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .main-grid { grid-template-columns: 1fr; }
-      .side-sticky { position: static; }
-      .area-list, .template-list { grid-template-columns: 1fr; }
-      .login-grid { grid-template-columns: 1fr; }
-    }
-
-    @media (max-width: 640px) {
-      .hero-inner, .wrap { width: min(100% - 22px, 1120px); }
-      .hero { padding-top: 22px; }
-      .hero-nav, .status-grid, .grid-2, .grid-3, .grid-4, .mini-grid { grid-template-columns: 1fr; }
-      .panel { padding: 14px; border-radius: 15px; }
-      .panel-head { flex-direction: column; align-items: stretch; }
-      .url-row { grid-template-columns: 1fr; }
-      .status-card { min-height: auto; }
-    }
+    *{box-sizing:border-box}html{scroll-behavior:smooth}
+    body{margin:0;background:linear-gradient(180deg,#f9fbfa 0%,var(--bg) 100%);color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Yu Gothic",Meiryo,sans-serif;font-size:16px;line-height:1.65;min-height:100vh}
+    button,input,select,textarea{font:inherit}button{cursor:pointer}a{color:inherit}
+    .sidebar{position:fixed;inset:0 auto 0 0;width:var(--sidebar);background:#073f34;color:#fff;padding:20px 16px;overflow:auto;z-index:20;box-shadow:12px 0 30px rgba(6,48,39,.12)}
+    .brand{padding:4px 8px 18px;border-bottom:1px solid rgba(255,255,255,.14)}
+    .brand small{display:block;color:rgba(255,255,255,.72);font-weight:800;font-size:12px}.brand strong{display:block;font-size:21px;line-height:1.3;margin-top:4px}
+    .shop-mini{margin-top:12px;padding:10px;border-radius:13px;background:rgba(255,255,255,.10);color:rgba(255,255,255,.92);font-size:13px;font-weight:800}
+    .nav-group{margin-top:18px}.nav-label{padding:0 9px 7px;color:rgba(255,255,255,.58);font-size:11px;font-weight:900;letter-spacing:.08em}
+    .nav-btn,.nav-link{width:100%;display:flex;align-items:center;gap:10px;border:0;border-radius:13px;padding:11px 12px;background:transparent;
+      color:rgba(255,255,255,.88);font-weight:900;text-align:left;text-decoration:none;margin:3px 0}
+    .nav-btn:hover,.nav-link:hover,.nav-btn.active{background:rgba(255,255,255,.14);color:#fff}
+    .side-delete{margin-top:18px;border-top:1px solid rgba(255,255,255,.12);padding-top:14px}
+    .side-delete button{width:100%;border:1px solid rgba(255,255,255,.24);background:transparent;color:#fff;border-radius:11px;padding:9px;font-weight:900}
+    .main{margin-left:var(--sidebar);min-height:100vh}
+    .topbar{position:sticky;top:0;z-index:10;background:rgba(249,251,250,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+    .topbar-inner{display:flex;align-items:center;justify-content:space-between;gap:14px;max-width:1320px;margin:0 auto;padding:13px 22px}
+    .page-title h1{margin:0;font-size:24px;line-height:1.25;letter-spacing:-.03em}.page-title p{margin:2px 0 0;color:var(--muted);font-size:13px;font-weight:700}
+    .status{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+    .pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:var(--soft);color:var(--main2);font-size:12px;font-weight:900;white-space:nowrap}
+    .pill.blue{background:var(--blue-soft);color:#1d4ed8}.pill.warn{background:var(--warn-soft);color:#92400e}.pill.danger{background:var(--danger-soft);color:#991b1b}.pill.gray{background:#eef2f1;color:#51615b}
+    .content{max-width:1320px;margin:0 auto;padding:20px 22px 50px}
+    .card{background:rgba(255,255,255,.97);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:16px}
+    .card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:18px 19px 13px;border-bottom:1px solid var(--line)}
+    .card-title{margin:0;font-size:21px;line-height:1.35;letter-spacing:-.02em}.card-sub{margin:4px 0 0;color:var(--muted);font-size:13px;font-weight:700}
+    .card-body{padding:18px 19px}
+    .auth-grid{display:grid;grid-template-columns:minmax(240px,420px) auto auto;gap:10px;align-items:end}
+    label{display:block;margin-bottom:6px;font-size:13px;font-weight:900;color:#32453e}
+    input,select,textarea{width:100%;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--text);padding:12px 13px;min-height:48px;outline:none}
+    input:focus,select:focus,textarea:focus{border-color:rgba(13,107,85,.5);box-shadow:0 0 0 4px rgba(13,107,85,.10)}textarea{min-height:160px;resize:vertical}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:0;border-radius:12px;padding:11px 15px;min-height:46px;background:var(--main);color:#fff;font-weight:950;text-decoration:none}
+    .btn:hover{background:var(--main2)}.btn.secondary{background:var(--soft);color:var(--main2);border:1px solid #cce8dc}.btn.light{background:#fff;color:var(--main2);border:1px solid var(--line)}
+    .btn.warn{background:var(--warn)}.btn.danger{background:var(--danger)}.btn:disabled{opacity:.55;cursor:not-allowed}
+    .settings-panel{display:none}.settings-panel.active{display:block}
+    .grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.grid-4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+    .field{margin-bottom:12px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.notice{border-radius:13px;padding:12px 13px;background:var(--soft);color:var(--main2);font-size:13px;font-weight:750;margin-bottom:12px}
+    .notice.warn{background:var(--warn-soft);color:#7c4a00}.notice.danger{background:var(--danger-soft);color:#991b1b}.notice.blue{background:var(--blue-soft);color:#1d4ed8}
+    .holiday-row{display:flex;flex-wrap:wrap;gap:8px}.check-pill{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:999px;background:#fff;padding:9px 11px;font-size:13px;font-weight:850}
+    .check-pill input{width:auto;min-height:auto;margin:0;accent-color:var(--main)}
+    .area-list,.template-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.area-card,.template-card,.summary-card{border:1px solid var(--line);border-radius:16px;background:#fff;padding:14px}
+    .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.item-title{font-size:16px;font-weight:950}.item-sub{color:var(--muted);font-size:12px;font-weight:700;margin-top:3px}
+    .summary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.summary-box{border:1px solid #edf2ef;background:var(--surface2);border-radius:11px;padding:10px}
+    .summary-box small{display:block;color:var(--muted);font-size:11px;font-weight:900}.summary-box strong{display:block;margin-top:3px;font-size:13px;word-break:break-word}
+    .template-layout{display:grid;grid-template-columns:minmax(260px,.72fr) minmax(360px,1.28fr);gap:14px}
+    .demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.demo-card{border:1px solid var(--line);border-radius:17px;background:#fff;padding:15px}
+    .demo-card h3{margin:0 0 5px;font-size:17px}.demo-card p{margin:0;color:var(--muted);font-size:13px}
+    .url-list{display:grid;gap:8px;margin-top:12px}.url-row{display:grid;grid-template-columns:130px 1fr auto;gap:8px;align-items:center;border:1px solid var(--line);border-radius:12px;background:#fff;padding:8px}
+    .url-row code{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;background:#f7faf9;border-radius:8px;padding:7px;font-size:12px;color:#40534c}
+    .toast{position:fixed;right:18px;bottom:18px;z-index:60;max-width:min(470px,calc(100vw - 36px));padding:13px 15px;border-radius:14px;background:#064e3b;color:#fff;
+      box-shadow:0 18px 42px rgba(0,0,0,.22);opacity:0;transform:translateY(18px);pointer-events:none;transition:.18s;font-weight:850}.toast.show{opacity:1;transform:none}.toast.error{background:#7f1d1d}
+    .mobile-menu{display:none;border:0;border-radius:11px;background:var(--main);color:#fff;padding:9px 12px;font-weight:900}.hidden{display:none!important}
+    @media(max-width:980px){.sidebar{transform:translateX(-105%);transition:.2s}.sidebar.open{transform:none}.main{margin-left:0}.mobile-menu{display:inline-flex}.content{padding:15px 12px 42px}.topbar-inner{padding:11px 13px}.status{display:none}.grid-4{grid-template-columns:1fr 1fr}.area-list,.template-list,.template-layout,.demo-grid{grid-template-columns:1fr}}
+    @media(max-width:640px){.auth-grid,.grid-2,.grid-3,.grid-4,.summary-grid,.url-row{grid-template-columns:1fr}.auth-grid .btn{width:100%}.card-head,.card-body{padding-left:14px;padding-right:14px}.page-title h1{font-size:20px}}
   </style>
 </head>
 <body>
-  <header class="hero">
-    <div class="hero-inner">
-      <div class="badge-row">
-        <span class="badge">STEP ESTATE-12</span>
-        <span class="badge">全体導線ブラッシュアップ</span>
-        <span class="badge">店舗設定・対応エリア管理</span>
-        <span class="badge">管理コード 1234</span>
-      </div>
-      <h1>店舗設定と<br />対応エリアを管理</h1>
-      <p>志免・宇美・須恵エリアを初期値に、店舗ごとの対応エリア・営業時間・定休日・LINE文面テンプレートを変更できます。お客様用画面にも設定が反映されます。</p>
-      <nav class="hero-nav">
-        <a href="#basic">店舗設定</a>
-        <a href="#areas">対応エリア</a>
-        <a href="#templates">文面テンプレート</a>
-        <a href="#urls">画面URL</a>
-      </nav>
-      <div class="status-grid">
-        <div class="status-card"><div class="label">店舗</div><div id="statusShop" class="value">読込中</div></div>
-        <div class="status-card"><div class="label">API</div><div class="value">dpro-estate-line-api</div></div>
-        <div class="status-card"><div class="label">本日</div><div id="statusToday" class="value">-</div></div>
-        <div class="status-card"><div class="label">状態</div><div id="statusState" class="value">未確認</div></div>
-      </div>
+  <!-- DPRO ESTATE NEXT-2 / owner-settings.html -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <small>DPRO 不動産・賃貸内見 LINE</small>
+      <strong>店舗設定</strong>
+      <div class="shop-mini" id="sideShopName">管理コード確認前</div>
     </div>
-  </header>
+    <div class="nav-group">
+      <div class="nav-label">設定メニュー</div>
+      <button class="nav-btn active" data-settings-button="basic" onclick="openSettingsPanel('basic')">店舗基本情報</button>
+      <button class="nav-btn" data-settings-button="booking" onclick="openSettingsPanel('booking')">予約・営業時間</button>
+      <button class="nav-btn" data-settings-button="areas" onclick="openSettingsPanel('areas')">対応エリア</button>
+      <button class="nav-btn" data-settings-button="templates" onclick="openSettingsPanel('templates')">LINE文面</button>
+      <button class="nav-btn" data-settings-button="system" onclick="openSettingsPanel('system')">デモ・システム</button>
+    </div>
+    <div class="nav-group">
+      <div class="nav-label">関連画面</div>
+      <a class="nav-link" id="ownerLink" href="owner.html">PC管理画面</a>
+      <a class="nav-link" id="ipadLink" href="owner-ipad.html">iPad・スタッフ画面</a>
+    </div>
+    <div class="side-delete"><button onclick="clearSavedAdminCode()">この端末から管理コードを削除</button></div>
+  </aside>
 
-  <main class="wrap">
-    <section class="panel" id="loginPanel">
-      <div class="panel-head">
-        <div>
-          <h2>管理コード確認</h2>
-          <p class="desc">デモ初期値は 1234 です。設定変更・エリア変更・文面変更の前に確認します。</p>
-        </div>
-        <span class="pill ok">店舗設定用</span>
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <button class="mobile-menu" onclick="toggleSidebar()">メニュー</button>
+        <div class="page-title"><h1 id="currentTitle">店舗基本情報</h1><p id="currentDescription">店舗名・電話番号・住所などを設定します。</p></div>
+        <div class="status"><span class="pill" id="statusToday">-</span><span class="pill gray" id="statusState">未接続</span></div>
       </div>
-      <div class="login-grid">
-        <div>
-          <label>Cloudflare Worker API</label>
-          <input id="apiBaseInput" value="https://dpro-estate-line-api.dpromstk2000.workers.dev" />
-        </div>
-        <div>
-          <label>管理コード</label>
-          <input id="adminCodeInput" type="password" value="1234" autocomplete="current-password" />
-        </div>
-        <button class="btn" id="loadBtn">設定を読み込む</button>
-      </div>
-      <div id="loginNotice" class="notice warn" style="margin-top:12px;">まずは「設定を読み込む」を押してください。読み込み後に各設定を編集できます。</div>
-    </section>
+    </header>
 
-    <div class="main-grid">
-      <div>
-        <section class="panel" id="basic">
-          <div class="panel-head">
-            <div>
-              <h2>1. 店舗基本設定</h2>
-              <p class="desc">営業時間・定休日・内見枠・管理コードを変更できます。お客様用画面の予約可能時間にも関係します。</p>
+    <main class="content">
+      <section class="card" id="authCard">
+        <div class="card-head">
+          <div><h2 class="card-title">管理コード確認</h2><p class="card-sub">共有端末では、設定終了後に保存済み管理コードを削除してください。</p></div>
+          <span class="pill">設定認証</span>
+        </div>
+        <div class="card-body">
+          <div class="auth-grid">
+            <div><label for="adminCodeInput">管理コード</label><input id="adminCodeInput" type="password" inputmode="numeric" autocomplete="current-password" placeholder="デモは 1234"></div>
+            <button class="btn" id="loadBtn" onclick="authenticate()">設定を読み込む</button>
+            <button class="btn light" id="clearAdminCodeBtn" onclick="clearSavedAdminCode()">この端末から削除</button>
+          </div>
+          <div id="loginNotice" class="notice warn" style="margin-top:12px">管理コードを入力して設定を読み込んでください。</div>
+        </div>
+      </section>
+
+      <section class="settings-panel active" data-settings-panel="basic">
+        <section class="card">
+          <div class="card-head">
+            <div><h2 class="card-title">店舗基本情報</h2><p class="card-sub">お客様画面や案内文面に使用する店舗情報です。</p></div>
+            <span class="pill" id="basicStatus">未読込</span>
+          </div>
+          <div class="card-body">
+            <div class="grid-2">
+              <div class="field"><label for="shopName">店舗名</label><input id="shopName" placeholder="DPRO不動産 デモ店"></div>
+              <div class="field"><label for="shopPhone">電話番号</label><input id="shopPhone" type="tel" placeholder="092-000-1234"></div>
             </div>
-            <span class="pill ok" id="basicStatus">未読込</span>
-          </div>
-
-          <div class="notice blue">営業デモでは管理コードは <strong>1234</strong> のままでOKです。本番導入時は店舗ごとに変更します。</div>
-
-          <div class="grid-2">
-            <div class="form-row"><label>店舗名</label><input id="shopName" placeholder="DPRO不動産 志免・宇美・須恵デモ店" /></div>
-            <div class="form-row"><label>電話番号</label><input id="shopPhone" placeholder="092-000-1234" /></div>
-          </div>
-          <div class="form-row"><label>住所</label><input id="shopAddress" placeholder="福岡県糟屋郡志免町 デモ住所" /></div>
-
-          <div class="grid-4">
-            <div class="form-row"><label>営業開始</label><input id="businessStart" type="time" /></div>
-            <div class="form-row"><label>営業終了</label><input id="businessEnd" type="time" /></div>
-            <div class="form-row"><label>予約枠の分数</label><select id="slotMinutes"><option value="30">30分</option><option value="45">45分</option><option value="60">60分</option><option value="90">90分</option><option value="120">120分</option></select></div>
-            <div class="form-row"><label>予約受付期間</label><select id="bookingDays"><option value="30">30日先まで</option><option value="45">45日先まで</option><option value="60">60日先まで</option><option value="90">90日先まで</option></select></div>
-          </div>
-
-          <div class="form-row">
-            <label>定休日</label>
-            <div class="holiday-row" id="holidayRow"></div>
-          </div>
-
-          <div class="grid-4">
-            <div class="form-row"><label>1日の最大内見件数</label><input id="maxViewings" type="number" min="1" max="50" /></div>
-            <div class="form-row"><label>1枠の最大予約数</label><input id="maxPerSlot" type="number" min="1" max="10" /></div>
-            <div class="form-row"><label>当日予約締切</label><input id="cutoffTime" type="time" /></div>
-            <div class="form-row"><label>キャンセル締切</label><input id="cancelHours" type="number" min="0" max="168" /></div>
-          </div>
-
-          <div class="grid-2">
-            <div class="form-row"><label>お客様画面のエリア見出し</label><input id="areaTitle" placeholder="希望エリア" /></div>
-            <div class="form-row"><label>新しい管理コード（変更しない場合は空欄）</label><input id="newAdminCode" placeholder="本番導入時のみ変更" /></div>
-          </div>
-
-          <div class="card-actions">
-            <button class="btn" id="saveBasicBtn">店舗設定を保存</button>
-            <button class="btn sub" id="reloadBasicBtn">再読み込み</button>
-            <a class="btn gray" href="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner.html?v=estate-12" target="_blank" rel="noopener">PC管理画面へ</a>
+            <div class="field"><label for="shopAddress">住所</label><input id="shopAddress" placeholder="福岡県糟屋郡志免町"></div>
+            <div class="field"><label for="areaTitle">お客様画面のエリア見出し</label><input id="areaTitle" placeholder="希望エリア"></div>
+            <div class="actions"><button class="btn" id="saveBasicBtn" onclick="saveBasic()">店舗基本情報を保存</button><button class="btn secondary" id="reloadBasicBtn" onclick="loadAll()">再読み込み</button></div>
           </div>
         </section>
+        <section class="card">
+          <div class="card-head"><div><h2 class="card-title">現在の設定</h2><p class="card-sub">保存内容を簡単に確認できます。</p></div><span class="pill">概要</span></div>
+          <div class="card-body"><div class="summary-grid">
+            <div class="summary-box"><small>店舗名</small><strong id="summaryShop">-</strong></div>
+            <div class="summary-box"><small>営業時間</small><strong id="summaryHours">-</strong></div>
+            <div class="summary-box"><small>定休日</small><strong id="summaryHolidays">-</strong></div>
+            <div class="summary-box"><small>対応エリア</small><strong id="summaryAreas">-</strong></div>
+            <div class="summary-box"><small>1日上限</small><strong id="summaryMax">-</strong></div>
+            <div class="summary-box"><small>予約期間</small><strong id="summaryBooking">-</strong></div>
+          </div></div>
+        </section>
+      </section>
 
-        <section class="panel" id="areas">
-          <div class="panel-head">
-            <div>
-              <h2>2. 対応エリア設定</h2>
-              <p class="desc">初期値は志免・宇美・須恵です。店舗ごとにエリア追加・表示ON/OFF・並び順変更ができます。</p>
-            </div>
-            <span class="pill ok" id="areaCount">0件</span>
-          </div>
-
-          <div class="notice">ここで表示ONにしたエリアが、お客様用の希望エリア選択に表示されます。営業先に合わせて「粕屋」「篠栗」などを追加できます。</div>
-
-          <div class="panel" style="box-shadow:none;background:#f9fcfb;margin-bottom:14px;">
-            <div class="panel-head" style="margin-bottom:8px;">
-              <div>
-                <h2 style="font-size:16px;">エリアを追加</h2>
-                <p class="desc">例：粕屋、篠栗、久山、福岡空港周辺など。</p>
-              </div>
-            </div>
+      <section class="settings-panel" data-settings-panel="booking">
+        <section class="card">
+          <div class="card-head"><div><h2 class="card-title">予約・営業時間</h2><p class="card-sub">内見予約枠と受付可能期間を設定します。</p></div><span class="pill blue">予約設定</span></div>
+          <div class="card-body">
+            <div class="notice blue">30分枠を推奨します。既存店舗設定を壊さないため、現在の選択肢は維持しています。</div>
             <div class="grid-4">
-              <div class="form-row"><label>エリア名</label><input id="newAreaName" placeholder="粕屋" /></div>
-              <div class="form-row"><label>表示名</label><input id="newAreaLabel" placeholder="粕屋エリア" /></div>
-              <div class="form-row"><label>表示順</label><input id="newAreaOrder" type="number" value="100" /></div>
-              <div class="form-row"><label>優先度</label><input id="newAreaPriority" type="number" value="100" /></div>
+              <div class="field"><label for="businessStart">営業開始</label><input id="businessStart" type="time"></div>
+              <div class="field"><label for="businessEnd">営業終了</label><input id="businessEnd" type="time"></div>
+              <div class="field"><label for="slotMinutes">予約枠の分数</label><select id="slotMinutes"><option value="30">30分</option><option value="45">45分</option><option value="60">60分</option><option value="90">90分</option><option value="120">120分</option></select></div>
+              <div class="field"><label for="bookingDays">予約受付期間</label><select id="bookingDays"><option value="30">30日先まで</option><option value="45">45日先まで</option><option value="60">60日先まで</option><option value="90">90日先まで</option></select></div>
             </div>
-            <div class="form-row"><label>お客様向け説明</label><input id="newAreaCustomerMemo" placeholder="ファミリー向け・通勤しやすいエリアなど" /></div>
-            <button class="btn" id="addAreaBtn">エリアを追加する</button>
+            <div class="field"><label>定休日</label><div class="holiday-row" id="holidayRow"></div></div>
+            <div class="grid-4">
+              <div class="field"><label for="maxViewings">1日の最大内見件数</label><input id="maxViewings" type="number" min="1" max="50"></div>
+              <div class="field"><label for="maxPerSlot">1枠の最大予約数</label><input id="maxPerSlot" type="number" min="1" max="10"></div>
+              <div class="field"><label for="cutoffTime">当日予約締切</label><input id="cutoffTime" type="time"></div>
+              <div class="field"><label for="cancelHours">キャンセル締切（時間前）</label><input id="cancelHours" type="number" min="0" max="168"></div>
+            </div>
+            <div class="actions"><button class="btn" id="saveBookingBtn" onclick="saveBasic()">予約設定を保存</button><button class="btn secondary" onclick="loadAll()">再読み込み</button></div>
           </div>
-
-          <div class="area-list" id="areaList"></div>
         </section>
+      </section>
 
-        <section class="panel" id="templates">
-          <div class="panel-head">
-            <div>
-              <h2>3. LINE文面テンプレート設定</h2>
-              <p class="desc">内見予約受付・前日確認・当日案内・内見後お礼などの文面を編集できます。まずはコピー型で安全に運用します。</p>
-            </div>
-            <span class="pill ok" id="templateCount">0件</span>
-          </div>
-          <div class="notice warn">差し込み文字はそのまま残してください。例：{{customer_name}}、{{reservation_date}}、{{property_name}} など。</div>
-
-          <div class="grid-2">
-            <div>
-              <label>編集するテンプレート</label>
-              <select id="templateSelect"></select>
-              <div id="templateList" class="template-list" style="margin-top:12px;"></div>
-            </div>
-            <div class="template-editor">
-              <div class="form-row"><label>テンプレート名</label><input id="templateTitle" /></div>
-              <div class="grid-2">
-                <div class="form-row"><label>カテゴリ</label><input id="templateCategory" /></div>
-                <div class="form-row"><label>表示順</label><input id="templateOrder" type="number" /></div>
-              </div>
-              <div class="form-row"><label>文面</label><textarea id="templateBody"></textarea></div>
-              <label class="check-pill" style="width:max-content;"><input type="checkbox" id="templateActive" /> 表示ON</label>
-              <div class="card-actions">
-                <button class="btn" id="saveTemplateBtn">文面を保存</button>
-                <button class="btn sub" id="copyTemplateBtn">文面コピー</button>
+      <section class="settings-panel" data-settings-panel="areas">
+        <section class="card">
+          <div class="card-head"><div><h2 class="card-title">対応エリア</h2><p class="card-sub">お客様画面に表示するエリアを追加・編集します。</p></div><span class="pill" id="areaCount">0件</span></div>
+          <div class="card-body">
+            <div class="notice">表示ONのエリアだけがお客様用の希望エリア選択に表示されます。</div>
+            <div class="card" style="box-shadow:none;background:#f9fcfb">
+              <div class="card-head"><div><h3 class="card-title" style="font-size:17px">エリアを追加</h3><p class="card-sub">例：粕屋、篠栗、久山、福岡空港周辺</p></div></div>
+              <div class="card-body">
+                <div class="grid-4">
+                  <div class="field"><label for="newAreaName">エリア名</label><input id="newAreaName" placeholder="粕屋"></div>
+                  <div class="field"><label for="newAreaLabel">表示名</label><input id="newAreaLabel" placeholder="粕屋エリア"></div>
+                  <div class="field"><label for="newAreaOrder">表示順</label><input id="newAreaOrder" type="number" value="100"></div>
+                  <div class="field"><label for="newAreaPriority">優先度</label><input id="newAreaPriority" type="number" value="100"></div>
+                </div>
+                <div class="field"><label for="newAreaCustomerMemo">お客様向け説明</label><input id="newAreaCustomerMemo" placeholder="ファミリー向け・通勤しやすいエリアなど"></div>
+                <button class="btn" id="addAreaBtn" onclick="addArea()">エリアを追加する</button>
               </div>
             </div>
+            <div class="area-list" id="areaList"></div>
           </div>
         </section>
-      </div>
+      </section>
 
-      <aside class="side-sticky">
-        <section class="panel">
-          <div class="panel-head">
-            <div>
-              <h2>設定状況</h2>
-              <p class="desc">現在の店舗設定を簡単に確認できます。</p>
+      <section class="settings-panel" data-settings-panel="templates">
+        <section class="card">
+          <div class="card-head"><div><h2 class="card-title">LINE文面テンプレート</h2><p class="card-sub">コピー型の安全な運用を維持し、送信前に内容を確認します。</p></div><span class="pill" id="templateCount">0件</span></div>
+          <div class="card-body">
+            <div class="notice warn">差し込み文字は削除しないでください。例：{{customer_name}}、{{reservation_date}}、{{property_name}}</div>
+            <div class="template-layout">
+              <div>
+                <label for="templateSelect">編集するテンプレート</label><select id="templateSelect" onchange="selectTemplate(this.value)"></select>
+                <div class="template-list" id="templateList" style="margin-top:12px"></div>
+              </div>
+              <div>
+                <div class="field"><label for="templateTitle">テンプレート名</label><input id="templateTitle"></div>
+                <div class="grid-2"><div class="field"><label for="templateCategory">カテゴリ</label><input id="templateCategory"></div><div class="field"><label for="templateOrder">表示順</label><input id="templateOrder" type="number"></div></div>
+                <div class="field"><label for="templateBody">文面</label><textarea id="templateBody"></textarea></div>
+                <label class="check-pill"><input type="checkbox" id="templateActive"> 表示ON</label>
+                <div class="actions"><button class="btn" id="saveTemplateBtn" onclick="saveTemplate()">文面を保存</button><button class="btn secondary" id="copyTemplateBtn" onclick="copyText($('templateBody').value)">文面コピー</button></div>
+              </div>
             </div>
-            <span class="pill ok">確認</span>
-          </div>
-          <div class="summary-card">
-            <div class="mini-grid">
-              <div class="mini-box"><div class="k">店舗名</div><div id="summaryShop" class="v">-</div></div>
-              <div class="mini-box"><div class="k">営業時間</div><div id="summaryHours" class="v">-</div></div>
-              <div class="mini-box"><div class="k">定休日</div><div id="summaryHolidays" class="v">-</div></div>
-              <div class="mini-box"><div class="k">対応エリア</div><div id="summaryAreas" class="v">-</div></div>
-              <div class="mini-box"><div class="k">1日上限</div><div id="summaryMax" class="v">-</div></div>
-              <div class="mini-box"><div class="k">予約期間</div><div id="summaryBooking" class="v">-</div></div>
-            </div>
-          </div>
-          <div class="card-actions">
-            <button class="btn warn" id="demoPrepareBtn">営業前デモ準備</button>
-            <a class="btn sub" href="https://dpro-estate-line-api.dpromstk2000.workers.dev/api/admin/system-check?admin_code=1234" target="_blank" rel="noopener">system-check</a>
           </div>
         </section>
+      </section>
 
-        <section class="panel" id="urls">
-          <div class="panel-head">
-            <div>
-              <h2>画面URL</h2>
-              <p class="desc">そのままコピーして確認できます。</p>
+      <section class="settings-panel" data-settings-panel="system">
+        <section class="card">
+          <div class="card-head"><div><h2 class="card-title">デモ・システム</h2><p class="card-sub">日常設定と分けた管理者向け操作です。</p></div><span class="pill warn">慎重操作</span></div>
+          <div class="card-body">
+            <div class="demo-grid">
+              <div class="demo-card">
+                <h3>営業前デモ準備</h3><p>デモ予約・顧客・追客を初期状態へ戻します。本番店舗では使用しません。</p>
+                <div class="actions"><button class="btn warn" id="demoPrepareBtn" onclick="prepareDemo()">営業前デモ準備</button></div>
+              </div>
+              <div class="demo-card">
+                <h3>管理コード変更</h3><p>本番導入時だけ変更してください。保存後、この端末の保存値も更新されます。</p>
+                <div class="field" style="margin-top:10px"><label for="newAdminCode">新しい管理コード</label><input id="newAdminCode" type="password" autocomplete="new-password" placeholder="変更しない場合は空欄"></div>
+                <div class="actions"><button class="btn" onclick="saveBasic()">管理コードを変更</button><button class="btn light" onclick="clearSavedAdminCode()">この端末から保存値を削除</button></div>
+              </div>
             </div>
-            <span class="pill ok">URL</span>
-          </div>
-          <div class="url-box">
-            <div class="url-row"><strong>お客様画面</strong><code id="urlIndex">https://dpromstk2000-lab.github.io/dpro-estate-line-liff/index.html?v=estate-12</code><button class="btn small sub" data-copy="urlIndex">コピー</button></div>
-            <div class="url-row"><strong>PC管理画面</strong><code id="urlOwner">https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner.html?v=estate-12</code><button class="btn small sub" data-copy="urlOwner">コピー</button></div>
-            <div class="url-row"><strong>店舗設定</strong><code id="urlSettings">https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner-settings.html?v=estate-12</code><button class="btn small sub" data-copy="urlSettings">コピー</button></div>
-            <div class="url-row"><strong>Worker health</strong><code id="urlHealth">https://dpro-estate-line-api.dpromstk2000.workers.dev/api/health</code><button class="btn small sub" data-copy="urlHealth">コピー</button></div>
-            <div class="url-row"><strong>管理チェック</strong><code id="urlCheck">https://dpro-estate-line-api.dpromstk2000.workers.dev/api/admin/system-check?admin_code=1234</code><button class="btn small sub" data-copy="urlCheck">コピー</button></div>
+            <div class="demo-grid" style="margin-top:14px">
+              <div class="demo-card"><h3>システム確認</h3><p>APIの管理コードをURLへ付けず、system-check画面から確認します。</p><div class="actions"><a class="btn secondary" id="systemCheckLink" href="system-check.html" target="_blank" rel="noopener">system-checkを開く</a></div></div>
+              <div class="demo-card"><h3>画面URL</h3><p>営業確認に必要な画面だけを表示します。</p><div class="url-list">
+                <div class="url-row"><strong>お客様画面</strong><code id="urlIndex"></code><button class="btn light" onclick="copyElementText('urlIndex')">コピー</button></div>
+                <div class="url-row"><strong>PC管理画面</strong><code id="urlOwner"></code><button class="btn light" onclick="copyElementText('urlOwner')">コピー</button></div>
+                <div class="url-row"><strong>店舗設定</strong><code id="urlSettings"></code><button class="btn light" onclick="copyElementText('urlSettings')">コピー</button></div>
+              </div></div>
+            </div>
           </div>
         </section>
-      </aside>
-    </div>
-  </main>
+      </section>
+    </main>
+  </div>
 
-  <div class="footer">DPRO 不動産・賃貸内見 LINE ｜ STEP ESTATE-12 ｜ API: https://dpro-estate-line-api.dpromstk2000.workers.dev</div>
-  <div id="toast" class="toast"></div>
-
+  <div class="toast" id="toast"></div>
+  <script src="config.js?v=estate-next-2"></script>
   <script>
-    const DEFAULT_API_BASE = 'https://dpro-estate-line-api.dpromstk2000.workers.dev';
-    const SHOP_CODE = 'dpro_estate_demo';
-    const DAYS = ['月','火','水','木','金','土','日'];
-
-    const state = {
-      apiBase: localStorage.getItem('estate_api_base') || DEFAULT_API_BASE,
-      adminCode: localStorage.getItem('estate_admin_code') || '1234',
-      shop: null,
-      areas: [],
-      templates: [],
-      selectedTemplateKey: '',
-      loading: false,
+    'use strict';
+    const CONFIG=window.DPRO_ESTATE_CONFIG||{
+      apiBase:'https://dpro-estate-line-api.dpromstk2000.workers.dev',pageBase:'https://dpromstk2000-lab.github.io/dpro-estate-line-liff',
+      shopCode:'dpro_estate_demo',storage:{adminCode:'dpro_estate_admin_code',settingsPanel:'dpro_estate_settings_panel'},demo:{queryKey:'demo',queryValue:'1',adminCode:'1234'}
     };
+    const DAYS=['月','火','水','木','金','土','日'];
+    const state={adminCode:'',authenticated:false,shop:null,areas:[],templates:[],selectedTemplateKey:'',loading:false};
+    const PANEL_META={
+      basic:['店舗基本情報','店舗名・電話番号・住所などを設定します。'],
+      booking:['予約・営業時間','営業時間・定休日・内見枠を設定します。'],
+      areas:['対応エリア','お客様画面に表示するエリアを管理します。'],
+      templates:['LINE文面','送信前確認用の文面テンプレートを編集します。'],
+      system:['デモ・システム','デモ準備・管理コード・確認画面を管理します。']
+    };
+    const $=id=>document.getElementById(id);
 
-    const $ = (id) => document.getElementById(id);
-
-    document.addEventListener('DOMContentLoaded', () => {
-      $('apiBaseInput').value = state.apiBase;
-      $('adminCodeInput').value = state.adminCode;
-      renderHolidayChecks([]);
-      bindEvents();
-      setToday();
-      loadAll();
+    document.addEventListener('DOMContentLoaded',async()=>{
+      setToday();setPageLinks();renderHolidayChecks([]);
+      const saved=localStorage.getItem(CONFIG.storage.adminCode)||'';const demo=new URLSearchParams(location.search).get(CONFIG.demo.queryKey)===CONFIG.demo.queryValue;
+      state.adminCode=saved||(demo?CONFIG.demo.adminCode:'');$('adminCodeInput').value=state.adminCode;
+      const panel=localStorage.getItem(CONFIG.storage.settingsPanel)||'basic';openSettingsPanel(PANEL_META[panel]?panel:'basic',false);
+      if(state.adminCode)await authenticate(true);
     });
 
-    function bindEvents() {
-      $('loadBtn').addEventListener('click', loadAll);
-      $('reloadBasicBtn').addEventListener('click', loadAll);
-      $('saveBasicBtn').addEventListener('click', saveBasic);
-      $('addAreaBtn').addEventListener('click', addArea);
-      $('templateSelect').addEventListener('change', () => selectTemplate($('templateSelect').value));
-      $('saveTemplateBtn').addEventListener('click', saveTemplate);
-      $('copyTemplateBtn').addEventListener('click', () => copyText($('templateBody').value));
-      $('demoPrepareBtn').addEventListener('click', prepareDemo);
-      document.querySelectorAll('[data-copy]').forEach(btn => {
-        btn.addEventListener('click', () => copyElementText(btn.dataset.copy));
-      });
+    function setToday(){$('statusToday').textContent=new Intl.DateTimeFormat('ja-JP',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());}
+    function setPageLinks(){const v='estate-next-2';$('ownerLink').href=`${CONFIG.pageBase}/owner.html?v=${v}`;$('ipadLink').href=`${CONFIG.pageBase}/owner-ipad.html?v=${v}`;$('systemCheckLink').href=`${CONFIG.pageBase}/system-check.html?v=${v}`;$('urlIndex').textContent=`${CONFIG.pageBase}/index.html`;$('urlOwner').textContent=`${CONFIG.pageBase}/owner.html?v=${v}`;$('urlSettings').textContent=`${CONFIG.pageBase}/owner-settings.html?v=${v}`;}
+    function toggleSidebar(){$('sidebar').classList.toggle('open');}function closeSidebar(){$('sidebar').classList.remove('open');}
+    function openSettingsPanel(name,render=true){document.querySelectorAll('[data-settings-panel]').forEach(el=>el.classList.toggle('active',el.dataset.settingsPanel===name));document.querySelectorAll('[data-settings-button]').forEach(el=>el.classList.toggle('active',el.dataset.settingsButton===name));$('currentTitle').textContent=PANEL_META[name][0];$('currentDescription').textContent=PANEL_META[name][1];localStorage.setItem(CONFIG.storage.settingsPanel,name);closeSidebar();if(render&&state.authenticated){if(name==='areas')renderAreas();if(name==='templates')renderTemplates();}}
+    function escapeHtml(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}function escapeAttr(v){return escapeHtml(v).replace(/`/g,'&#96;');}
+    function toInt(v,f){const n=Number.parseInt(v,10);return Number.isFinite(n)?n:f;}function toTime(v){return v?String(v).slice(0,5):'';}
+    function toast(message,error=false){const el=$('toast');el.textContent=message;el.className=`toast ${error?'error ':''}show`;clearTimeout(window.__estateSettingsToast);window.__estateSettingsToast=setTimeout(()=>el.className='toast',error?4800:3000);}
+    function setLoading(flag){state.loading=flag;$('statusState').textContent=flag?'処理中':state.authenticated?'接続OK':'未接続';document.querySelectorAll('button').forEach(btn=>{if(btn.id!=='clearAdminCodeBtn')btn.disabled=flag;});}
+    async function api(path,options={}){
+      const method=options.method||'GET',url=new URL(CONFIG.apiBase+path);url.searchParams.set('shop_code',CONFIG.shopCode);if(method==='GET')url.searchParams.set('admin_code',state.adminCode);
+      const headers={'Content-Type':'application/json','X-Admin-Code':state.adminCode,'X-DPRO-Admin-Code':state.adminCode};const init={method,headers};
+      if(options.body)init.body=JSON.stringify({...options.body,shop_code:CONFIG.shopCode,admin_code:state.adminCode});
+      const res=await fetch(url.toString(),init),text=await res.text();let data={};try{data=text?JSON.parse(text):{};}catch{data={ok:false,error:text};}
+      if(!res.ok||data?.ok===false)throw new Error(data?.error||data?.message||`APIエラー ${res.status}`);return data;
     }
-
-    function setToday() {
-      const now = new Date();
-      const parts = new Intl.DateTimeFormat('ja-JP', { timeZone: 'Asia/Tokyo', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(now);
-      const y = parts.find(p => p.type === 'year').value;
-      const m = parts.find(p => p.type === 'month').value;
-      const d = parts.find(p => p.type === 'day').value;
-      $('statusToday').textContent = `${y}/${m}/${d}`;
+    async function authenticate(silent=false){
+      state.adminCode=$('adminCodeInput').value.trim();if(!state.adminCode){if(!silent)toast('管理コードを入力してください。',true);return;}
+      try{setLoading(true);await loadAll(true);localStorage.setItem(CONFIG.storage.adminCode,state.adminCode);state.authenticated=true;$('authCard').classList.add('hidden');$('loginNotice').textContent='設定を読み込みました。';if(!silent)toast('店舗設定を開きました。');}
+      catch(error){state.authenticated=false;$('authCard').classList.remove('hidden');$('statusState').textContent='認証エラー';$('loginNotice').className='notice danger';$('loginNotice').textContent=error.message;if(!silent)toast(error.message,true);}
+      finally{setLoading(false);}
     }
-
-    function syncAuthInputs() {
-      state.apiBase = $('apiBaseInput').value.trim().replace(/\/$/, '') || DEFAULT_API_BASE;
-      state.adminCode = $('adminCodeInput').value.trim() || '1234';
-      localStorage.setItem('estate_api_base', state.apiBase);
-      localStorage.setItem('estate_admin_code', state.adminCode);
-      updateUrlTexts();
+    function clearSavedAdminCode(){localStorage.removeItem(CONFIG.storage.adminCode);state.adminCode='';state.authenticated=false;$('adminCodeInput').value='';$('authCard').classList.remove('hidden');$('statusState').textContent='未接続';$('sideShopName').textContent='管理コード確認前';toast('この端末に保存した管理コードを削除しました。');}
+    async function loadAll(fromAuth=false){
+      if(!fromAuth){state.adminCode=$('adminCodeInput').value.trim()||state.adminCode;if(!state.adminCode){toast('管理コードを入力してください。',true);return;}}
+      try{setLoading(true);const data=await api('/api/admin/settings');state.shop=data.shop||null;state.areas=Array.isArray(data.areas)?data.areas:[];state.templates=Array.isArray(data.message_templates)?data.message_templates:[];
+        state.authenticated=true;localStorage.setItem(CONFIG.storage.adminCode,state.adminCode);renderBasic();renderAreas();renderTemplates();renderSummary();$('basicStatus').textContent='読込OK';$('basicStatus').className='pill';$('sideShopName').textContent=state.shop?.shop_name||'DPRO不動産';$('statusState').textContent='接続OK';$('authCard').classList.add('hidden');
+        if(!fromAuth)toast('設定を再読み込みしました。');
+      }catch(error){if(!fromAuth)toast(error.message,true);throw error;}finally{setLoading(false);}
     }
-
-    async function loadAll() {
-      syncAuthInputs();
-      setLoading(true, '設定を読み込み中...');
-      try {
-        const data = await apiGet('/api/admin/settings');
-        state.shop = data.shop || null;
-        state.areas = Array.isArray(data.areas) ? data.areas : [];
-        state.templates = Array.isArray(data.message_templates) ? data.message_templates : [];
-        renderBasic();
-        renderAreas();
-        renderTemplates();
-        renderSummary();
-        $('basicStatus').textContent = '読込OK';
-        $('basicStatus').className = 'pill ok';
-        $('statusState').textContent = '接続OK';
-        $('statusShop').textContent = state.shop?.shop_name || '店舗未取得';
-        $('loginNotice').className = 'notice';
-        $('loginNotice').textContent = '設定を読み込みました。必要な項目を変更して保存してください。';
-        toast('設定を読み込みました。');
-      } catch (error) {
-        $('basicStatus').textContent = 'エラー';
-        $('basicStatus').className = 'pill danger';
-        $('statusState').textContent = '接続エラー';
-        $('loginNotice').className = 'notice danger';
-        $('loginNotice').textContent = error.message;
-        toast(error.message, true);
-      } finally {
-        setLoading(false);
-      }
+    function renderBasic(){const s=state.shop||{};$('shopName').value=s.shop_name||'';$('shopPhone').value=s.phone||'';$('shopAddress').value=s.address||'';$('areaTitle').value=s.area_title||'希望エリア';$('businessStart').value=toTime(s.business_start_time||'10:00');$('businessEnd').value=toTime(s.business_end_time||'18:00');$('slotMinutes').value=String(s.slot_minutes||60);$('bookingDays').value=String(s.booking_days_ahead||60);$('maxViewings').value=s.max_viewings_per_day||8;$('maxPerSlot').value=s.max_reservations_per_slot||1;$('cutoffTime').value=toTime(s.same_day_booking_cutoff_time||'09:00');$('cancelHours').value=s.cancel_deadline_hours??24;$('newAdminCode').value='';renderHolidayChecks(Array.isArray(s.regular_holidays)?s.regular_holidays:[]);}
+    function renderHolidayChecks(selected){$('holidayRow').innerHTML=DAYS.map(day=>`<label class="check-pill"><input type="checkbox" value="${day}" ${selected.includes(day)?'checked':''}> ${day}曜日</label>`).join('');}
+    async function saveBasic(){
+      if(!state.authenticated){toast('先に設定を読み込んでください。',true);return;}const holidays=[...$('holidayRow').querySelectorAll('input:checked')].map(i=>i.value);
+      const payload={shop_name:$('shopName').value.trim(),phone:$('shopPhone').value.trim(),address:$('shopAddress').value.trim(),area_title:$('areaTitle').value.trim()||'希望エリア',
+        business_start_time:$('businessStart').value||'10:00',business_end_time:$('businessEnd').value||'18:00',slot_minutes:toInt($('slotMinutes').value,60),booking_days_ahead:toInt($('bookingDays').value,60),
+        regular_holidays:holidays,max_viewings_per_day:toInt($('maxViewings').value,8),max_reservations_per_slot:toInt($('maxPerSlot').value,1),same_day_booking_cutoff_time:$('cutoffTime').value||'09:00',cancel_deadline_hours:toInt($('cancelHours').value,24)};
+      const newCode=$('newAdminCode').value.trim();if(newCode)payload.new_admin_code=newCode;
+      try{setLoading(true);await api('/api/admin/settings',{method:'PATCH',body:payload});if(newCode){state.adminCode=newCode;$('adminCodeInput').value=newCode;localStorage.setItem(CONFIG.storage.adminCode,newCode);}toast('店舗設定を保存しました。');await loadAll(true);}
+      catch(error){toast(error.message,true);}finally{setLoading(false);}
     }
-
-    function renderBasic() {
-      const s = state.shop || {};
-      $('shopName').value = s.shop_name || '';
-      $('shopPhone').value = s.phone || '';
-      $('shopAddress').value = s.address || '';
-      $('businessStart').value = toTimeValue(s.business_start_time || '10:00');
-      $('businessEnd').value = toTimeValue(s.business_end_time || '18:00');
-      $('slotMinutes').value = String(s.slot_minutes || 60);
-      $('bookingDays').value = String(s.booking_days_ahead || 60);
-      $('maxViewings').value = s.max_viewings_per_day || 8;
-      $('maxPerSlot').value = s.max_reservations_per_slot || 1;
-      $('cutoffTime').value = toTimeValue(s.same_day_booking_cutoff_time || '09:00');
-      $('cancelHours').value = s.cancel_deadline_hours ?? 24;
-      $('areaTitle').value = s.area_title || '希望エリア';
-      $('newAdminCode').value = '';
-      renderHolidayChecks(Array.isArray(s.regular_holidays) ? s.regular_holidays : []);
+    function renderAreas(){
+      $('areaCount').textContent=`${state.areas.length}件`;if(!state.areas.length){$('areaList').innerHTML='<div class="notice warn">対応エリアがありません。</div>';return;}
+      $('areaList').innerHTML=state.areas.map(area=>`<article class="area-card" data-area-card="${escapeAttr(area.id)}"><div class="card-top"><div><div class="item-title">${escapeHtml(area.area_label||area.area_name||'-')}</div><div class="item-sub">${escapeHtml(area.area_name||'-')} / 表示順 ${escapeHtml(area.display_order??'-')}</div></div><span class="pill ${area.is_active?'':'gray'}">${area.is_active?'表示ON':'非表示'}</span></div>
+      <div class="grid-2" style="margin-top:10px"><div class="field"><label>エリア名</label><input data-field="area_name" value="${escapeAttr(area.area_name||'')}"></div><div class="field"><label>表示名</label><input data-field="area_label" value="${escapeAttr(area.area_label||'')}"></div></div>
+      <div class="grid-2"><div class="field"><label>表示順</label><input data-field="display_order" type="number" value="${escapeAttr(area.display_order??100)}"></div><div class="field"><label>優先度</label><input data-field="area_priority" type="number" value="${escapeAttr(area.area_priority??100)}"></div></div>
+      <div class="field"><label>社内メモ</label><input data-field="area_memo" value="${escapeAttr(area.area_memo||'')}"></div><div class="field"><label>お客様向け説明</label><input data-field="customer_memo" value="${escapeAttr(area.customer_memo||'')}"></div>
+      <label class="check-pill"><input data-field="is_active" type="checkbox" ${area.is_active?'checked':''}> お客様画面に表示</label>
+      <div class="actions"><button class="btn" onclick="saveArea('${escapeAttr(area.id)}')">保存</button><button class="btn light" onclick="toggleArea('${escapeAttr(area.id)}')">${area.is_active?'非表示にする':'表示ONにする'}</button></div></article>`).join('');
     }
-
-    function renderHolidayChecks(selected) {
-      const row = $('holidayRow');
-      row.innerHTML = '';
-      DAYS.forEach(day => {
-        const label = document.createElement('label');
-        label.className = 'check-pill';
-        label.innerHTML = `<input type="checkbox" value="${escapeHtml(day)}" ${selected.includes(day) ? 'checked' : ''}> ${escapeHtml(day)}曜日`;
-        row.appendChild(label);
-      });
+    async function addArea(){const name=$('newAreaName').value.trim();if(!name){toast('エリア名を入力してください。',true);return;}const body={area_name:name,area_label:$('newAreaLabel').value.trim()||`${name}エリア`,display_order:toInt($('newAreaOrder').value,100),area_priority:toInt($('newAreaPriority').value,100),customer_memo:$('newAreaCustomerMemo').value.trim()||null,is_active:true};
+      try{setLoading(true);await api('/api/admin/areas',{method:'POST',body});$('newAreaName').value='';$('newAreaLabel').value='';$('newAreaCustomerMemo').value='';toast('対応エリアを追加しました。');await loadAll(true);}catch(error){toast(error.message,true);}finally{setLoading(false);}}
+    async function saveArea(id){const card=document.querySelector(`[data-area-card="${CSS.escape(String(id))}"]`);if(!card)return;const body={area_id:id};card.querySelectorAll('[data-field]').forEach(el=>{const key=el.dataset.field;if(el.type==='checkbox')body[key]=el.checked;else if(['display_order','area_priority'].includes(key))body[key]=toInt(el.value,100);else body[key]=el.value.trim();});
+      try{setLoading(true);await api('/api/admin/areas',{method:'PATCH',body});toast('対応エリアを保存しました。');await loadAll(true);}catch(error){toast(error.message,true);}finally{setLoading(false);}}
+    async function toggleArea(id){const area=state.areas.find(a=>String(a.id)===String(id));if(!area)return;try{setLoading(true);await api('/api/admin/areas',{method:'PATCH',body:{area_id:id,is_active:!area.is_active}});toast(area.is_active?'エリアを非表示にしました。':'エリアを表示ONにしました。');await loadAll(true);}catch(error){toast(error.message,true);}finally{setLoading(false);}}
+    function renderTemplates(){
+      $('templateCount').textContent=`${state.templates.length}件`;$('templateSelect').innerHTML=state.templates.map(t=>`<option value="${escapeAttr(t.template_key)}">${escapeHtml(t.title||t.template_key)}</option>`).join('');
+      const key=state.selectedTemplateKey||state.templates[0]?.template_key||'';if(key)selectTemplate(key);
+      $('templateList').innerHTML=state.templates.map(t=>`<article class="template-card"><div class="card-top"><div><div class="item-title">${escapeHtml(t.title||t.template_key)}</div><div class="item-sub">${escapeHtml(t.template_key)} / ${escapeHtml(t.category||'-')}</div></div><span class="pill ${t.is_active===false?'gray':''}">${t.is_active===false?'OFF':'ON'}</span></div><div class="actions"><button class="btn secondary" onclick="selectTemplate('${escapeAttr(t.template_key)}')">編集する</button></div></article>`).join('');
     }
-
-    async function saveBasic() {
-      syncAuthInputs();
-      const holidays = Array.from($('holidayRow').querySelectorAll('input:checked')).map(i => i.value);
-      const payload = {
-        shop_name: $('shopName').value.trim(),
-        phone: $('shopPhone').value.trim(),
-        address: $('shopAddress').value.trim(),
-        business_start_time: $('businessStart').value || '10:00',
-        business_end_time: $('businessEnd').value || '18:00',
-        regular_holidays: holidays,
-        max_viewings_per_day: toInt($('maxViewings').value, 8),
-        max_reservations_per_slot: toInt($('maxPerSlot').value, 1),
-        slot_minutes: toInt($('slotMinutes').value, 60),
-        booking_days_ahead: toInt($('bookingDays').value, 60),
-        same_day_booking_cutoff_time: $('cutoffTime').value || '09:00',
-        cancel_deadline_hours: toInt($('cancelHours').value, 24),
-        area_title: $('areaTitle').value.trim() || '希望エリア',
-      };
-      const newCode = $('newAdminCode').value.trim();
-      if (newCode) payload.new_admin_code = newCode;
-
-      setLoading(true, '店舗設定を保存中...');
-      try {
-        await apiPatch('/api/admin/settings', payload);
-        if (newCode) {
-          state.adminCode = newCode;
-          $('adminCodeInput').value = newCode;
-          localStorage.setItem('estate_admin_code', newCode);
-        }
-        toast('店舗設定を保存しました。');
-        await loadAll();
-      } catch (error) {
-        toast(error.message, true);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    function renderAreas() {
-      $('areaCount').textContent = `${state.areas.length}件`;
-      const list = $('areaList');
-      list.innerHTML = '';
-      if (!state.areas.length) {
-        list.innerHTML = '<div class="notice warn">対応エリアがありません。上の追加フォームから作成してください。</div>';
-        return;
-      }
-      state.areas.forEach(area => {
-        const card = document.createElement('div');
-        card.className = 'area-card';
-        card.innerHTML = `
-          <div class="card-top">
-            <div>
-              <div class="card-title">${escapeHtml(area.area_label || area.area_name || '-')}</div>
-              <div class="card-sub">${escapeHtml(area.area_name || '-')} / 表示順 ${escapeHtml(area.display_order ?? '-')}</div>
-            </div>
-            <span class="pill ${area.is_active ? 'ok' : 'gray'}">${area.is_active ? '表示ON' : '非表示'}</span>
-          </div>
-          <div class="grid-2">
-            <div class="form-row"><label>エリア名</label><input data-field="area_name" value="${escapeAttr(area.area_name || '')}"></div>
-            <div class="form-row"><label>表示名</label><input data-field="area_label" value="${escapeAttr(area.area_label || '')}"></div>
-          </div>
-          <div class="grid-2">
-            <div class="form-row"><label>表示順</label><input data-field="display_order" type="number" value="${escapeAttr(area.display_order ?? 100)}"></div>
-            <div class="form-row"><label>優先度</label><input data-field="area_priority" type="number" value="${escapeAttr(area.area_priority ?? 100)}"></div>
-          </div>
-          <div class="form-row"><label>社内メモ</label><input data-field="area_memo" value="${escapeAttr(area.area_memo || '')}" placeholder="空港勤務・ファミリー層に人気など"></div>
-          <div class="form-row"><label>お客様向け説明</label><input data-field="customer_memo" value="${escapeAttr(area.customer_memo || '')}" placeholder="画面に表示する説明"></div>
-          <label class="check-pill" style="width:max-content;"><input data-field="is_active" type="checkbox" ${area.is_active ? 'checked' : ''}> お客様画面に表示</label>
-          <div class="card-actions">
-            <button class="btn small" data-area-save="${area.id}">保存</button>
-            <button class="btn small ${area.is_active ? 'gray' : 'sub'}" data-area-toggle="${area.id}">${area.is_active ? '非表示にする' : '表示ONにする'}</button>
-          </div>
-        `;
-        list.appendChild(card);
-        card.querySelector('[data-area-save]').addEventListener('click', () => saveArea(area.id, card));
-        card.querySelector('[data-area-toggle]').addEventListener('click', () => toggleArea(area));
-      });
-    }
-
-    async function addArea() {
-      syncAuthInputs();
-      const areaName = $('newAreaName').value.trim();
-      if (!areaName) return toast('エリア名を入力してください。', true);
-      const payload = {
-        area_name: areaName,
-        area_label: $('newAreaLabel').value.trim() || `${areaName}エリア`,
-        display_order: toInt($('newAreaOrder').value, 100),
-        area_priority: toInt($('newAreaPriority').value, 100),
-        customer_memo: $('newAreaCustomerMemo').value.trim() || null,
-        is_active: true,
-      };
-      setLoading(true, 'エリアを追加中...');
-      try {
-        await apiPost('/api/admin/areas', payload);
-        $('newAreaName').value = '';
-        $('newAreaLabel').value = '';
-        $('newAreaCustomerMemo').value = '';
-        toast('対応エリアを追加しました。');
-        await loadAll();
-      } catch (error) {
-        toast(error.message, true);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    async function saveArea(id, card) {
-      syncAuthInputs();
-      const payload = { area_id: id };
-      card.querySelectorAll('[data-field]').forEach(el => {
-        const key = el.dataset.field;
-        if (el.type === 'checkbox') payload[key] = el.checked;
-        else if (['display_order', 'area_priority'].includes(key)) payload[key] = toInt(el.value, 100);
-        else payload[key] = el.value.trim();
-      });
-      setLoading(true, 'エリアを保存中...');
-      try {
-        await apiPatch('/api/admin/areas', payload);
-        toast('対応エリアを保存しました。');
-        await loadAll();
-      } catch (error) {
-        toast(error.message, true);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    async function toggleArea(area) {
-      syncAuthInputs();
-      setLoading(true, 'エリア表示を変更中...');
-      try {
-        await apiPatch('/api/admin/areas', { area_id: area.id, is_active: !area.is_active });
-        toast(area.is_active ? 'エリアを非表示にしました。' : 'エリアを表示ONにしました。');
-        await loadAll();
-      } catch (error) {
-        toast(error.message, true);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    function renderTemplates() {
-      $('templateCount').textContent = `${state.templates.length}件`;
-      const select = $('templateSelect');
-      select.innerHTML = '';
-      state.templates.forEach(t => {
-        const opt = document.createElement('option');
-        opt.value = t.template_key;
-        opt.textContent = `${t.display_order || ''} ${t.title || t.template_key}`;
-        select.appendChild(opt);
-      });
-      const current = state.selectedTemplateKey || state.templates[0]?.template_key || '';
-      if (current) selectTemplate(current);
-      renderTemplateCards();
-    }
-
-    function renderTemplateCards() {
-      const list = $('templateList');
-      list.innerHTML = '';
-      state.templates.forEach(t => {
-        const card = document.createElement('div');
-        card.className = 'template-card';
-        card.innerHTML = `
-          <div class="card-top">
-            <div>
-              <div class="card-title">${escapeHtml(t.title || t.template_key)}</div>
-              <div class="card-sub">${escapeHtml(t.template_key)} / ${escapeHtml(t.category || '-')}</div>
-            </div>
-            <span class="pill ${t.is_active ? 'ok' : 'gray'}">${t.is_active ? 'ON' : 'OFF'}</span>
-          </div>
-          <button class="btn small sub" data-template-pick="${escapeAttr(t.template_key)}">編集する</button>
-        `;
-        list.appendChild(card);
-        card.querySelector('[data-template-pick]').addEventListener('click', () => selectTemplate(t.template_key));
-      });
-    }
-
-    function selectTemplate(key) {
-      state.selectedTemplateKey = key;
-      const t = state.templates.find(x => x.template_key === key) || {};
-      $('templateSelect').value = key;
-      $('templateTitle').value = t.title || '';
-      $('templateCategory').value = t.category || '';
-      $('templateOrder').value = t.display_order ?? 100;
-      $('templateBody').value = t.body || '';
-      $('templateActive').checked = t.is_active !== false;
-    }
-
-    async function saveTemplate() {
-      syncAuthInputs();
-      const key = state.selectedTemplateKey;
-      if (!key) return toast('テンプレートを選択してください。', true);
-      const payload = {
-        template_key: key,
-        title: $('templateTitle').value.trim(),
-        category: $('templateCategory').value.trim(),
-        display_order: toInt($('templateOrder').value, 100),
-        body: $('templateBody').value,
-        is_active: $('templateActive').checked,
-      };
-      setLoading(true, '文面テンプレートを保存中...');
-      try {
-        await apiPatch('/api/admin/templates', payload);
-        toast('LINE文面テンプレートを保存しました。');
-        await loadAll();
-      } catch (error) {
-        toast(error.message, true);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    function renderSummary() {
-      const s = state.shop || {};
-      const activeAreas = state.areas.filter(a => a.is_active);
-      $('summaryShop').textContent = s.shop_name || '-';
-      $('summaryHours').textContent = `${toTimeValue(s.business_start_time || '10:00')}〜${toTimeValue(s.business_end_time || '18:00')}`;
-      $('summaryHolidays').textContent = Array.isArray(s.regular_holidays) && s.regular_holidays.length ? s.regular_holidays.join('・') : 'なし';
-      $('summaryAreas').textContent = activeAreas.map(a => a.area_name).join('・') || '-';
-      $('summaryMax').textContent = `${s.max_viewings_per_day || 0}件 / 1枠${s.max_reservations_per_slot || 0}件`;
-      $('summaryBooking').textContent = `${s.booking_days_ahead || 0}日先まで`;
-    }
-
-    async function prepareDemo() {
-      syncAuthInputs();
-      if (!confirm('営業前デモデータを再準備します。志免・宇美・須恵のデモ状態に戻します。よろしいですか？')) return;
-      setLoading(true, '営業前デモ準備中...');
-      try {
-        const data = await apiPost('/api/admin/demo/prepare', {});
-        toast(data.message || '営業前デモ準備が完了しました。');
-        await loadAll();
-      } catch (error) {
-        toast(error.message, true);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    function updateUrlTexts() {
-      const base = state.apiBase || DEFAULT_API_BASE;
-      $('urlHealth').textContent = `${base}/api/health`;
-      $('urlCheck').textContent = `${base}/api/admin/system-check?admin_code=${encodeURIComponent(state.adminCode || '1234')}`;
-    }
-
-    async function apiGet(path) {
-      return api(path, { method: 'GET' });
-    }
-    async function apiPost(path, body) {
-      return api(path, { method: 'POST', body: JSON.stringify({ ...body, shop_code: SHOP_CODE, admin_code: state.adminCode }) });
-    }
-    async function apiPatch(path, body) {
-      return api(path, { method: 'PATCH', body: JSON.stringify({ ...body, shop_code: SHOP_CODE, admin_code: state.adminCode }) });
-    }
-    async function api(path, options = {}) {
-      const method = options.method || 'GET';
-      const url = new URL(`${state.apiBase}${path}`);
-      url.searchParams.set('shop_code', SHOP_CODE);
-      if (method === 'GET') url.searchParams.set('admin_code', state.adminCode);
-      const res = await fetch(url.toString(), {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Admin-Code': state.adminCode,
-        },
-        body: options.body,
-      });
-      const text = await res.text();
-      let data = null;
-      try { data = text ? JSON.parse(text) : null; } catch { data = { ok: false, error: text }; }
-      if (!res.ok || data?.ok === false) {
-        throw new Error(data?.error || data?.message || `APIエラー ${res.status}`);
-      }
-      return data;
-    }
-
-    function setLoading(isLoading, message) {
-      state.loading = isLoading;
-      ['loadBtn','saveBasicBtn','reloadBasicBtn','addAreaBtn','saveTemplateBtn','demoPrepareBtn'].forEach(id => {
-        const el = $(id);
-        if (el) el.disabled = isLoading;
-      });
-      if (message && isLoading) toast(message);
-    }
-
-    function toast(message, isError = false) {
-      const el = $('toast');
-      el.textContent = message;
-      el.className = `toast show ${isError ? 'error' : ''}`;
-      clearTimeout(window.__toastTimer);
-      window.__toastTimer = setTimeout(() => {
-        el.className = 'toast';
-      }, isError ? 5200 : 2600);
-    }
-
-    function toTimeValue(value) {
-      if (!value) return '';
-      return String(value).slice(0,5);
-    }
-    function toInt(value, fallback) {
-      const n = Number.parseInt(value, 10);
-      return Number.isFinite(n) ? n : fallback;
-    }
-    function escapeHtml(value) {
-      return String(value ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-    }
-    function escapeAttr(value) {
-      return escapeHtml(value).replace(/'/g, '&#039;');
-    }
-    async function copyElementText(id) {
-      const el = $(id);
-      if (!el) return;
-      await copyText(el.textContent.trim());
-    }
-    async function copyText(text) {
-      try {
-        await navigator.clipboard.writeText(text);
-        toast('コピーしました。');
-      } catch {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
-        toast('コピーしました。');
-      }
-    }
+    function selectTemplate(key){state.selectedTemplateKey=key;const t=state.templates.find(x=>x.template_key===key)||{};$('templateSelect').value=key;$('templateTitle').value=t.title||'';$('templateCategory').value=t.category||'';$('templateOrder').value=t.display_order??100;$('templateBody').value=t.body||'';$('templateActive').checked=t.is_active!==false;}
+    async function saveTemplate(){const key=state.selectedTemplateKey;if(!key){toast('テンプレートを選択してください。',true);return;}const body={template_key:key,title:$('templateTitle').value.trim(),category:$('templateCategory').value.trim(),display_order:toInt($('templateOrder').value,100),body:$('templateBody').value,is_active:$('templateActive').checked};
+      try{setLoading(true);await api('/api/admin/templates',{method:'PATCH',body});toast('LINE文面テンプレートを保存しました。');await loadAll(true);}catch(error){toast(error.message,true);}finally{setLoading(false);}}
+    function renderSummary(){const s=state.shop||{},active=state.areas.filter(a=>a.is_active);$('summaryShop').textContent=s.shop_name||'-';$('summaryHours').textContent=`${toTime(s.business_start_time||'10:00')}〜${toTime(s.business_end_time||'18:00')}`;$('summaryHolidays').textContent=Array.isArray(s.regular_holidays)&&s.regular_holidays.length?s.regular_holidays.join('・'):'なし';$('summaryAreas').textContent=active.map(a=>a.area_name).join('・')||'-';$('summaryMax').textContent=`${s.max_viewings_per_day||0}件 / 1枠${s.max_reservations_per_slot||0}件`;$('summaryBooking').textContent=`${s.booking_days_ahead||0}日先まで`;}
+    async function prepareDemo(){if(!state.authenticated){toast('先に管理コードを確認してください。',true);return;}if(!confirm('営業前デモデータを再準備します。現在のデモ状態が初期化されます。実行しますか？'))return;try{setLoading(true);const data=await api('/api/admin/demo/prepare',{method:'POST',body:{}});toast(data.message||'営業前デモ準備が完了しました。');await loadAll(true);}catch(error){toast(error.message,true);}finally{setLoading(false);}}
+    async function copyElementText(id){const el=$(id);if(el)await copyText(el.textContent.trim());}
+    async function copyText(text){try{await navigator.clipboard.writeText(text);}catch{const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();}toast('コピーしました。');}
   </script>
 </body>
 </html>
