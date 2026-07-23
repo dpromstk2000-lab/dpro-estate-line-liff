@@ -1,0 +1,53 @@
+system: DPRO 不動産・賃貸内見 LINE
+step: ESTATE-NEXT-3
+model_version: ESTATE-DOMAIN-1
+units:
+  customer:
+    label: 顧客
+    current_source:
+      - /api/admin/customers
+      - reservation.customer
+    identity:
+      - customer.id
+      - customer_id
+  property:
+    label: 物件
+    current_source:
+      - /api/admin/properties
+      - reservation.property
+    identity:
+      - property.id
+      - property_id
+  viewing:
+    label: 内見予約
+    current_source:
+      - /api/admin/reservations
+    identity:
+      - reservation.id
+  application_case:
+    label: 申込案件
+    current_step_behavior: 顧客状態・内見状態から統合表示
+    persistence: NEXT-3では追加しない
+pipeline:
+  - key: inquiry
+    label: 新規問い合わせ
+  - key: conditions
+    label: 希望条件確認
+  - key: proposal
+    label: 物件提案
+  - key: viewing
+    label: 内見調整・予約
+  - key: viewed
+    label: 内見済み
+  - key: application
+    label: 申込検討・希望
+  - key: contracted
+    label: 成約
+  - key: closed
+    label: 見送り
+preservation:
+  reservation_operations: true
+  customer_search: true
+  property_status_operations: true
+  individual_line_copy: true
+  demo_prepare: true

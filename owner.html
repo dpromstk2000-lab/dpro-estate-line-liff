@@ -99,13 +99,24 @@
     .toast.show{opacity:1;transform:none}.toast.error{background:#7f1d1d}
     .mobile-menu{display:none;border:0;border-radius:11px;background:var(--main);color:#fff;padding:9px 12px;font-weight:900}
     .hidden{display:none!important}
-    @media(max-width:1180px){.task-grid{grid-template-columns:1fr 1fr}.task-grid>div:last-child{grid-column:1/-1}.cards{grid-template-columns:1fr}.message-grid{grid-template-columns:1fr}}
+    @media(max-width:1180px){.pipeline{grid-template-columns:repeat(2,minmax(0,1fr))}.case-list{grid-template-columns:1fr}.task-grid{grid-template-columns:1fr 1fr}.task-grid>div:last-child{grid-column:1/-1}.cards{grid-template-columns:1fr}.message-grid{grid-template-columns:1fr}}
     @media(max-width:860px){
       .sidebar{transform:translateX(-105%);transition:.2s}.sidebar.open{transform:none}.main{margin-left:0}.mobile-menu{display:inline-flex}
       .topbar-inner{padding:11px 13px}.content{padding:15px 12px 42px}.task-grid,.kpi{grid-template-columns:1fr 1fr}.auth-grid,.toolbar{grid-template-columns:1fr}
       .auth-grid .btn,.toolbar .btn{width:100%}.top-status{display:none}
     }
-    @media(max-width:560px){.task-grid,.kpi,.info-grid{grid-template-columns:1fr}.card-head,.card-body{padding-left:14px;padding-right:14px}.page-title h1{font-size:20px}}
+    @media(max-width:560px){.pipeline,.case-grid,.task-grid,.kpi,.info-grid{grid-template-columns:1fr}.card-head,.card-body{padding-left:14px;padding-right:14px}.page-title h1{font-size:20px}}
+
+    .pipeline{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:14px}
+    .pipeline-box{border:1px solid var(--line);border-radius:15px;background:#fff;padding:12px;text-align:left}
+    .pipeline-box.active{border-color:var(--main);box-shadow:0 0 0 3px rgba(13,107,85,.10);background:var(--soft)}
+    .pipeline-box strong{display:block;font-size:24px;line-height:1.15}.pipeline-box span{display:block;margin-top:4px;color:var(--muted);font-size:12px;font-weight:900}
+    .case-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.case-filter{border:1px solid var(--line);background:#fff;color:#33463f;border-radius:999px;padding:8px 12px;font-size:13px;font-weight:900}
+    .case-filter.active{background:var(--main);border-color:var(--main);color:#fff}
+    .case-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.case-card{border:1px solid var(--line);border-radius:17px;background:#fff;padding:14px}
+    .case-stage{display:inline-flex;border-radius:999px;padding:5px 9px;background:var(--soft);color:var(--main2);font-size:12px;font-weight:950}
+    .case-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.case-info{border:1px solid #edf2ef;border-radius:11px;background:var(--surface2);padding:8px;font-size:12px}
+    .case-info b{display:block;color:#52635d;font-size:11px;margin-bottom:2px}.case-next{margin-top:10px;border-left:4px solid var(--warn);background:var(--warn-soft);border-radius:10px;padding:9px;font-size:12px;color:#704000}
   </style>
 </head>
 <body>
@@ -124,6 +135,7 @@
         <button class="nav-btn" data-panel-button="reservations" onclick="openPanel('reservations')">内見予約 <span class="count" id="sideReservationCount">-</span></button>
         <button class="nav-btn" data-panel-button="customers" onclick="openPanel('customers')">顧客カルテ</button>
         <button class="nav-btn" data-panel-button="properties" onclick="openPanel('properties')">物件管理 <span class="count" id="sidePropertyCount">-</span></button>
+        <button class="nav-btn" data-panel-button="cases" onclick="openPanel('cases')">案件進捗 <span class="count" id="sideCaseCount">-</span></button>
         <button class="nav-btn" data-panel-button="messages" onclick="openPanel('messages')">LINE文面コピー</button>
       </div>
 
@@ -261,6 +273,21 @@
           </section>
         </section>
 
+        <section class="panel" data-panel="cases">
+          <section class="card">
+            <div class="card-head">
+              <div><h2 class="card-title">顧客・物件・内見・申込案件</h2><p class="card-sub">既存データを案件単位にまとめ、現在位置と次の対応を確認します。</p></div>
+              <span class="pill">統合表示</span>
+            </div>
+            <div class="card-body">
+              <div class="notice">このSTEPでは既存の顧客・予約・物件データから案件を統合表示します。申込案件の永続保存、担当者、期限、必要書類はAPI調査結果に基づき次STEPで追加します。</div>
+              <div class="pipeline" id="casePipeline"></div>
+              <div class="case-toolbar" id="caseFilters"></div>
+              <div class="case-list" id="caseList"><div class="empty">このメニューを開くと案件を組み立てます。</div></div>
+            </div>
+          </section>
+        </section>
+
         <section class="panel" data-panel="messages">
           <section class="card">
             <div class="card-head">
@@ -294,7 +321,8 @@
   </div>
 
   <div class="toast" id="toast"></div>
-  <script src="config.js?v=estate-next-2"></script>
+  <script src="config.js?v=estate-next-3"></script>
+  <script src="domain.js?v=estate-next-3"></script>
   <script>
     'use strict';
     const CONFIG = window.DPRO_ESTATE_CONFIG || {
@@ -308,7 +336,7 @@
     const PANEL_KEY = CONFIG.storage.ownerPanel;
     const state = {
       adminCode:'', authenticated:false, dashboard:null, templates:[], reservations:[], customers:[], properties:[],
-      reservationFilter:'all', propertyArea:'', selectedReservationId:'', selectedCustomerId:'', currentMessage:'',
+      reservationFilter:'all', propertyArea:'', caseFilter:'all', selectedReservationId:'', selectedCustomerId:'', currentMessage:'',
       loaded:{dashboard:false,templates:false,reservations:false,customers:false,properties:false},
       limits:{reservations:30,customers:30,properties:30}, loading:false, actionBusy:false
     };
@@ -317,6 +345,7 @@
       reservations:['内見予約','予約ステータスと内見後フォローを管理します。'],
       customers:['顧客カルテ','希望条件と最終連絡状況を確認します。'],
       properties:['物件管理','空室状態・内見可否・公開状態を管理します。'],
+      cases:['案件進捗','顧客・物件・内見・申込状況を案件単位で確認します。'],
       messages:['LINE文面コピー','対象と文面を確認してからLINE公式へ貼り付けます。']
     };
     const $ = id => document.getElementById(id);
@@ -334,7 +363,7 @@
     });
 
     function setPageLinks(){
-      const version = 'estate-next-2';
+      const version = 'estate-next-3';
       $('settingsLink').href = `${CONFIG.pageBase}/owner-settings.html?v=${version}`;
       $('ipadLink').href = `${CONFIG.pageBase}/owner-ipad.html?v=${version}`;
       $('checkLink').href = `${CONFIG.pageBase}/system-check.html?v=${version}`;
@@ -397,6 +426,7 @@
       if(name==='reservations'&&!state.loaded.reservations)await loadReservations(true);
       if(name==='customers'&&!state.loaded.customers)await loadCustomers(true);
       if(name==='properties'&&!state.loaded.properties)await loadProperties(true);
+      if(name==='cases'){ if(!state.loaded.reservations)await loadReservations(true); if(!state.loaded.customers)await loadCustomers(true); renderCases(); }
       if(name==='messages'){ await loadTemplates(); if(!state.loaded.reservations)await loadReservations(true); renderTargetSelect(); }
     }
 
@@ -417,7 +447,7 @@
     }
     function updateSideCounts(){
       const c=state.dashboard?.counts||{}; $('sideTodayCount').textContent=(c.today_reservations??0)+(c.due_followups??0)+(c.need_check_properties??0);
-      $('sideReservationCount').textContent=state.reservations.length||c.today_reservations||0; $('sidePropertyCount').textContent=c.need_check_properties??0;
+      $('sideReservationCount').textContent=state.reservations.length||c.today_reservations||0; $('sidePropertyCount').textContent=c.need_check_properties??0; if($('sideCaseCount')&&state.loaded.customers&&state.loaded.reservations){$('sideCaseCount').textContent=buildCaseItems().length;}
     }
     function renderTodayTasks(){
       const today=state.dashboard?.today_reservations||[], follow=state.dashboard?.due_followups||[], check=state.dashboard?.need_check_properties||[];
@@ -431,7 +461,7 @@
       if(!isAuthenticated())return; if(reset)state.limits.reservations=30;
       try{
         setLoading(true); const today=todayYmd(); const data=await api('/api/admin/reservations',{query:{from:today,to:addDays(today,14),limit:state.limits.reservations}});
-        state.reservations=data.reservations||[]; state.loaded.reservations=true; renderReservations(); renderTargetSelect(); updateSideCounts();
+        state.reservations=data.reservations||[]; state.loaded.reservations=true; renderReservations(); renderTargetSelect(); renderCasesIfReady(); updateSideCounts();
       }catch(error){toast(error.message||'予約を読み込めませんでした。','error');}finally{setLoading(false);}
     }
     async function loadMoreReservations(){ state.limits.reservations+=30; await loadReservations(false); }
@@ -460,7 +490,7 @@
       if(!isAuthenticated())return; if(reset)state.limits.customers=30;
       try{
         setLoading(true); const data=await api('/api/admin/customers',{query:{q:$('customerSearchInput').value.trim(),status:$('customerStatusFilter').value,limit:state.limits.customers}});
-        state.customers=data.customers||[]; state.loaded.customers=true; renderCustomers();
+        state.customers=data.customers||[]; state.loaded.customers=true; renderCustomers(); renderCasesIfReady();
       }catch(error){toast(error.message||'顧客を読み込めませんでした。','error');}finally{setLoading(false);}
     }
     async function searchCustomers(){ await loadCustomers(true); }
@@ -498,6 +528,32 @@
       <div class="memo">${tags.map(escapeHtml).join('・')}<br>${escapeHtml(p.internal_memo||p.public_memo||'メモなし')}</div>
       <div class="actions"><button class="small-btn main" onclick="updatePropertyStatus('${escapeAttr(p.id)}','募集中',true)">募集中</button><button class="small-btn warn" onclick="updatePropertyStatus('${escapeAttr(p.id)}','確認中',true)">確認中</button><button class="small-btn danger" onclick="updatePropertyStatus('${escapeAttr(p.id)}','成約済み',false)">成約済み</button></div></article>`;
     }
+
+
+    function domainModel(){ return window.DPRO_ESTATE_DOMAIN || null; }
+    function buildCaseItems(){ const domain=domainModel(); return domain?domain.buildCases(state.customers,state.reservations):[]; }
+    function renderCasesIfReady(){ if(state.loaded.customers&&state.loaded.reservations&&document.querySelector('[data-panel="cases"]'))renderCases(); }
+    function setCaseFilter(filter){ state.caseFilter=filter; renderCases(); }
+    function renderCases(){
+      const domain=domainModel();
+      if(!domain){ $('caseList').innerHTML='<div class="empty">案件モデルを読み込めませんでした。</div>'; return; }
+      const items=buildCaseItems(), counts=domain.counts(items);
+      $('sideCaseCount').textContent=counts.all||0;
+      $('casePipeline').innerHTML=domain.stages.map(stage=>`<button class="pipeline-box ${state.caseFilter===stage.key?'active':''}" onclick="setCaseFilter('${escapeAttr(stage.key)}')"><strong>${counts[stage.key]||0}</strong><span>${escapeHtml(stage.label)}</span></button>`).join('');
+      $('caseFilters').innerHTML=`<button class="case-filter ${state.caseFilter==='all'?'active':''}" onclick="setCaseFilter('all')">すべて ${counts.all||0}</button>`+domain.stages.map(stage=>`<button class="case-filter ${state.caseFilter===stage.key?'active':''}" onclick="setCaseFilter('${escapeAttr(stage.key)}')">${escapeHtml(stage.label)}</button>`).join('');
+      const rows=state.caseFilter==='all'?items:items.filter(item=>item.stageKey===state.caseFilter);
+      $('caseList').innerHTML=rows.length?rows.map(caseCardHtml).join(''):'<div class="empty">該当する案件はありません。</div>';
+    }
+    function caseCardHtml(item){
+      const c=item.customer||{},r=item.reservation||{},p=item.property||{};
+      const viewing=r.id?`${formatDate(r.reservation_date)} ${formatTime(r.reservation_time)} / ${r.status||'-'}`:'内見予約なし';
+      const property=p.property_name||'物件未定・条件相談';
+      return `<article class="case-card"><div class="card-top"><div><div class="name">${escapeHtml(c.customer_name||'名前未入力')}様</div><div class="subline">${escapeHtml(c.phone||'-')} / ${escapeHtml(c.customer_status||'状態未設定')}</div></div><span class="case-stage">${escapeHtml(item.stageLabel)}</span></div>
+      <div class="case-grid"><div class="case-info"><b>物件</b>${escapeHtml(property)}</div><div class="case-info"><b>内見</b>${escapeHtml(viewing)}</div><div class="case-info"><b>申込状況</b>${escapeHtml(item.applicationState)}</div><div class="case-info"><b>案件保存</b>${item.hasPersistentApplicationCase?'保存済み':'既存データから統合'}</div></div>
+      <div class="case-next"><b>次の対応</b><br>${escapeHtml(item.nextAction)}</div>
+      <div class="actions"><button class="small-btn main" onclick="selectCustomerForSuggestion('${escapeAttr(c.id||item.id)}')">提案文面</button>${r.id?`<button class="small-btn blue" onclick="selectReservationForMessage('${escapeAttr(r.id)}','before_viewing')">予約文面</button>`:''}<button class="small-btn" onclick="openCustomerFromCase('${escapeAttr(c.id||item.id)}')">顧客カルテ</button></div></article>`;
+    }
+    async function openCustomerFromCase(customerId){ await openPanel('customers'); const c=state.customers.find(x=>String(x.id)===String(customerId)); if(c){$('customerSearchInput').value=c.customer_name||c.phone||''; await searchCustomers();} }
 
     async function loadTemplates(){
       if(state.loaded.templates)return;

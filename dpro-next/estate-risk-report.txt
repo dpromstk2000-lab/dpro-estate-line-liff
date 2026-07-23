@@ -36,3 +36,10 @@ DPRO 不動産・賃貸内見 LINE / ESTATE-NEXT-1 危険箇所台帳
 - 日常画面からSTEP名・Worker URL・管理コード付きsystem-check URLを非表示。
 - Worker・Supabase・APIの変更なし。
 - ロールバックタグ: dpro-estate-next-2-before-20260723
+[ESTATE-NEXT-3 / 2026-07-23T22:52:38+09:00]
+- OK: 顧客・物件・内見予約を既存APIのまま案件単位で統合表示した。
+- OK: API監査では個人名・電話番号・物件値などを保存せず、項目名・型・件数だけを記録した。
+- 注意: NEXT-3の申込案件は既存データから算出した表示であり、独立した案件レコードではない。
+- 注意: 永続化不足候補: assigned_staff、next_action、lost_reason、vacancy_history、required_documents
+- 注意: 現リポジトリにWorker原本がないため、NEXT-4で正式配置先を確認してからWorkerを変更する。
+- 変更記録: Workerなし / Supabaseなし / APIなし。

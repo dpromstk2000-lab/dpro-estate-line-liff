@@ -1,0 +1,30 @@
+{
+  "system": "DPRO 不動産・賃貸内見 LINE",
+  "step": "ESTATE-NEXT-3",
+  "generated_at_jst": "2026-07-23T22:52:36+09:00",
+  "modified_files": [
+    "owner.html",
+    "config.js",
+    "domain.js"
+  ],
+  "domain_units": [
+    "customer",
+    "property",
+    "viewing",
+    "application_case"
+  ],
+  "derived_pipeline_enabled": true,
+  "persistent_application_case_detected": false,
+  "missing_persistent_capabilities": [
+    "assigned_staff",
+    "next_action",
+    "lost_reason",
+    "vacancy_history",
+    "required_documents"
+  ],
+  "worker_changed": false,
+  "supabase_changed": false,
+  "api_changed": false,
+  "raw_personal_data_committed": false,
+  "next_step": "ESTATE-NEXT-4"
+}

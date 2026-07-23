@@ -1,0 +1,22 @@
+system: DPRO 不動産・賃貸内見 LINE
+step: ESTATE-NEXT-3
+generated_at_jst: "2026-07-23T22:52:36+09:00"
+api_inspection_status: complete
+persistent_application_case_detected: false
+worker_changed_this_step: false
+supabase_changed_this_step: false
+api_changed_this_step: false
+worker_change_required_next_step: true
+supabase_change_required_next_step: true
+worker_source_in_current_repository: false
+next_step_guard: Worker原本または正式なWorker配置先を確認してから変更する
+missing_persistent_capabilities:
+  - assigned_staff
+  - next_action
+  - lost_reason
+  - vacancy_history
+  - required_documents
+reason:
+  - 現在の顧客・予約・物件データで案件進捗の統合表示は可能
+  - 担当者・次アクション期限・見送り理由・空室確認履歴・必要書類は永続保存が必要
+  - NEXT-3では実データを変更せず、画面統合と契約調査だけを実施

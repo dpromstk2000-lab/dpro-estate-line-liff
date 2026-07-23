@@ -1,23 +1,22 @@
 system: DPRO 不動産・賃貸内見 LINE
 repository: dpromstk2000-lab/dpro-estate-line-liff
-previous_step: ESTATE-NEXT-1-COMPLETE
-current_step: ESTATE-NEXT-2-COMPLETE
-next_step: ESTATE-NEXT-3
+previous_step: ESTATE-NEXT-2-COMPLETE
+current_step: ESTATE-NEXT-3-COMPLETE
+next_step: ESTATE-NEXT-4
 baseline_tag: dpro-estate-next-baseline-20260723
-step_backup_tag: dpro-estate-next-2-before-20260723
-completed_at_jst: "2026-07-23T22:20:13+09:00"
+step_backup_tag: dpro-estate-next-3-before-20260723
+completed_at_jst: "2026-07-23T22:52:38+09:00"
 modified_files:
-- owner.html
-- owner-settings.html
-- config.js
-owner_today_first: true
-owner_left_menu: true
-settings_left_menu: true
-lazy_loading: true
-page_increment: 30
-admin_code_local_delete: true
-daily_demo_separated: true
-visible_internal_information_removed: true
+  - owner.html
+  - config.js
+  - domain.js
+domain_units_integrated: true
+derived_application_case_view: true
+api_inspection_status: complete
+persistent_application_case_detected: false
+worker_change_required_next_step: true
+supabase_change_required_next_step: true
+raw_personal_data_committed: false
 worker_changed: false
 supabase_changed: false
 api_changed: false
@@ -26,4 +25,5 @@ html_syntax_check: PASS
 javascript_syntax_check: PASS
 workflow_yml_syntax_check: PASS
 html_id_duplicate_check: PASS
+domain_fixture_check: PASS
 local_http_check: PASS

@@ -73,3 +73,21 @@ estate_next_2:
     worker: unchanged
     supabase: unchanged
     api: unchanged
+next_3:
+  completed_at_jst: "2026-07-23T22:52:38+09:00"
+  added:
+    - 顧客・物件・内見・申込案件の統合表示
+    - 8段階の不動産案件パイプライン
+    - 既存データからの申込状態・次アクション算出
+    - 個人情報の値を保存しないAPIフィールド監査
+  preserved:
+    - 今日やること
+    - 内見予約ステータス変更
+    - 顧客検索と連絡済み更新
+    - 物件ステータス変更
+    - 個別確認型LINE文面コピー
+    - 営業前デモ準備
+  change_record:
+    worker: unchanged
+    supabase: unchanged
+    api: unchanged

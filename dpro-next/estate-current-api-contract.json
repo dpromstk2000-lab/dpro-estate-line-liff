@@ -1,0 +1,2131 @@
+{
+  "system": "DPRO 不動産・賃貸内見 LINE",
+  "step": "ESTATE-NEXT-3",
+  "generated_at_jst": "2026-07-23T22:52:36+09:00",
+  "inspection_status": "complete",
+  "successful_endpoint_count": 9,
+  "endpoint_count": 9,
+  "privacy": "Only field names, value types, array counts, and HTTP status were stored. Customer values were discarded.",
+  "endpoints": {
+    "health": {
+      "ok": true,
+      "http_status": 200,
+      "schema": {
+        "type": "object",
+        "keys": [
+          "db_error",
+          "db_ok",
+          "elapsed_ms",
+          "ok",
+          "service",
+          "shop",
+          "shop_code",
+          "step",
+          "supabase_service_key_set",
+          "supabase_url_set",
+          "time",
+          "tokyo_today",
+          "version"
+        ],
+        "fields": {
+          "db_error": {
+            "type": "null"
+          },
+          "db_ok": {
+            "type": "boolean"
+          },
+          "elapsed_ms": {
+            "type": "number"
+          },
+          "ok": {
+            "type": "boolean"
+          },
+          "service": {
+            "type": "string"
+          },
+          "shop": {
+            "type": "object",
+            "keys": [
+              "business_end_time",
+              "business_start_time",
+              "shop_code",
+              "shop_name",
+              "status",
+              "timezone"
+            ],
+            "fields": {
+              "business_end_time": {
+                "type": "string"
+              },
+              "business_start_time": {
+                "type": "string"
+              },
+              "shop_code": {
+                "type": "string"
+              },
+              "shop_name": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string"
+              },
+              "timezone": {
+                "type": "string"
+              }
+            }
+          },
+          "shop_code": {
+            "type": "string"
+          },
+          "step": {
+            "type": "string"
+          },
+          "supabase_service_key_set": {
+            "type": "boolean"
+          },
+          "supabase_url_set": {
+            "type": "boolean"
+          },
+          "time": {
+            "type": "string"
+          },
+          "tokyo_today": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "login": {
+      "ok": true,
+      "http_status": 200,
+      "schema": {
+        "type": "object",
+        "keys": [
+          "message",
+          "ok",
+          "shop",
+          "step"
+        ],
+        "fields": {
+          "message": {
+            "type": "string"
+          },
+          "ok": {
+            "type": "boolean"
+          },
+          "shop": {
+            "type": "object",
+            "keys": [
+              "address",
+              "area_title",
+              "booking_days_ahead",
+              "business_end_time",
+              "business_start_time",
+              "cancel_deadline_hours",
+              "created_at",
+              "id",
+              "max_reservations_per_slot",
+              "max_viewings_per_day",
+              "phone",
+              "regular_holidays",
+              "same_day_booking_cutoff_time",
+              "service_name",
+              "shop_code",
+              "shop_name",
+              "slot_minutes",
+              "status",
+              "timezone",
+              "updated_at"
+            ],
+            "fields": {
+              "address": {
+                "type": "string"
+              },
+              "area_title": {
+                "type": "string"
+              },
+              "booking_days_ahead": {
+                "type": "number"
+              },
+              "business_end_time": {
+                "type": "string"
+              },
+              "business_start_time": {
+                "type": "string"
+              },
+              "cancel_deadline_hours": {
+                "type": "number"
+              },
+              "created_at": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              },
+              "max_reservations_per_slot": {
+                "type": "number"
+              },
+              "max_viewings_per_day": {
+                "type": "number"
+              },
+              "phone": {
+                "type": "string"
+              },
+              "regular_holidays": {
+                "type": "array",
+                "count": 1,
+                "item": {
+                  "type": "string"
+                }
+              },
+              "same_day_booking_cutoff_time": {
+                "type": "string"
+              },
+              "service_name": {
+                "type": "string"
+              },
+              "shop_code": {
+                "type": "string"
+              },
+              "shop_name": {
+                "type": "string"
+              },
+              "slot_minutes": {
+                "type": "number"
+              },
+              "status": {
+                "type": "string"
+              },
+              "timezone": {
+                "type": "string"
+              },
+              "updated_at": {
+                "type": "string"
+              }
+            }
+          },
+          "step": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "system_check": {
+      "ok": true,
+      "http_status": 200,
+      "schema": {
+        "type": "object",
+        "keys": [
+          "admin_code",
+          "checks",
+          "elapsed_ms",
+          "ok",
+          "service",
+          "shop_code",
+          "step",
+          "today"
+        ],
+        "fields": {
+          "admin_code": {
+            "type": "string"
+          },
+          "checks": {
+            "type": "array",
+            "count": 8,
+            "item": {
+              "type": "object",
+              "keys": [
+                "data",
+                "name",
+                "ok"
+              ],
+              "fields": {
+                "data": {
+                  "type": "object",
+                  "keys": [
+                    "address",
+                    "area_title",
+                    "booking_days_ahead",
+                    "business_end_time",
+                    "business_start_time",
+                    "cancel_deadline_hours",
+                    "created_at",
+                    "id",
+                    "max_reservations_per_slot",
+                    "max_viewings_per_day",
+                    "phone",
+                    "regular_holidays",
+                    "same_day_booking_cutoff_time",
+                    "service_name",
+                    "shop_code",
+                    "shop_name",
+                    "slot_minutes",
+                    "status",
+                    "timezone",
+                    "updated_at"
+                  ],
+                  "fields": {
+                    "address": {
+                      "type": "string"
+                    },
+                    "area_title": {
+                      "type": "string"
+                    },
+                    "booking_days_ahead": {
+                      "type": "number"
+                    },
+                    "business_end_time": {
+                      "type": "string"
+                    },
+                    "business_start_time": {
+                      "type": "string"
+                    },
+                    "cancel_deadline_hours": {
+                      "type": "number"
+                    },
+                    "created_at": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "max_reservations_per_slot": {
+                      "type": "number"
+                    },
+                    "max_viewings_per_day": {
+                      "type": "number"
+                    },
+                    "phone": {
+                      "type": "string"
+                    },
+                    "regular_holidays": {
+                      "type": "array",
+                      "count": 1,
+                      "item": {
+                        "type": "str"
+                      }
+                    },
+                    "same_day_booking_cutoff_time": {
+                      "type": "string"
+                    },
+                    "service_name": {
+                      "type": "string"
+                    },
+                    "shop_code": {
+                      "type": "string"
+                    },
+                    "shop_name": {
+                      "type": "string"
+                    },
+                    "slot_minutes": {
+                      "type": "number"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "timezone": {
+                      "type": "string"
+                    },
+                    "updated_at": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "name": {
+                  "type": "string"
+                },
+                "ok": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "elapsed_ms": {
+            "type": "number"
+          },
+          "ok": {
+            "type": "boolean"
+          },
+          "service": {
+            "type": "string"
+          },
+          "shop_code": {
+            "type": "string"
+          },
+          "step": {
+            "type": "string"
+          },
+          "today": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "settings": {
+      "ok": true,
+      "http_status": 200,
+      "schema": {
+        "type": "object",
+        "keys": [
+          "areas",
+          "message_templates",
+          "ok",
+          "settings",
+          "settings_object",
+          "shop",
+          "staffs",
+          "step"
+        ],
+        "fields": {
+          "areas": {
+            "type": "array",
+            "count": 3,
+            "item": {
+              "type": "object",
+              "keys": [
+                "area_label",
+                "area_memo",
+                "area_name",
+                "area_priority",
+                "created_at",
+                "customer_memo",
+                "display_order",
+                "id",
+                "is_active",
+                "shop_code",
+                "updated_at"
+              ],
+              "fields": {
+                "area_label": {
+                  "type": "string"
+                },
+                "area_memo": {
+                  "type": "string"
+                },
+                "area_name": {
+                  "type": "string"
+                },
+                "area_priority": {
+                  "type": "number"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "customer_memo": {
+                  "type": "string"
+                },
+                "display_order": {
+                  "type": "number"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "is_active": {
+                  "type": "boolean"
+                },
+                "shop_code": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "message_templates": {
+            "type": "array",
+            "count": 8,
+            "item": {
+              "type": "object",
+              "keys": [
+                "body",
+                "category",
+                "created_at",
+                "display_order",
+                "id",
+                "is_active",
+                "shop_code",
+                "template_key",
+                "title",
+                "updated_at"
+              ],
+              "fields": {
+                "body": {
+                  "type": "string"
+                },
+                "category": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "display_order": {
+                  "type": "number"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "is_active": {
+                  "type": "boolean"
+                },
+                "shop_code": {
+                  "type": "string"
+                },
+                "template_key": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "ok": {
+            "type": "boolean"
+          },
+          "settings": {
+            "type": "array",
+            "count": 3,
+            "item": {
+              "type": "object",
+              "keys": [
+                "created_at",
+                "id",
+                "memo",
+                "setting_key",
+                "setting_value",
+                "shop_code",
+                "updated_at"
+              ],
+              "fields": {
+                "created_at": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "memo": {
+                  "type": "string"
+                },
+                "setting_key": {
+                  "type": "string"
+                },
+                "setting_value": {
+                  "type": "object",
+                  "keys": [
+                    "area_multiple_select",
+                    "required_fields",
+                    "show_property_suggestions"
+                  ],
+                  "fields": {
+                    "area_multiple_select": {
+                      "type": "boolean"
+                    },
+                    "required_fields": {
+                      "type": "array",
+                      "count": 6,
+                      "item": {
+                        "type": "str"
+                      }
+                    },
+                    "show_property_suggestions": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "shop_code": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "settings_object": {
+            "type": "object",
+            "keys": [
+              "customer_form",
+              "line_copy_mode",
+              "reservation_rules"
+            ],
+            "fields": {
+              "customer_form": {
+                "type": "object",
+                "keys": [
+                  "area_multiple_select",
+                  "required_fields",
+                  "show_property_suggestions"
+                ],
+                "fields": {
+                  "area_multiple_select": {
+                    "type": "boolean"
+                  },
+                  "required_fields": {
+                    "type": "array",
+                    "count": 6,
+                    "item": {
+                      "type": "string"
+                    }
+                  },
+                  "show_property_suggestions": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "line_copy_mode": {
+                "type": "object",
+                "keys": [
+                  "auto_send",
+                  "copy_preview",
+                  "editable_before_copy"
+                ],
+                "fields": {
+                  "auto_send": {
+                    "type": "boolean"
+                  },
+                  "copy_preview": {
+                    "type": "boolean"
+                  },
+                  "editable_before_copy": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "reservation_rules": {
+                "type": "object",
+                "keys": [
+                  "booking_days_ahead",
+                  "cancel_deadline_hours",
+                  "max_reservations_per_slot",
+                  "max_viewings_per_day",
+                  "same_day_booking_cutoff_time",
+                  "slot_minutes"
+                ],
+                "fields": {
+                  "booking_days_ahead": {
+                    "type": "number"
+                  },
+                  "cancel_deadline_hours": {
+                    "type": "number"
+                  },
+                  "max_reservations_per_slot": {
+                    "type": "number"
+                  },
+                  "max_viewings_per_day": {
+                    "type": "number"
+                  },
+                  "same_day_booking_cutoff_time": {
+                    "type": "string"
+                  },
+                  "slot_minutes": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          },
+          "shop": {
+            "type": "object",
+            "keys": [
+              "address",
+              "admin_code",
+              "area_title",
+              "booking_days_ahead",
+              "business_end_time",
+              "business_start_time",
+              "cancel_deadline_hours",
+              "created_at",
+              "id",
+              "max_reservations_per_slot",
+              "max_viewings_per_day",
+              "phone",
+              "regular_holidays",
+              "same_day_booking_cutoff_time",
+              "service_name",
+              "shop_code",
+              "shop_name",
+              "slot_minutes",
+              "status",
+              "timezone",
+              "updated_at"
+            ],
+            "fields": {
+              "address": {
+                "type": "string"
+              },
+              "admin_code": {
+                "type": "string"
+              },
+              "area_title": {
+                "type": "string"
+              },
+              "booking_days_ahead": {
+                "type": "number"
+              },
+              "business_end_time": {
+                "type": "string"
+              },
+              "business_start_time": {
+                "type": "string"
+              },
+              "cancel_deadline_hours": {
+                "type": "number"
+              },
+              "created_at": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              },
+              "max_reservations_per_slot": {
+                "type": "number"
+              },
+              "max_viewings_per_day": {
+                "type": "number"
+              },
+              "phone": {
+                "type": "string"
+              },
+              "regular_holidays": {
+                "type": "array",
+                "count": 1,
+                "item": {
+                  "type": "string"
+                }
+              },
+              "same_day_booking_cutoff_time": {
+                "type": "string"
+              },
+              "service_name": {
+                "type": "string"
+              },
+              "shop_code": {
+                "type": "string"
+              },
+              "shop_name": {
+                "type": "string"
+              },
+              "slot_minutes": {
+                "type": "number"
+              },
+              "status": {
+                "type": "string"
+              },
+              "timezone": {
+                "type": "string"
+              },
+              "updated_at": {
+                "type": "string"
+              }
+            }
+          },
+          "staffs": {
+            "type": "array",
+            "count": 2,
+            "item": {
+              "type": "object",
+              "keys": [
+                "created_at",
+                "display_order",
+                "email",
+                "id",
+                "is_active",
+                "line_name",
+                "memo",
+                "phone",
+                "role",
+                "shop_code",
+                "staff_name",
+                "updated_at"
+              ],
+              "fields": {
+                "created_at": {
+                  "type": "string"
+                },
+                "display_order": {
+                  "type": "number"
+                },
+                "email": {
+                  "type": "null"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "is_active": {
+                  "type": "boolean"
+                },
+                "line_name": {
+                  "type": "string"
+                },
+                "memo": {
+                  "type": "string"
+                },
+                "phone": {
+                  "type": "string"
+                },
+                "role": {
+                  "type": "string"
+                },
+                "shop_code": {
+                  "type": "string"
+                },
+                "staff_name": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "step": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "dashboard": {
+      "ok": true,
+      "http_status": 200,
+      "schema": {
+        "type": "object",
+        "keys": [
+          "areas",
+          "counts",
+          "due_followups",
+          "message_templates",
+          "need_check_properties",
+          "ok",
+          "recent_customers",
+          "shop",
+          "step",
+          "today",
+          "today_reservations",
+          "tomorrow",
+          "tomorrow_reservations"
+        ],
+        "fields": {
+          "areas": {
+            "type": "array",
+            "count": 3,
+            "item": {
+              "type": "object",
+              "keys": [
+                "area_label",
+                "area_memo",
+                "area_name",
+                "area_priority",
+                "created_at",
+                "customer_memo",
+                "display_order",
+                "id",
+                "is_active",
+                "shop_code",
+                "updated_at"
+              ],
+              "fields": {
+                "area_label": {
+                  "type": "string"
+                },
+                "area_memo": {
+                  "type": "string"
+                },
+                "area_name": {
+                  "type": "string"
+                },
+                "area_priority": {
+                  "type": "number"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "customer_memo": {
+                  "type": "string"
+                },
+                "display_order": {
+                  "type": "number"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "is_active": {
+                  "type": "boolean"
+                },
+                "shop_code": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "counts": {
+            "type": "object",
+            "keys": [
+              "active_areas",
+              "due_followups",
+              "need_check_properties",
+              "recent_customers",
+              "today_reservations",
+              "tomorrow_reservations"
+            ],
+            "fields": {
+              "active_areas": {
+                "type": "number"
+              },
+              "due_followups": {
+                "type": "number"
+              },
+              "need_check_properties": {
+                "type": "number"
+              },
+              "recent_customers": {
+                "type": "number"
+              },
+              "today_reservations": {
+                "type": "number"
+              },
+              "tomorrow_reservations": {
+                "type": "number"
+              }
+            }
+          },
+          "due_followups": {
+            "type": "array",
+            "count": 8,
+            "item": {
+              "type": "object",
+              "keys": [
+                "completed_at",
+                "created_at",
+                "customer",
+                "customer_id",
+                "followup_date",
+                "followup_time",
+                "followup_type",
+                "id",
+                "memo",
+                "message_template_key",
+                "priority",
+                "reservation",
+                "reservation_id",
+                "shop_code",
+                "status",
+                "updated_at"
+              ],
+              "fields": {
+                "completed_at": {
+                  "type": "null"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "customer": {
+                  "type": "object",
+                  "keys": [
+                    "customer_name",
+                    "customer_status",
+                    "line_display_name",
+                    "phone"
+                  ],
+                  "fields": {
+                    "customer_name": {
+                      "type": "string"
+                    },
+                    "customer_status": {
+                      "type": "string"
+                    },
+                    "line_display_name": {
+                      "type": "string"
+                    },
+                    "phone": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "customer_id": {
+                  "type": "string"
+                },
+                "followup_date": {
+                  "type": "string"
+                },
+                "followup_time": {
+                  "type": "string"
+                },
+                "followup_type": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "memo": {
+                  "type": "string"
+                },
+                "message_template_key": {
+                  "type": "string"
+                },
+                "priority": {
+                  "type": "string"
+                },
+                "reservation": {
+                  "type": "object",
+                  "keys": [
+                    "meeting_place",
+                    "meeting_type",
+                    "reservation_date",
+                    "reservation_time",
+                    "status"
+                  ],
+                  "fields": {
+                    "meeting_place": {
+                      "type": "string"
+                    },
+                    "meeting_type": {
+                      "type": "string"
+                    },
+                    "reservation_date": {
+                      "type": "string"
+                    },
+                    "reservation_time": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "reservation_id": {
+                  "type": "string"
+                },
+                "shop_code": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "message_templates": {
+            "type": "array",
+            "count": 8,
+            "item": {
+              "type": "object",
+              "keys": [
+                "category",
+                "display_order",
+                "is_active",
+                "template_key",
+                "title"
+              ],
+              "fields": {
+                "category": {
+                  "type": "string"
+                },
+                "display_order": {
+                  "type": "number"
+                },
+                "is_active": {
+                  "type": "boolean"
+                },
+                "template_key": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "need_check_properties": {
+            "type": "array",
+            "count": 2,
+            "item": {
+              "type": "object",
+              "keys": [
+                "area_name",
+                "floor_plan",
+                "id",
+                "internal_memo",
+                "property_code",
+                "property_name",
+                "property_status",
+                "rent_amount",
+                "updated_at",
+                "viewing_available"
+              ],
+              "fields": {
+                "area_name": {
+                  "type": "string"
+                },
+                "floor_plan": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "internal_memo": {
+                  "type": "string"
+                },
+                "property_code": {
+                  "type": "string"
+                },
+                "property_name": {
+                  "type": "string"
+                },
+                "property_status": {
+                  "type": "string"
+                },
+                "rent_amount": {
+                  "type": "number"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "viewing_available": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "ok": {
+            "type": "boolean"
+          },
+          "recent_customers": {
+            "type": "array",
+            "count": 6,
+            "item": {
+              "type": "object",
+              "keys": [
+                "created_at",
+                "customer_name",
+                "customer_status",
+                "id",
+                "last_contact_at",
+                "line_display_name",
+                "memo",
+                "phone"
+              ],
+              "fields": {
+                "created_at": {
+                  "type": "string"
+                },
+                "customer_name": {
+                  "type": "string"
+                },
+                "customer_status": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "last_contact_at": {
+                  "type": "string"
+                },
+                "line_display_name": {
+                  "type": "string"
+                },
+                "memo": {
+                  "type": "null"
+                },
+                "phone": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "shop": {
+            "type": "object",
+            "keys": [
+              "address",
+              "area_title",
+              "booking_days_ahead",
+              "business_end_time",
+              "business_start_time",
+              "cancel_deadline_hours",
+              "created_at",
+              "id",
+              "max_reservations_per_slot",
+              "max_viewings_per_day",
+              "phone",
+              "regular_holidays",
+              "same_day_booking_cutoff_time",
+              "service_name",
+              "shop_code",
+              "shop_name",
+              "slot_minutes",
+              "status",
+              "timezone",
+              "updated_at"
+            ],
+            "fields": {
+              "address": {
+                "type": "string"
+              },
+              "area_title": {
+                "type": "string"
+              },
+              "booking_days_ahead": {
+                "type": "number"
+              },
+              "business_end_time": {
+                "type": "string"
+              },
+              "business_start_time": {
+                "type": "string"
+              },
+              "cancel_deadline_hours": {
+                "type": "number"
+              },
+              "created_at": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              },
+              "max_reservations_per_slot": {
+                "type": "number"
+              },
+              "max_viewings_per_day": {
+                "type": "number"
+              },
+              "phone": {
+                "type": "string"
+              },
+              "regular_holidays": {
+                "type": "array",
+                "count": 1,
+                "item": {
+                  "type": "string"
+                }
+              },
+              "same_day_booking_cutoff_time": {
+                "type": "string"
+              },
+              "service_name": {
+                "type": "string"
+              },
+              "shop_code": {
+                "type": "string"
+              },
+              "shop_name": {
+                "type": "string"
+              },
+              "slot_minutes": {
+                "type": "number"
+              },
+              "status": {
+                "type": "string"
+              },
+              "timezone": {
+                "type": "string"
+              },
+              "updated_at": {
+                "type": "string"
+              }
+            }
+          },
+          "step": {
+            "type": "string"
+          },
+          "today": {
+            "type": "string"
+          },
+          "today_reservations": {
+            "type": "array",
+            "count": 0,
+            "item": null
+          },
+          "tomorrow": {
+            "type": "string"
+          },
+          "tomorrow_reservations": {
+            "type": "array",
+            "count": 0,
+            "item": null
+          }
+        }
+      }
+    },
+    "reservations": {
+      "ok": true,
+      "http_status": 200,
+      "schema": {
+        "type": "object",
+        "keys": [
+          "count",
+          "ok",
+          "reservations",
+          "step"
+        ],
+        "fields": {
+          "count": {
+            "type": "number"
+          },
+          "ok": {
+            "type": "boolean"
+          },
+          "reservations": {
+            "type": "array",
+            "count": 5,
+            "item": {
+              "type": "object",
+              "keys": [
+                "cancel_reason",
+                "completed_at",
+                "created_at",
+                "customer",
+                "customer_id",
+                "customer_note",
+                "id",
+                "internal_note",
+                "meeting_place",
+                "meeting_type",
+                "property",
+                "property_id",
+                "reservation_date",
+                "reservation_datetime",
+                "reservation_time",
+                "reservation_type",
+                "shop_code",
+                "staff",
+                "staff_id",
+                "status",
+                "updated_at"
+              ],
+              "fields": {
+                "cancel_reason": {
+                  "type": "null"
+                },
+                "completed_at": {
+                  "type": "null"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "customer": {
+                  "type": "object",
+                  "keys": [
+                    "customer_name",
+                    "customer_status",
+                    "id",
+                    "line_display_name",
+                    "memo",
+                    "phone"
+                  ],
+                  "fields": {
+                    "customer_name": {
+                      "type": "string"
+                    },
+                    "customer_status": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "line_display_name": {
+                      "type": "string"
+                    },
+                    "memo": {
+                      "type": "string"
+                    },
+                    "phone": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "customer_id": {
+                  "type": "string"
+                },
+                "customer_note": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "internal_note": {
+                  "type": "string"
+                },
+                "meeting_place": {
+                  "type": "string"
+                },
+                "meeting_type": {
+                  "type": "string"
+                },
+                "property": {
+                  "type": "object",
+                  "keys": [
+                    "address",
+                    "area_name",
+                    "floor_plan",
+                    "id",
+                    "parking_status",
+                    "pet_allowed",
+                    "property_code",
+                    "property_name",
+                    "property_status",
+                    "rent_amount",
+                    "viewing_available"
+                  ],
+                  "fields": {
+                    "address": {
+                      "type": "string"
+                    },
+                    "area_name": {
+                      "type": "string"
+                    },
+                    "floor_plan": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "parking_status": {
+                      "type": "string"
+                    },
+                    "pet_allowed": {
+                      "type": "boolean"
+                    },
+                    "property_code": {
+                      "type": "string"
+                    },
+                    "property_name": {
+                      "type": "string"
+                    },
+                    "property_status": {
+                      "type": "string"
+                    },
+                    "rent_amount": {
+                      "type": "number"
+                    },
+                    "viewing_available": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "property_id": {
+                  "type": "string"
+                },
+                "reservation_date": {
+                  "type": "string"
+                },
+                "reservation_datetime": {
+                  "type": "string"
+                },
+                "reservation_time": {
+                  "type": "string"
+                },
+                "reservation_type": {
+                  "type": "string"
+                },
+                "shop_code": {
+                  "type": "string"
+                },
+                "staff": {
+                  "type": "object",
+                  "keys": [
+                    "id",
+                    "line_name",
+                    "phone",
+                    "staff_name"
+                  ],
+                  "fields": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "line_name": {
+                      "type": "string"
+                    },
+                    "phone": {
+                      "type": "string"
+                    },
+                    "staff_name": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "staff_id": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "step": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "customers": {
+      "ok": true,
+      "http_status": 200,
+      "schema": {
+        "type": "object",
+        "keys": [
+          "count",
+          "customers",
+          "ok",
+          "step"
+        ],
+        "fields": {
+          "count": {
+            "type": "number"
+          },
+          "customers": {
+            "type": "array",
+            "count": 5,
+            "item": {
+              "type": "object",
+              "keys": [
+                "contact_method",
+                "created_at",
+                "customer_kana",
+                "customer_name",
+                "customer_status",
+                "email",
+                "id",
+                "last_contact_at",
+                "line_display_name",
+                "line_user_id",
+                "memo",
+                "phone",
+                "preference",
+                "shop_code",
+                "updated_at"
+              ],
+              "fields": {
+                "contact_method": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "customer_kana": {
+                  "type": "null"
+                },
+                "customer_name": {
+                  "type": "string"
+                },
+                "customer_status": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "null"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "last_contact_at": {
+                  "type": "string"
+                },
+                "line_display_name": {
+                  "type": "string"
+                },
+                "line_user_id": {
+                  "type": "null"
+                },
+                "memo": {
+                  "type": "null"
+                },
+                "phone": {
+                  "type": "string"
+                },
+                "preference": {
+                  "type": "object",
+                  "keys": [
+                    "created_at",
+                    "customer_id",
+                    "desired_areas",
+                    "floor_plans",
+                    "id",
+                    "low_initial_cost",
+                    "max_rent",
+                    "min_rent",
+                    "move_in_timing",
+                    "near_station",
+                    "other_request",
+                    "parking_required",
+                    "pet_required",
+                    "priority_memo",
+                    "school_area",
+                    "shop_code",
+                    "two_people",
+                    "updated_at",
+                    "workplace_or_school"
+                  ],
+                  "fields": {
+                    "created_at": {
+                      "type": "string"
+                    },
+                    "customer_id": {
+                      "type": "string"
+                    },
+                    "desired_areas": {
+                      "type": "array",
+                      "count": 1,
+                      "item": {
+                        "type": "str"
+                      }
+                    },
+                    "floor_plans": {
+                      "type": "array",
+                      "count": 1,
+                      "item": {
+                        "type": "str"
+                      }
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "low_initial_cost": {
+                      "type": "boolean"
+                    },
+                    "max_rent": {
+                      "type": "number"
+                    },
+                    "min_rent": {
+                      "type": "null"
+                    },
+                    "move_in_timing": {
+                      "type": "string"
+                    },
+                    "near_station": {
+                      "type": "boolean"
+                    },
+                    "other_request": {
+                      "type": "string"
+                    },
+                    "parking_required": {
+                      "type": "boolean"
+                    },
+                    "pet_required": {
+                      "type": "boolean"
+                    },
+                    "priority_memo": {
+                      "type": "null"
+                    },
+                    "school_area": {
+                      "type": "null"
+                    },
+                    "shop_code": {
+                      "type": "string"
+                    },
+                    "two_people": {
+                      "type": "boolean"
+                    },
+                    "updated_at": {
+                      "type": "string"
+                    },
+                    "workplace_or_school": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "shop_code": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "ok": {
+            "type": "boolean"
+          },
+          "step": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "properties": {
+      "ok": true,
+      "http_status": 200,
+      "schema": {
+        "type": "object",
+        "keys": [
+          "count",
+          "ok",
+          "properties",
+          "step"
+        ],
+        "fields": {
+          "count": {
+            "type": "number"
+          },
+          "ok": {
+            "type": "boolean"
+          },
+          "properties": {
+            "type": "array",
+            "count": 5,
+            "item": {
+              "type": "object",
+              "keys": [
+                "address",
+                "area_id",
+                "area_name",
+                "building_age",
+                "created_at",
+                "display_order",
+                "floor_plan",
+                "id",
+                "initial_cost_memo",
+                "internal_memo",
+                "is_public",
+                "management_fee",
+                "nearest_station",
+                "parking_status",
+                "pet_allowed",
+                "photo_url",
+                "property_code",
+                "property_name",
+                "property_status",
+                "public_memo",
+                "rent_amount",
+                "room_size",
+                "shop_code",
+                "updated_at",
+                "viewing_available",
+                "walking_minutes"
+              ],
+              "fields": {
+                "address": {
+                  "type": "string"
+                },
+                "area_id": {
+                  "type": "string"
+                },
+                "area_name": {
+                  "type": "string"
+                },
+                "building_age": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "display_order": {
+                  "type": "number"
+                },
+                "floor_plan": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "initial_cost_memo": {
+                  "type": "string"
+                },
+                "internal_memo": {
+                  "type": "string"
+                },
+                "is_public": {
+                  "type": "boolean"
+                },
+                "management_fee": {
+                  "type": "number"
+                },
+                "nearest_station": {
+                  "type": "string"
+                },
+                "parking_status": {
+                  "type": "string"
+                },
+                "pet_allowed": {
+                  "type": "boolean"
+                },
+                "photo_url": {
+                  "type": "null"
+                },
+                "property_code": {
+                  "type": "string"
+                },
+                "property_name": {
+                  "type": "string"
+                },
+                "property_status": {
+                  "type": "string"
+                },
+                "public_memo": {
+                  "type": "string"
+                },
+                "rent_amount": {
+                  "type": "number"
+                },
+                "room_size": {
+                  "type": "string"
+                },
+                "shop_code": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "viewing_available": {
+                  "type": "boolean"
+                },
+                "walking_minutes": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          "step": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "followups": {
+      "ok": true,
+      "http_status": 200,
+      "schema": {
+        "type": "object",
+        "keys": [
+          "count",
+          "followups",
+          "ok",
+          "step"
+        ],
+        "fields": {
+          "count": {
+            "type": "number"
+          },
+          "followups": {
+            "type": "array",
+            "count": 5,
+            "item": {
+              "type": "object",
+              "keys": [
+                "completed_at",
+                "created_at",
+                "customer",
+                "customer_id",
+                "followup_date",
+                "followup_time",
+                "followup_type",
+                "id",
+                "memo",
+                "message_template_key",
+                "priority",
+                "reservation",
+                "reservation_id",
+                "shop_code",
+                "status",
+                "updated_at"
+              ],
+              "fields": {
+                "completed_at": {
+                  "type": "null"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "customer": {
+                  "type": "object",
+                  "keys": [
+                    "customer_name",
+                    "customer_status",
+                    "id",
+                    "line_display_name",
+                    "phone"
+                  ],
+                  "fields": {
+                    "customer_name": {
+                      "type": "string"
+                    },
+                    "customer_status": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "line_display_name": {
+                      "type": "string"
+                    },
+                    "phone": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "customer_id": {
+                  "type": "string"
+                },
+                "followup_date": {
+                  "type": "string"
+                },
+                "followup_time": {
+                  "type": "string"
+                },
+                "followup_type": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "memo": {
+                  "type": "string"
+                },
+                "message_template_key": {
+                  "type": "string"
+                },
+                "priority": {
+                  "type": "string"
+                },
+                "reservation": {
+                  "type": "object",
+                  "keys": [
+                    "id",
+                    "meeting_place",
+                    "meeting_type",
+                    "reservation_date",
+                    "reservation_time",
+                    "status"
+                  ],
+                  "fields": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "meeting_place": {
+                      "type": "string"
+                    },
+                    "meeting_type": {
+                      "type": "string"
+                    },
+                    "reservation_date": {
+                      "type": "string"
+                    },
+                    "reservation_time": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "reservation_id": {
+                  "type": "string"
+                },
+                "shop_code": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "ok": {
+            "type": "boolean"
+          },
+          "step": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "static_endpoint_references": [
+    "/api/admin/areas",
+    "/api/admin/customers",
+    "/api/admin/dashboard",
+    "/api/admin/dashboard?admin_code=",
+    "/api/admin/demo/prepare",
+    "/api/admin/demo/prepare?admin_code=",
+    "/api/admin/followups",
+    "/api/admin/login",
+    "/api/admin/properties",
+    "/api/admin/reservations",
+    "/api/admin/settings",
+    "/api/admin/system-check?admin_code=",
+    "/api/admin/system-check?admin_code=1234",
+    "/api/admin/templates",
+    "/api/health",
+    "/api/public/areas",
+    "/api/public/available-slots?date=",
+    "/api/public/member?phone=",
+    "/api/public/properties",
+    "/api/public/properties?limit=80",
+    "/api/public/reserve",
+    "/api/public/settings"
+  ],
+  "detected_field_names": [
+    "active_areas",
+    "address",
+    "admin_code",
+    "area_id",
+    "area_label",
+    "area_memo",
+    "area_multiple_select",
+    "area_name",
+    "area_priority",
+    "area_title",
+    "areas",
+    "auto_send",
+    "body",
+    "booking_days_ahead",
+    "building_age",
+    "business_end_time",
+    "business_start_time",
+    "cancel_deadline_hours",
+    "cancel_reason",
+    "category",
+    "checks",
+    "completed_at",
+    "contact_method",
+    "copy_preview",
+    "count",
+    "counts",
+    "created_at",
+    "customer",
+    "customer_form",
+    "customer_id",
+    "customer_kana",
+    "customer_memo",
+    "customer_name",
+    "customer_note",
+    "customer_status",
+    "customers",
+    "data",
+    "db_error",
+    "db_ok",
+    "desired_areas",
+    "display_order",
+    "due_followups",
+    "editable_before_copy",
+    "elapsed_ms",
+    "email",
+    "floor_plan",
+    "floor_plans",
+    "followup_date",
+    "followup_time",
+    "followup_type",
+    "followups",
+    "id",
+    "initial_cost_memo",
+    "internal_memo",
+    "internal_note",
+    "is_active",
+    "is_public",
+    "last_contact_at",
+    "line_copy_mode",
+    "line_display_name",
+    "line_name",
+    "line_user_id",
+    "low_initial_cost",
+    "management_fee",
+    "max_rent",
+    "max_reservations_per_slot",
+    "max_viewings_per_day",
+    "meeting_place",
+    "meeting_type",
+    "memo",
+    "message",
+    "message_template_key",
+    "message_templates",
+    "min_rent",
+    "move_in_timing",
+    "name",
+    "near_station",
+    "nearest_station",
+    "need_check_properties",
+    "ok",
+    "other_request",
+    "parking_required",
+    "parking_status",
+    "pet_allowed",
+    "pet_required",
+    "phone",
+    "photo_url",
+    "preference",
+    "priority",
+    "priority_memo",
+    "properties",
+    "property",
+    "property_code",
+    "property_id",
+    "property_name",
+    "property_status",
+    "public_memo",
+    "recent_customers",
+    "regular_holidays",
+    "rent_amount",
+    "required_fields",
+    "reservation",
+    "reservation_date",
+    "reservation_datetime",
+    "reservation_id",
+    "reservation_rules",
+    "reservation_time",
+    "reservation_type",
+    "reservations",
+    "role",
+    "room_size",
+    "same_day_booking_cutoff_time",
+    "school_area",
+    "service",
+    "service_name",
+    "setting_key",
+    "setting_value",
+    "settings",
+    "settings_object",
+    "shop",
+    "shop_code",
+    "shop_name",
+    "show_property_suggestions",
+    "slot_minutes",
+    "staff",
+    "staff_id",
+    "staff_name",
+    "staffs",
+    "status",
+    "step",
+    "supabase_service_key_set",
+    "supabase_url_set",
+    "template_key",
+    "time",
+    "timezone",
+    "title",
+    "today",
+    "today_reservations",
+    "tokyo_today",
+    "tomorrow",
+    "tomorrow_reservations",
+    "two_people",
+    "updated_at",
+    "version",
+    "viewing_available",
+    "walking_minutes",
+    "workplace_or_school"
+  ],
+  "persistent_application_case_detected": false,
+  "detected_capabilities": {
+    "assigned_staff": false,
+    "next_action": false,
+    "lost_reason": false,
+    "vacancy_history": false,
+    "required_documents": false
+  }
+}
