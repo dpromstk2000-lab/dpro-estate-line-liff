@@ -1,4 +1,4 @@
-name: DPRO ESTATE NEXT-1 R2 Baseline Protection
+name: DPRO ESTATE NEXT-1 R3 Baseline Protection
 
 on:
   workflow_dispatch:
@@ -16,13 +16,13 @@ env:
   DPRO_PREVIOUS_STEP: STEP ESTATE-12
   DPRO_NEXT_STEP: ESTATE-NEXT-2
   DPRO_TARGET_FILES: index.html, property.html, member.html, owner.html, owner-ipad.html, owner-settings.html, system-check.html, reservation-test.html
-  DPRO_CHANGE_SUMMARY: Protect the normal version and create the current-system baseline ledgers without changing application files.
+  DPRO_CHANGE_SUMMARY: Protect the normal version and create the current-system baseline ledgers without changing application files; R3 corrects the owner-ipad demo-prepare evidence rule.
   DPRO_FEATURE_SCOPE: File manifest, feature ledger, risk report, progress ledger, syntax checks, ID duplicate checks, existing-feature preservation checks, estate business-logic checks.
   DPRO_BACKUP_TAG: dpro-estate-next-baseline-20260723
   DPRO_WORKER_CHANGED: "false"
   DPRO_SUPABASE_CHANGED: "false"
   DPRO_API_CHANGED: "false"
-  DPRO_WORKFLOW_REVISION: R2
+  DPRO_WORKFLOW_REVISION: R3
 
 concurrency:
   group: dpro-estate-next-1-${{ github.ref }}
@@ -54,9 +54,9 @@ jobs:
 
           CURRENT_SHA="$(git rev-parse HEAD)"
 
-          # R2: Skip every consecutive commit that changed only this temporary
+          # R3: Skip every consecutive commit that changed only this temporary
           # workflow. This protects the true pre-NEXT application commit even
-          # after replacing a failed R1 workflow with R2.
+          # after replacing failed R1/R2 workflows with R3.
           BASELINE_SHA="$CURRENT_SHA"
           WORKFLOW_ONLY_COMMITS_SKIPPED=0
           while git rev-parse "${BASELINE_SHA}^" >/dev/null 2>&1; do
@@ -100,7 +100,7 @@ jobs:
             }
           done
 
-          # R2: git show | grep -q under pipefail can be misclassified as a
+          # R3: git show | grep -q under pipefail can be misclassified as a
           # failure after grep exits early. Use git grep directly against the
           # protected commit, with index.html as the authoritative STEP marker.
           if ! git grep -Fq "STEP ESTATE-12" "$BASELINE_SHA" -- index.html; then
@@ -349,7 +349,8 @@ jobs:
                   "/api/admin/dashboard",
                   "todayReservations",
                   "messagePreview",
-                  "prepareDemo",
+                  "demoBtn",
+                  "/api/admin/demo/prepare",
               ],
               "owner-settings.html": [
                   "saveBasicBtn",
