@@ -1,4 +1,4 @@
-name: DPRO ESTATE NEXT-1 Baseline Protection
+name: DPRO ESTATE NEXT-1 R2 Baseline Protection
 
 on:
   workflow_dispatch:
@@ -22,6 +22,7 @@ env:
   DPRO_WORKER_CHANGED: "false"
   DPRO_SUPABASE_CHANGED: "false"
   DPRO_API_CHANGED: "false"
+  DPRO_WORKFLOW_REVISION: R2
 
 concurrency:
   group: dpro-estate-next-1-${{ github.ref }}
@@ -52,14 +53,34 @@ jobs:
           git fetch --force --tags origin
 
           CURRENT_SHA="$(git rev-parse HEAD)"
-          BASELINE_SHA="$CURRENT_SHA"
 
-          if git rev-parse HEAD^ >/dev/null 2>&1; then
-            mapfile -t trigger_files < <(git diff-tree --no-commit-id --name-only -r HEAD)
-            if [ "${#trigger_files[@]}" -eq 1 ] && [ "${trigger_files[0]}" = "$WORKFLOW_PATH" ]; then
-              BASELINE_SHA="$(git rev-parse HEAD^)"
+          # R2: Skip every consecutive commit that changed only this temporary
+          # workflow. This protects the true pre-NEXT application commit even
+          # after replacing a failed R1 workflow with R2.
+          BASELINE_SHA="$CURRENT_SHA"
+          WORKFLOW_ONLY_COMMITS_SKIPPED=0
+          while git rev-parse "${BASELINE_SHA}^" >/dev/null 2>&1; do
+            mapfile -t commit_files < <(git diff-tree --no-commit-id --name-only -r "$BASELINE_SHA")
+            workflow_only=true
+
+            if [ "${#commit_files[@]}" -eq 0 ]; then
+              workflow_only=false
+            else
+              for changed_file in "${commit_files[@]}"; do
+                if [ "$changed_file" != "$WORKFLOW_PATH" ]; then
+                  workflow_only=false
+                  break
+                fi
+              done
             fi
-          fi
+
+            if [ "$workflow_only" != "true" ]; then
+              break
+            fi
+
+            BASELINE_SHA="$(git rev-parse "${BASELINE_SHA}^")"
+            WORKFLOW_ONLY_COMMITS_SKIPPED=$((WORKFLOW_ONLY_COMMITS_SKIPPED + 1))
+          done
 
           required_files=(
             index.html
@@ -79,22 +100,39 @@ jobs:
             }
           done
 
+          # R2: git show | grep -q under pipefail can be misclassified as a
+          # failure after grep exits early. Use git grep directly against the
+          # protected commit, with index.html as the authoritative STEP marker.
+          if ! git grep -Fq "STEP ESTATE-12" "$BASELINE_SHA" -- index.html; then
+            echo "ERROR: authoritative previous STEP marker was not found in index.html" >&2
+            git show "${BASELINE_SHA}:index.html" | sed -n '680,730p' >&2 || true
+            exit 1
+          fi
+
+          marker_count=0
           for file in index.html owner.html owner-ipad.html owner-settings.html member.html property.html system-check.html; do
-            git show "${BASELINE_SHA}:${file}" | grep -q "STEP ESTATE-12" || {
-              echo "ERROR: previous completed version marker was not found in $file" >&2
-              exit 1
-            }
+            if git grep -Fq "STEP ESTATE-12" "$BASELINE_SHA" -- "$file"; then
+              marker_count=$((marker_count + 1))
+              echo "Previous STEP marker: PASS / $file"
+            else
+              echo "Previous STEP marker: NOTICE / $file has no exact shared marker"
+            fi
           done
 
-          git show "${BASELINE_SHA}:index.html" | grep -q "dpro-estate-line-api.dpromstk2000.workers.dev" || {
+          if [ "$marker_count" -lt 1 ]; then
+            echo "ERROR: no previous STEP marker was confirmed." >&2
+            exit 1
+          fi
+
+          if ! git grep -Fq "dpro-estate-line-api.dpromstk2000.workers.dev" "$BASELINE_SHA" -- index.html; then
             echo "ERROR: current Worker API reference was not found in index.html" >&2
             exit 1
-          }
+          fi
 
           if git cat-file -e "${BASELINE_SHA}:dpro-next/estate-progress.yml" 2>/dev/null; then
             previous_progress="$(git show "${BASELINE_SHA}:dpro-next/estate-progress.yml")"
-            if printf '%s' "$previous_progress" | grep -q '^current_step:' && \
-               ! printf '%s' "$previous_progress" | grep -Eq '^current_step:[[:space:]]*(ESTATE-NEXT-1-COMPLETE|COMPLETE)[[:space:]]*$'; then
+            if grep -q '^current_step:' <<< "$previous_progress" && \
+               ! grep -Eq '^current_step:[[:space:]]*(ESTATE-NEXT-1-COMPLETE|COMPLETE)[[:space:]]*$' <<< "$previous_progress"; then
               echo "ERROR: another DPRO NEXT STEP appears to be incomplete." >&2
               printf '%s\n' "$previous_progress" >&2
               exit 1
@@ -106,10 +144,12 @@ jobs:
           echo "CURRENT_SHA=$CURRENT_SHA" >> "$GITHUB_ENV"
           echo "BASELINE_SHA=$BASELINE_SHA" >> "$GITHUB_ENV"
           echo "TARGET_BRANCH=${GITHUB_REF_NAME}" >> "$GITHUB_ENV"
+          echo "WORKFLOW_ONLY_COMMITS_SKIPPED=$WORKFLOW_ONLY_COMMITS_SKIPPED" >> "$GITHUB_ENV"
 
           echo "Current workflow commit: $CURRENT_SHA"
           echo "Protected application baseline: $BASELINE_SHA"
           echo "Previous STEP ESTATE-12 confirmation: PASS"
+          echo "Workflow-only commits skipped: $WORKFLOW_ONLY_COMMITS_SKIPPED"
 
       - name: Create or verify backup tag
         shell: bash
@@ -698,9 +738,10 @@ jobs:
 
           | 項目 | 結果 |
           |---|---|
-          | 前STEP ESTATE-12確認 | PASS |
+          | 前STEP ESTATE-12確認 | PASS（R2誤判定修正） |
           | 正常版保護タグ | \`$BASELINE_TAG\` |
           | 保護SHA | \`$BASELINE_SHA\` |
+          | 除外した一時YML専用コミット | \`$WORKFLOW_ONLY_COMMITS_SKIPPED\`件 |
           | HTML構文読込 | PASS |
           | JavaScript構文 | PASS |
           | YML構文 | PASS |
@@ -743,7 +784,7 @@ jobs:
             esac
           done
 
-          git commit -m "chore(estate): complete ESTATE-NEXT-1 baseline protection"
+          git commit -m "chore(estate): complete ESTATE-NEXT-1 R2 baseline protection"
           git push origin "HEAD:$TARGET_BRANCH"
 
-          echo "ESTATE-NEXT-1 completed and workflow self-deleted."
+          echo "ESTATE-NEXT-1 R2 completed and workflow self-deleted."
