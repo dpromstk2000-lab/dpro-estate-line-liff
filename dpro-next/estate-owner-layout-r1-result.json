@@ -1,0 +1,98 @@
+{
+  "desktop1440": {
+    "today": {
+      "buttonCount": 18,
+      "maximumButtonHeight": 34,
+      "maximumCardHeight": 206.7,
+      "horizontalOverflow": 0
+    },
+    "reservations": {
+      "buttonCount": 48,
+      "maximumButtonHeight": 34,
+      "maximumCardHeight": 165.7,
+      "horizontalOverflow": 0
+    },
+    "customers": {
+      "buttonCount": 18,
+      "maximumButtonHeight": 34,
+      "maximumCardHeight": 303.9,
+      "horizontalOverflow": 0
+    },
+    "properties": {
+      "buttonCount": 24,
+      "maximumButtonHeight": 34,
+      "maximumCardHeight": 364.7,
+      "horizontalOverflow": 0
+    },
+    "cases": {
+      "buttonCount": 24,
+      "maximumButtonHeight": 34,
+      "maximumCardHeight": 478.4,
+      "horizontalOverflow": 0
+    }
+  },
+  "tablet1024": {
+    "today": {
+      "buttonCount": 18,
+      "maximumButtonHeight": 34,
+      "maximumCardHeight": 206.7,
+      "horizontalOverflow": 0
+    },
+    "reservations": {
+      "buttonCount": 48,
+      "maximumButtonHeight": 34,
+      "maximumCardHeight": 206.7,
+      "horizontalOverflow": 0
+    },
+    "customers": {
+      "buttonCount": 18,
+      "maximumButtonHeight": 34,
+      "maximumCardHeight": 303.9,
+      "horizontalOverflow": 0
+    },
+    "properties": {
+      "buttonCount": 24,
+      "maximumButtonHeight": 34,
+      "maximumCardHeight": 323.7,
+      "horizontalOverflow": 0
+    },
+    "cases": {
+      "buttonCount": 24,
+      "maximumButtonHeight": 34,
+      "maximumCardHeight": 498.2,
+      "horizontalOverflow": 0
+    }
+  },
+  "mobile390": {
+    "today": {
+      "buttonCount": 18,
+      "maximumButtonHeight": 34,
+      "maximumCardHeight": 165.7,
+      "horizontalOverflow": 0
+    },
+    "reservations": {
+      "buttonCount": 48,
+      "maximumButtonHeight": 34,
+      "maximumCardHeight": 286.7,
+      "horizontalOverflow": 0
+    },
+    "customers": {
+      "buttonCount": 18,
+      "maximumButtonHeight": 34,
+      "maximumCardHeight": 516.3,
+      "horizontalOverflow": 0
+    },
+    "properties": {
+      "buttonCount": 24,
+      "maximumButtonHeight": 34,
+      "maximumCardHeight": 496.5,
+      "horizontalOverflow": 0
+    },
+    "cases": {
+      "buttonCount": 24,
+      "maximumButtonHeight": 46,
+      "maximumCardHeight": 647.6,
+      "horizontalOverflow": 0
+    }
+  }
+}

@@ -1,0 +1,21 @@
+system: DPRO 不動産・賃貸内見 LINE
+hotfix: ESTATE-NEXT-10-HOTFIX-OWNER-LAYOUT-R1
+status: COMPLETE
+completed_at_jst: "2026-07-25T07:30:13+09:00"
+defect: shared owner card action buttons stretched vertically
+resolution: explicit grid alignment and horizontal fixed-height action controls
+affected_panels:
+  - today
+  - reservations
+  - customers
+  - properties
+  - cases
+desktop_1440_visual_check: PASS
+tablet_1024_visual_check: PASS
+mobile_390_visual_check: PASS
+action_button_height_check: PASS
+horizontal_overflow_check: PASS
+existing_features_preserved: true
+worker_changed: false
+supabase_changed: false
+api_changed: false

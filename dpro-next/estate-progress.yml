@@ -31,3 +31,7 @@ post_complete_hotfix: ESTATE-NEXT-10-HOTFIX-FOLLOWUP-AUTH-R2
 followup_authentication: PASS
 followup_authentication_method: READ_ONLY_FOLLOWUP_TASK_LIST
 followup_authentication_verification: R2
+post_complete_ui_hotfix: ESTATE-NEXT-10-HOTFIX-OWNER-LAYOUT-R1
+owner_layout: PASS
+owner_action_buttons: PASS
+owner_visual_verification: DESKTOP_TABLET_MOBILE
