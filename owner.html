@@ -134,10 +134,82 @@
     .message-type-grid{display:grid;grid-template-columns:220px 1fr;gap:12px}.message-note{font-size:12px;color:var(--muted);font-weight:700;margin-top:6px}
     @media(max-width:860px){.cost-grid{grid-template-columns:1fr 1fr}.message-type-grid{grid-template-columns:1fr}}
     @media(max-width:560px){.cost-grid,.document-row{grid-template-columns:1fr}}
+  
+    /* ESTATE-NEXT-10-HOTFIX-OWNER-LAYOUT-R1 / 20260725 */
+    .task-grid,
+    .list,
+    .cards,
+    .case-list{
+      align-items:start;
+      align-content:start;
+    }
+
+    .task-grid > *,
+    .list > *,
+    .cards > *,
+    .case-list > *{
+      min-width:0;
+      align-self:start;
+    }
+
+    .item,
+    .person-card,
+    .property-card,
+    .case-card{
+      width:100%;
+      height:auto;
+      min-height:0;
+      align-self:start;
+    }
+
+    .actions{
+      display:flex;
+      align-items:center;
+      align-content:flex-start;
+      justify-content:flex-start;
+      gap:7px;
+      flex-wrap:wrap;
+      width:100%;
+      height:auto;
+      min-height:0;
+      margin-top:10px;
+    }
+
+    .small-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      flex:0 0 auto;
+      width:auto;
+      height:auto;
+      min-height:34px;
+      max-height:none;
+      padding:7px 11px;
+      line-height:1.25;
+      white-space:nowrap;
+      writing-mode:horizontal-tb;
+      text-orientation:mixed;
+      overflow:visible;
+    }
+
+    @media(max-width:560px){
+      .actions{
+        display:grid;
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        align-items:start;
+      }
+
+      .small-btn{
+        width:100%;
+        min-width:0;
+        white-space:normal;
+      }
+    }
+
   </style>
 </head>
 <body>
-  <!-- DPRO ESTATE NEXT-8 / owner.html -->
+  <!-- DPRO ESTATE NEXT-10 / owner.html -->
   <div class="app">
     <aside class="sidebar" id="sidebar">
       <div class="brand">
@@ -153,7 +225,7 @@
         <button class="nav-btn" data-panel-button="customers" onclick="openPanel('customers')">顧客カルテ</button>
         <button class="nav-btn" data-panel-button="properties" onclick="openPanel('properties')">物件管理 <span class="count" id="sidePropertyCount">-</span></button>
         <button class="nav-btn" data-panel-button="cases" onclick="openPanel('cases')">案件進捗 <span class="count" id="sideCaseCount">-</span></button>
-        <a class="nav-link" id="followupLink" href="followup.html?v=estate-next-8">追客・再相談 <span class="count">NEXT</span></a>
+        <a class="nav-link" id="followupLink" href="followup.html?v=estate-next-10-followup-auth-r2">追客・再相談 <span class="count">NEXT</span></a>
         <button class="nav-btn" data-panel-button="messages" onclick="openPanel('messages')">LINE文面コピー</button>
       </div>
 
@@ -476,7 +548,7 @@
     });
 
     function setPageLinks(){
-      const version = 'estate-next-8';
+      const version = 'estate-next-10-owner-layout-r1';
       $('settingsLink').href = `${CONFIG.pageBase}/owner-settings.html?v=${version}`;
       $('ipadLink').href = `${CONFIG.pageBase}/owner-ipad.html?v=${version}`;
       $('checkLink').href = `${CONFIG.pageBase}/system-check.html?v=${version}`;
