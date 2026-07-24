@@ -1,0 +1,16 @@
+step: ESTATE-NEXT-9
+status: LIVE-VERIFY-PENDING
+next_step: ESTATE-NEXT-9-VERIFY
+modified_files:
+  - system-check.html
+  - system-check-api.js
+  - config.js
+  - property.html
+worker_changed: false
+supabase_changed: false
+api_changed: false
+public_ui_phone_only_removed: true
+property_phone_localstorage_removed: true
+property_member_phone_url_removed: true
+property_reservation_code_session_handoff: true
+legacy_phone_only_direct_block: attention_source_unavailable

@@ -1,0 +1,19 @@
+{
+  "step": "ESTATE-NEXT-9",
+  "html_files_checked": 9,
+  "inline_scripts_checked": 9,
+  "duplicate_ids": "PASS",
+  "javascript_syntax": "PASS",
+  "public_security_scan": "PASS",
+  "property_secure_handoff": "PASS",
+  "legacy_worker_source_present": false,
+  "sizes_bytes": {
+    "system-check.html": 14517,
+    "system-check-api.js": 11849,
+    "config.js": 1296
+  },
+  "status": "PASS_WITH_ATTENTION",
+  "attention": [
+    "Legacy Worker source is unavailable; the old phone-only endpoint cannot be directly removed in this STEP."
+  ]
+}

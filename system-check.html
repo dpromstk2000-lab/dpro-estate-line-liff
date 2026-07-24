@@ -1,868 +1,195 @@
 <!doctype html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>STEP ESTATE-12｜system-check｜DPRO 不動産・賃貸内見 LINE</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>DPRO 不動産 LINE｜営業前システムチェック</title>
   <style>
-    :root{
-      --bg:#edf5f1;
-      --bg2:#fff7e8;
-      --main:#0b6b57;
-      --main2:#064f42;
-      --sub:#7b9250;
-      --mint:#e7f7f0;
-      --line:#dfe9e5;
-      --text:#18322d;
-      --muted:#6b7c78;
-      --card:#ffffff;
-      --danger:#d94b4b;
-      --danger-bg:#fff0f0;
-      --warn:#e5961a;
-      --warn-bg:#fff7e5;
-      --ok:#078b63;
-      --ok-bg:#e9fbf2;
-      --shadow:0 18px 45px rgba(17,45,38,.12);
-      --radius:22px;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP","Hiragino Sans","Yu Gothic",sans-serif;
-      color:var(--text);
-      background:
-        radial-gradient(circle at top left, rgba(11,107,87,.10), transparent 34%),
-        radial-gradient(circle at bottom right, rgba(229,150,26,.16), transparent 34%),
-        linear-gradient(135deg,var(--bg),#f8fbfa 52%,var(--bg2));
-      min-height:100vh;
-    }
-    a{color:inherit}
-    button,input,select,textarea{font:inherit}
-    .hero{
-      background:linear-gradient(135deg,var(--main2),var(--main),var(--sub));
-      color:#fff;
-      padding:24px 20px 30px;
-      position:relative;
-      overflow:hidden;
-      border-bottom-left-radius:22px;
-      border-bottom-right-radius:22px;
-      box-shadow:var(--shadow);
-    }
-    .hero:after{
-      content:"";
-      position:absolute;
-      right:-54px;
-      top:-76px;
-      width:210px;
-      height:210px;
-      border-radius:999px;
-      background:rgba(255,255,255,.16);
-    }
-    .wrap{
-      width:min(1120px,calc(100% - 28px));
-      margin:0 auto;
-      position:relative;
-      z-index:1;
-    }
-    .badge-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-    .badge{
-      display:inline-flex;align-items:center;gap:6px;
-      padding:5px 10px;
-      border-radius:999px;
-      background:rgba(255,255,255,.18);
-      color:#fff;
-      font-size:12px;
-      font-weight:800;
-      letter-spacing:.02em;
-      backdrop-filter:blur(8px);
-    }
-    .hero h1{
-      margin:14px 0 8px;
-      font-size:clamp(28px,4vw,46px);
-      line-height:1.05;
-      letter-spacing:-.05em;
-    }
-    .hero p{
-      margin:0;
-      max-width:820px;
-      color:rgba(255,255,255,.92);
-      font-weight:700;
-      line-height:1.75;
-      font-size:14px;
-    }
-    .hero-nav{
-      margin-top:20px;
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:8px;
-    }
-    .hero-nav a,.hero-nav button{
-      border:1px solid rgba(255,255,255,.24);
-      background:rgba(255,255,255,.12);
-      color:#fff;
-      border-radius:10px;
-      padding:12px 10px;
-      text-align:center;
-      text-decoration:none;
-      font-weight:900;
-      cursor:pointer;
-    }
-    .summary-grid{
-      margin-top:12px;
-      display:grid;
-      grid-template-columns:1.2fr 1fr 1fr 1fr;
-      gap:10px;
-    }
-    .summary-card{
-      background:rgba(255,255,255,.92);
-      color:var(--text);
-      border-radius:12px;
-      padding:13px 14px;
-      min-height:64px;
-    }
-    .summary-card .label{font-size:11px;color:var(--muted);font-weight:800}
-    .summary-card .value{font-size:15px;font-weight:950;margin-top:4px;word-break:break-all}
-    main.wrap{padding:18px 0 42px}
-    .grid{
-      display:grid;
-      grid-template-columns:1.35fr .8fr;
-      gap:18px;
-      align-items:start;
-    }
-    .card{
-      background:rgba(255,255,255,.92);
-      border:1px solid rgba(223,233,229,.95);
-      border-radius:var(--radius);
-      box-shadow:0 10px 30px rgba(17,45,38,.08);
-      padding:18px;
-      margin-bottom:16px;
-    }
-    .card-head{
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      align-items:flex-start;
-      margin-bottom:12px;
-    }
-    h2{
-      margin:0;
-      font-size:20px;
-      letter-spacing:-.04em;
-    }
-    h3{
-      margin:0;
-      font-size:16px;
-      letter-spacing:-.03em;
-    }
-    .desc{
-      color:var(--muted);
-      font-size:12px;
-      line-height:1.7;
-      font-weight:700;
-      margin-top:4px;
-    }
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      min-height:24px;
-      padding:4px 9px;
-      border-radius:999px;
-      font-size:11px;
-      font-weight:900;
-      background:var(--mint);
-      color:var(--main);
-      white-space:nowrap;
-    }
-    .pill.ok{background:var(--ok-bg);color:var(--ok)}
-    .pill.ng{background:var(--danger-bg);color:var(--danger)}
-    .pill.warn{background:var(--warn-bg);color:var(--warn)}
-    .form-row{
-      display:grid;
-      grid-template-columns:1.5fr .55fr auto auto;
-      gap:10px;
-      align-items:end;
-    }
-    label{
-      display:block;
-      font-size:12px;
-      color:var(--muted);
-      font-weight:900;
-      margin-bottom:6px;
-    }
-    input,select,textarea{
-      width:100%;
-      border:1px solid var(--line);
-      background:#fff;
-      border-radius:12px;
-      padding:12px 13px;
-      color:var(--text);
-      outline:none;
-      font-weight:800;
-      min-height:44px;
-    }
-    input:focus,select:focus,textarea:focus{
-      border-color:rgba(11,107,87,.45);
-      box-shadow:0 0 0 4px rgba(11,107,87,.10);
-    }
-    .btn{
-      border:0;
-      border-radius:12px;
-      background:var(--main);
-      color:#fff;
-      padding:12px 14px;
-      min-height:44px;
-      font-weight:950;
-      cursor:pointer;
-      box-shadow:0 6px 16px rgba(11,107,87,.18);
-      white-space:nowrap;
-    }
-    .btn:hover{filter:brightness(.98)}
-    .btn.secondary{
-      background:#e8f4ef;
-      color:var(--main);
-      box-shadow:none;
-    }
-    .btn.orange{
-      background:#f39b16;
-      box-shadow:0 6px 16px rgba(243,155,22,.18);
-    }
-    .btn.danger{
-      background:#d94b4b;
-      box-shadow:0 6px 16px rgba(217,75,75,.15);
-    }
-    .mini-grid{
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:10px;
-    }
-    .stat{
-      border:1px solid var(--line);
-      background:#fff;
-      border-radius:14px;
-      padding:14px;
-    }
-    .stat strong{display:block;font-size:26px;line-height:1;color:var(--main)}
-    .stat span{display:block;margin-top:6px;font-size:12px;color:var(--muted);font-weight:900}
-    .alert{
-      padding:13px 14px;
-      border-radius:14px;
-      font-size:13px;
-      line-height:1.65;
-      font-weight:800;
-      margin:10px 0 0;
-    }
-    .alert.ok{background:var(--ok-bg);color:#0b6b57;border:1px solid #c8efdd}
-    .alert.ng{background:var(--danger-bg);color:var(--danger);border:1px solid #ffd0d0}
-    .alert.warn{background:var(--warn-bg);color:#9a6300;border:1px solid #ffe0a6}
-    .check-list{
-      display:grid;
-      gap:10px;
-    }
-    .check-item{
-      display:grid;
-      grid-template-columns:auto 1fr auto;
-      gap:12px;
-      align-items:start;
-      background:#fff;
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:13px;
-    }
-    .mark{
-      width:30px;height:30px;border-radius:999px;
-      display:inline-flex;align-items:center;justify-content:center;
-      font-weight:950;
-      font-size:14px;
-      background:#eef3f1;color:var(--muted);
-    }
-    .mark.ok{background:var(--ok-bg);color:var(--ok)}
-    .mark.ng{background:var(--danger-bg);color:var(--danger)}
-    .mark.warn{background:var(--warn-bg);color:var(--warn)}
-    .check-title{font-weight:950;margin-top:2px}
-    .check-detail{font-size:12px;color:var(--muted);font-weight:750;line-height:1.6;margin-top:3px;word-break:break-all}
-    .url-list{display:grid;gap:8px}
-    .url-row{
-      display:grid;
-      grid-template-columns:118px 1fr auto;
-      gap:8px;
-      align-items:center;
-      border:1px solid var(--line);
-      background:#fff;
-      border-radius:12px;
-      padding:8px;
-    }
-    .url-row b{font-size:12px}
-    .url-row input{min-height:36px;padding:8px 10px;font-size:12px;background:#f8fbfa}
-    .url-row button{
-      border:0;background:#e8f4ef;color:var(--main);
-      border-radius:9px;padding:8px 10px;font-weight:950;cursor:pointer;
-    }
-    .data-box{
-      background:#0b1f1b;
-      color:#d9f8ee;
-      border-radius:16px;
-      padding:14px;
-      max-height:280px;
-      overflow:auto;
-      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-      font-size:12px;
-      line-height:1.55;
-      white-space:pre-wrap;
-      word-break:break-word;
-    }
-    .step-row{
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:10px;
-    }
-    .step-card{
-      background:#fff;
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:14px;
-    }
-    .num{
-      width:28px;height:28px;border-radius:999px;background:var(--main);color:#fff;
-      display:inline-flex;align-items:center;justify-content:center;
-      font-weight:950;margin-bottom:10px;
-    }
-    .step-card b{display:block;font-size:14px;margin-bottom:5px}
-    .step-card p{margin:0;font-size:12px;line-height:1.6;color:var(--muted);font-weight:750}
-    .footer{
-      text-align:center;
-      color:#7a8b87;
-      font-size:11px;
-      font-weight:800;
-      padding:10px 0 24px;
-    }
-    .sticky-side{position:sticky;top:14px}
-    .hidden{display:none!important}
-    @media (max-width:920px){
-      .grid{grid-template-columns:1fr}
-      .sticky-side{position:static}
-      .summary-grid{grid-template-columns:repeat(2,1fr)}
-      .form-row{grid-template-columns:1fr}
-      .hero-nav{grid-template-columns:repeat(2,1fr)}
-      .mini-grid{grid-template-columns:repeat(2,1fr)}
-      .step-row{grid-template-columns:1fr}
-      .url-row{grid-template-columns:1fr}
-    }
+    :root{--bg:#edf5f1;--card:#fff;--main:#0b6b57;--main2:#064f42;--text:#18322d;--muted:#687a75;--line:#dce8e4;--ok:#078b63;--warn:#c87800;--ng:#d94b4b;--shadow:0 16px 42px rgba(17,45,38,.10)}
+    *{box-sizing:border-box} body{margin:0;background:linear-gradient(135deg,#edf5f1,#fffaf0);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP","Yu Gothic",sans-serif;min-height:100vh} button,input{font:inherit}
+    .hero{background:linear-gradient(135deg,var(--main2),var(--main));color:#fff;padding:24px 18px 30px;box-shadow:var(--shadow)} .wrap{width:min(1120px,calc(100% - 28px));margin:auto}.eyebrow{font-size:13px;font-weight:900;letter-spacing:.08em;opacity:.9}.hero h1{font-size:clamp(28px,5vw,48px);line-height:1.08;margin:10px 0 8px}.hero p{margin:0;line-height:1.8;font-weight:700;opacity:.92;max-width:850px}
+    main{padding:18px 0 40px}.card{background:rgba(255,255,255,.96);border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:0 10px 28px rgba(17,45,38,.07);margin-bottom:16px}.card h2{margin:0;font-size:21px}.desc{font-size:13px;line-height:1.7;color:var(--muted);font-weight:700;margin-top:5px}
+    .controls{display:grid;grid-template-columns:1fr auto auto auto;gap:10px;align-items:end;margin-top:16px}.field label{display:block;font-size:12px;font-weight:900;color:var(--muted);margin-bottom:6px}.field input{width:100%;min-height:46px;border:1px solid var(--line);border-radius:12px;padding:11px 13px;outline:none}.field input:focus{border-color:var(--main);box-shadow:0 0 0 4px rgba(11,107,87,.10)}
+    .btn{border:0;border-radius:12px;min-height:46px;padding:11px 15px;font-weight:950;cursor:pointer;background:var(--main);color:#fff}.btn.secondary{background:#e6f2ee;color:var(--main)}.btn.warn{background:#ef9a16}.btn.danger{background:#d94b4b}.btn:disabled{opacity:.5;cursor:not-allowed}.hidden{display:none!important}
+    .summary{display:grid;grid-template-columns:1.3fr repeat(3,1fr);gap:10px;margin-top:16px}.stat{border:1px solid var(--line);border-radius:14px;padding:14px;background:#fff}.stat small{display:block;color:var(--muted);font-weight:850}.stat strong{display:block;margin-top:5px;font-size:24px}.status{font-weight:950}.status.ok{color:var(--ok)}.status.attention{color:var(--warn)}.status.ng{color:var(--ng)}
+    .toolbar{display:flex;gap:8px;flex-wrap:wrap;justify-content:space-between;align-items:center}.filters{display:flex;gap:7px;flex-wrap:wrap}.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 12px;font-weight:900;cursor:pointer}.chip.active{background:var(--main);color:#fff;border-color:var(--main)}
+    .checks{display:grid;gap:10px;margin-top:14px}.check{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:start;border:1px solid var(--line);border-radius:15px;padding:13px;background:#fff}.mark{width:32px;height:32px;border-radius:999px;display:grid;place-items:center;font-weight:950;background:#edf2f0}.mark.ok{background:#e6f8ef;color:var(--ok)}.mark.attention{background:#fff4dc;color:var(--warn)}.mark.ng{background:#fff0f0;color:var(--ng)}.check-title{font-weight:950}.check-meta{font-size:12px;color:var(--muted);line-height:1.6;margin-top:3px;word-break:break-word}.pill{border-radius:999px;padding:5px 9px;font-size:11px;font-weight:950;white-space:nowrap}.pill.ok{background:#e6f8ef;color:var(--ok)}.pill.attention{background:#fff4dc;color:var(--warn)}.pill.ng{background:#fff0f0;color:var(--ng)}
+    .notice{border-radius:14px;padding:13px 14px;font-size:13px;line-height:1.7;font-weight:800;margin-top:12px;background:#fff4dc;color:#885200;border:1px solid #f6ddb0}.links{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:14px}.link{display:block;text-decoration:none;color:var(--main);background:#eef8f4;border:1px solid #d4ebe2;border-radius:12px;padding:12px;font-weight:900;text-align:center}.footer{text-align:center;color:#70817c;font-size:12px;font-weight:750;padding:4px 0 24px}
+    @media(max-width:820px){.controls{grid-template-columns:1fr 1fr}.field{grid-column:1/-1}.summary{grid-template-columns:repeat(2,1fr)}.links{grid-template-columns:1fr 1fr}} @media(max-width:520px){.controls{grid-template-columns:1fr}.summary{grid-template-columns:1fr 1fr}.check{grid-template-columns:auto 1fr}.check .pill{grid-column:2}.links{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
   <header class="hero">
     <div class="wrap">
-      <div class="badge-row">
-        <span class="badge">STEP ESTATE-12</span>
-        <span class="badge">全体導線ブラッシュアップ</span>
-        <span class="badge">営業前 system-check.html</span>
-        <span class="badge">管理コード 1234</span>
-      </div>
-      <h1>営業前チェックで<br>画面・API・データを確認</h1>
-      <p>
-        不動産・賃貸内見LINEの営業前に、API接続、Supabaseデータ、志免・宇美・須恵エリア、
-        お客様画面、PC管理画面、iPad画面、店舗設定まで一括確認します。
-      </p>
-      <nav class="hero-nav" aria-label="page links">
-        <button type="button" onclick="runAllChecks()">一括チェック</button>
-        <button type="button" onclick="prepareDemo()">営業前デモ準備</button>
-        <a href="index.html?v=estate-12" target="_blank" rel="noopener">お客様画面</a>
-        <a href="owner.html?v=estate-12" target="_blank" rel="noopener">PC管理画面</a>
-      </nav>
-      <div class="summary-grid">
-        <div class="summary-card">
-          <div class="label">店舗</div>
-          <div class="value" id="shopNameTop">DPRO不動産 志免・宇美・須恵デモ店</div>
-        </div>
-        <div class="summary-card">
-          <div class="label">API</div>
-          <div class="value">dpro-estate-line-api</div>
-        </div>
-        <div class="summary-card">
-          <div class="label">本日</div>
-          <div class="value" id="todayTop">確認中</div>
-        </div>
-        <div class="summary-card">
-          <div class="label">状態</div>
-          <div class="value" id="statusTop">未チェック</div>
-        </div>
-      </div>
+      <div class="eyebrow">DPRO NEXT｜ESTATE-NEXT-9</div>
+      <h1>営業前システムチェック</h1>
+      <p>画面、API、Supabase、Service Binding、会員セキュリティ、重複操作防止、公開情報、応答速度を一括確認し、結果を「OK・注意・NG」で表示します。</p>
     </div>
   </header>
 
   <main class="wrap">
     <section class="card">
-      <div class="card-head">
-        <div>
-          <h2>管理コード確認</h2>
-          <div class="desc">デモ管理コードは 1234 です。営業前に、この画面で全体チェックとデモデータ準備を行います。</div>
+      <h2>一括チェック</h2>
+      <div class="desc">管理コードはURLへ付けず、HTTPヘッダーで送信します。この画面にはAPI URLや管理コードの初期値を表示しません。</div>
+      <div class="controls">
+        <div class="field">
+          <label for="adminCode">管理コード</label>
+          <input id="adminCode" type="password" inputmode="numeric" autocomplete="current-password" placeholder="管理コードを入力">
         </div>
-        <span class="pill" id="loginPill">未確認</span>
+        <button id="runButton" class="btn" type="button">一括チェック</button>
+        <button id="copyButton" class="btn secondary" type="button" disabled>結果をコピー</button>
+        <button id="clearButton" class="btn danger" type="button">端末から削除</button>
+        <button id="demoButton" class="btn warn hidden" type="button">デモ準備</button>
       </div>
-      <div class="form-row">
-        <div>
-          <label>Cloudflare Worker API</label>
-          <input id="apiBase" value="https://dpro-estate-line-api.dpromstk2000.workers.dev" />
-        </div>
-        <div>
-          <label>管理コード</label>
-          <input id="adminCode" value="1234" type="password" inputmode="numeric" />
-        </div>
-        <button class="btn" onclick="runAllChecks()">一括チェック</button>
-        <button class="btn orange" onclick="prepareDemo()">営業前デモ準備</button>
+      <div class="summary">
+        <div class="stat"><small>総合状態</small><strong id="overallStatus" class="status">未チェック</strong></div>
+        <div class="stat"><small>OK</small><strong id="okCount">0</strong></div>
+        <div class="stat"><small>注意</small><strong id="attentionCount">0</strong></div>
+        <div class="stat"><small>NG</small><strong id="ngCount">0</strong></div>
       </div>
-      <div id="mainMessage" class="alert warn">まだチェックしていません。「一括チェック」を押してください。</div>
+      <div id="message" class="notice">管理コードを入力して「一括チェック」を押してください。</div>
     </section>
 
     <section class="card">
-      <div class="card-head">
+      <div class="toolbar">
         <div>
-          <h2>営業前に見る順番</h2>
-          <div class="desc">営業担当が迷わないように、確認順を固定します。オーナー様に渡す資料には内部チェック情報は載せません。</div>
+          <h2>検査結果</h2>
+          <div class="desc">NGは対応必須、注意は既知の制約または速度目安超過です。</div>
         </div>
-        <span class="pill warn">内部確認用</span>
+        <div class="filters" aria-label="検査結果フィルター">
+          <button class="chip active" type="button" data-filter="all">すべて</button>
+          <button class="chip" type="button" data-filter="API">API</button>
+          <button class="chip" type="button" data-filter="セキュリティ">セキュリティ</button>
+          <button class="chip" type="button" data-filter="データ">データ</button>
+          <button class="chip" type="button" data-filter="画面">画面</button>
+        </div>
       </div>
-      <div class="step-row">
-        <div class="step-card">
-          <span class="num">1</span>
-          <b>API・DB確認</b>
-          <p>health と system-check がOKか確認します。</p>
-        </div>
-        <div class="step-card">
-          <span class="num">2</span>
-          <b>デモデータ準備</b>
-          <p>志免・宇美・須恵の物件、内見予定、追客を整えます。</p>
-        </div>
-        <div class="step-card">
-          <span class="num">3</span>
-          <b>各画面を開く</b>
-          <p>お客様画面、PC管理画面、iPad画面、店舗設定を確認します。</p>
-        </div>
-        <div class="step-card">
-          <span class="num">4</span>
-          <b>予約テスト</b>
-          <p>お客様画面から予約し、PC管理画面に反映されるか確認します。</p>
-        </div>
+      <div id="checkList" class="checks">
+        <div class="check"><span class="mark">-</span><div><div class="check-title">未チェック</div><div class="check-meta">一括チェック後に結果を表示します。</div></div><span class="pill">待機</span></div>
       </div>
     </section>
 
-    <div class="grid">
-      <div>
-        <section class="card">
-          <div class="card-head">
-            <div>
-              <h2>一括チェック結果</h2>
-              <div class="desc">API・DB・エリア・物件・顧客・予約・追客・文面テンプレートをまとめて確認します。</div>
-            </div>
-            <span class="pill" id="overallPill">未チェック</span>
-          </div>
+    <section class="card">
+      <h2>画面を開く</h2>
+      <div class="desc">最終的な見た目と操作は、実際の端末でも確認してください。</div>
+      <div id="pageLinks" class="links"></div>
+    </section>
 
-          <div class="mini-grid">
-            <div class="stat">
-              <strong id="areaCount">-</strong>
-              <span>対応エリア</span>
-            </div>
-            <div class="stat">
-              <strong id="propertyCount">-</strong>
-              <span>公開物件</span>
-            </div>
-            <div class="stat">
-              <strong id="reservationCount">-</strong>
-              <span>内見予約</span>
-            </div>
-            <div class="stat">
-              <strong id="templateCount">-</strong>
-              <span>文面</span>
-            </div>
-          </div>
-
-          <div style="height:14px"></div>
-          <div id="checkList" class="check-list"></div>
-        </section>
-
-        <section class="card">
-          <div class="card-head">
-            <div>
-              <h2>画面別チェック</h2>
-              <div class="desc">GitHub Pages の各画面を別タブで開いて、実際の見た目を確認します。</div>
-            </div>
-            <span class="pill ok">URL</span>
-          </div>
-          <div class="url-list">
-            <div class="url-row">
-              <b>お客様画面</b>
-              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/index.html?v=estate-12" readonly />
-              <button onclick="openUrl(this)">開く</button>
-            </div>
-            <div class="url-row">
-              <b>PC管理画面</b>
-              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner.html?v=estate-12" readonly />
-              <button onclick="openUrl(this)">開く</button>
-            </div>
-            <div class="url-row">
-              <b>iPad画面</b>
-              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner-ipad.html?v=estate-12" readonly />
-              <button onclick="openUrl(this)">開く</button>
-            </div>
-            <div class="url-row">
-              <b>店舗設定</b>
-              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner-settings.html?v=estate-12" readonly />
-              <button onclick="openUrl(this)">開く</button>
-            </div>
-            <div class="url-row">
-              <b>system-check</b>
-              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/system-check.html?v=estate-12" readonly />
-              <button onclick="copyUrl(this)">コピー</button>
-            </div>
-            
-            <div class="url-row">
-              <b>予約テスト</b>
-              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/reservation-test.html?v=estate-12" readonly />
-              <button onclick="openUrl(this)">開く</button>
-            </div>
-            <div class="url-row">
-              <b>マイページ</b>
-              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/member.html?v=estate-12" readonly />
-              <button onclick="openUrl(this)">開く</button>
-            </div>
-            <div class="url-row">
-              <b>物件詳細</b>
-              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/property.html?v=estate-12" readonly />
-              <button onclick="openUrl(this)">開く</button>
-            </div>
-            <div class="url-row">
-              <b>Worker health</b>
-              <input value="https://dpro-estate-line-api.dpromstk2000.workers.dev/api/health" readonly />
-              <button onclick="openUrl(this)">開く</button>
-            </div>
-            <div class="url-row">
-              <b>管理チェック</b>
-              <input value="https://dpro-estate-line-api.dpromstk2000.workers.dev/api/admin/system-check?admin_code=1234" readonly />
-              <button onclick="openUrl(this)">開く</button>
-            </div>
-          </div>
-        </section>
-      </div>
-
-      <aside class="sticky-side">
-        <section class="card">
-          <div class="card-head">
-            <div>
-              <h2>営業前デモ準備</h2>
-              <div class="desc">今日基準の内見予定・追客・物件データを整えます。</div>
-            </div>
-            <span class="pill warn">営業前</span>
-          </div>
-          <button class="btn orange" style="width:100%;margin-bottom:10px" onclick="prepareDemo()">営業前デモ準備を実行</button>
-          <button class="btn secondary" style="width:100%;margin-bottom:10px" onclick="runAllChecks()">準備後に再チェック</button>
-          <div id="demoMessage" class="alert warn">まだ実行していません。</div>
-        </section>
-
-        <section class="card">
-          <div class="card-head">
-            <div>
-              <h2>確認メモ</h2>
-              <div class="desc">営業前の最終チェックです。</div>
-            </div>
-            <span class="pill">メモ</span>
-          </div>
-          <div class="check-list">
-            <div class="check-item">
-              <span class="mark ok">✓</span>
-              <div>
-                <div class="check-title">お客様画面</div>
-                <div class="check-detail">希望条件・物件選択・内見日時が見えること。</div>
-              </div>
-            </div>
-            <div class="check-item">
-              <span class="mark ok">✓</span>
-              <div>
-                <div class="check-title">PC管理画面</div>
-                <div class="check-detail">今日やること、内見予約、顧客、物件、LINE文面が見えること。</div>
-              </div>
-            </div>
-            <div class="check-item">
-              <span class="mark ok">✓</span>
-              <div>
-                <div class="check-title">iPad画面</div>
-                <div class="check-detail">スタッフが今日の案内予定と文面コピーを確認できること。</div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section class="card">
-          <div class="card-head">
-            <div>
-              <h2>API応答</h2>
-              <div class="desc">デバッグ用。営業先には見せない内部確認です。</div>
-            </div>
-            <button class="btn secondary" onclick="copyRaw()">コピー</button>
-          </div>
-          <pre id="rawBox" class="data-box">まだ取得していません。</pre>
-        </section>
-      </aside>
-    </div>
+    <footer class="footer">DPRO 不動産・賃貸内見 LINE｜営業前内部確認用</footer>
   </main>
 
-  <footer class="footer">
-    DPRO 不動産・賃貸内見 LINE ｜ STEP ESTATE-12 ｜ API: https://dpro-estate-line-api.dpromstk2000.workers.dev
-  </footer>
+  <script src="config.js?v=estate-next-9"></script>
+  <script src="system-check-api.js?v=estate-next-9"></script>
+  <script>
+    (function () {
+      'use strict';
+      const cfg = window.DPRO_ESTATE_CONFIG;
+      const api = window.DPRO_ESTATE_SYSTEM_CHECK;
+      const storageKey = cfg?.storage?.adminCode || 'dpro_estate_admin_code';
+      const params = new URLSearchParams(location.search);
+      const demoMode = params.get(cfg?.demo?.queryKey || 'demo') === (cfg?.demo?.queryValue || '1');
+      const adminInput = document.getElementById('adminCode');
+      const runButton = document.getElementById('runButton');
+      const copyButton = document.getElementById('copyButton');
+      const clearButton = document.getElementById('clearButton');
+      const demoButton = document.getElementById('demoButton');
+      const checkList = document.getElementById('checkList');
+      const message = document.getElementById('message');
+      let latestResult = null;
+      let activeFilter = 'all';
 
-<script>
-const DEFAULT_API_BASE = "https://dpro-estate-line-api.dpromstk2000.workers.dev";
-const PAGE_URLS = {
-  customer: "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/index.html?v=estate-12",
-  owner: "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner.html?v=estate-12",
-  ipad: "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner-ipad.html?v=estate-12",
-  settings: "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner-settings.html?v=estate-12",
-  systemCheck: "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/system-check.html?v=estate-12"
-};
+      if (demoMode) {
+        adminInput.value = cfg?.demo?.adminCode || '1234';
+        demoButton.classList.remove('hidden');
+      } else {
+        adminInput.value = sessionStorage.getItem(storageKey) || localStorage.getItem(storageKey) || '';
+      }
 
-const $ = (id)=>document.getElementById(id);
+      function escapeHtml(value) {
+        return String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char]));
+      }
 
-function tokyoDateString(){
-  const parts = new Intl.DateTimeFormat("ja-JP", {
-    timeZone:"Asia/Tokyo",
-    year:"numeric",
-    month:"2-digit",
-    day:"2-digit"
-  }).formatToParts(new Date()).reduce((a,p)=>{a[p.type]=p.value;return a;},{});
-  return `${parts.year}/${parts.month}/${parts.day}`;
-}
+      function statusClass(status) {
+        return status === 'OK' ? 'ok' : (status === '注意' ? 'attention' : 'ng');
+      }
 
-function apiBase(){
-  return ($("apiBase").value || DEFAULT_API_BASE).replace(/\/+$/,"");
-}
+      function render(result) {
+        latestResult = result;
+        const cls = statusClass(result.overall);
+        const overall = document.getElementById('overallStatus');
+        overall.textContent = result.overall;
+        overall.className = `status ${cls}`;
+        document.getElementById('okCount').textContent = result.counts.ok;
+        document.getElementById('attentionCount').textContent = result.counts.attention;
+        document.getElementById('ngCount').textContent = result.counts.ng;
+        const rows = result.checks.filter((row) => activeFilter === 'all' || row.category === activeFilter);
+        checkList.innerHTML = rows.map((row) => {
+          const rowClass = statusClass(row.status);
+          const mark = row.status === 'OK' ? '✓' : (row.status === '注意' ? '!' : '×');
+          const timing = Number.isFinite(row.elapsedMs) ? ` / ${row.elapsedMs}ms` : '';
+          return `<div class="check"><span class="mark ${rowClass}">${mark}</span><div><div class="check-title">${escapeHtml(row.label)}</div><div class="check-meta">${escapeHtml(row.category)}｜${escapeHtml(row.message)}${timing}</div></div><span class="pill ${rowClass}">${escapeHtml(row.status)}</span></div>`;
+        }).join('') || '<div class="check"><span class="mark">-</span><div><div class="check-title">該当なし</div></div><span class="pill">-</span></div>';
+        if (result.overall === 'OK') message.textContent = '全項目OKです。端末で最終操作確認へ進んでください。';
+        else if (result.overall === '注意') message.textContent = '重大なNGはありません。注意項目の内容を確認してから運用してください。';
+        else message.textContent = 'NG項目があります。運用開始前に修正してください。';
+        copyButton.disabled = false;
+      }
 
-function adminCode(){
-  return $("adminCode").value || "1234";
-}
+      function copySafeResult() {
+        if (!latestResult) return;
+        const safe = {
+          system: latestResult.system,
+          version: latestResult.version,
+          generatedAt: latestResult.generatedAt,
+          overall: latestResult.overall,
+          counts: latestResult.counts,
+          checks: latestResult.checks.map(({ key, label, category, status, message, elapsedMs }) => ({ key, label, category, status, message, elapsedMs }))
+        };
+        navigator.clipboard.writeText(JSON.stringify(safe, null, 2)).then(() => {
+          copyButton.textContent = 'コピー済み';
+          setTimeout(() => { copyButton.textContent = '結果をコピー'; }, 1200);
+        });
+      }
 
-function setMessage(id, type, text){
-  const el = $(id);
-  el.className = "alert " + type;
-  el.textContent = text;
-}
-
-function setPill(id, type, text){
-  const el = $(id);
-  el.className = "pill " + (type || "");
-  el.textContent = text;
-}
-
-async function getJson(path){
-  const url = path.startsWith("http") ? path : apiBase() + path;
-  const res = await fetch(url, { method:"GET", cache:"no-store" });
-  let data = null;
-  try { data = await res.json(); } catch(e) { data = { ok:false, error:"JSONとして読めません", status:res.status }; }
-  if(!res.ok){
-    const msg = data && (data.error || data.message) ? (data.error || data.message) : `HTTP ${res.status}`;
-    throw new Error(msg);
-  }
-  return data;
-}
-
-async function postJson(path, body){
-  const res = await fetch(apiBase() + path, {
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify(body || {})
-  });
-  let data = null;
-  try { data = await res.json(); } catch(e) { data = { ok:false, error:"JSONとして読めません", status:res.status }; }
-  if(!res.ok){
-    const msg = data && (data.error || data.message) ? (data.error || data.message) : `HTTP ${res.status}`;
-    throw new Error(msg);
-  }
-  return data;
-}
-
-function checkItem(name, ok, detail, warn=false){
-  const markClass = ok ? "ok" : (warn ? "warn" : "ng");
-  const markText = ok ? "✓" : (warn ? "!" : "×");
-  const pillClass = ok ? "ok" : (warn ? "warn" : "ng");
-  const pillText = ok ? "OK" : (warn ? "確認" : "NG");
-  return `
-    <div class="check-item">
-      <span class="mark ${markClass}">${markText}</span>
-      <div>
-        <div class="check-title">${escapeHtml(name)}</div>
-        <div class="check-detail">${escapeHtml(detail || "")}</div>
-      </div>
-      <span class="pill ${pillClass}">${pillText}</span>
-    </div>
-  `;
-}
-
-function escapeHtml(s){
-  return String(s ?? "").replace(/[&<>"']/g, c => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  }[c]));
-}
-
-function findCheck(systemCheck, name){
-  if(!systemCheck || !Array.isArray(systemCheck.checks)) return null;
-  return systemCheck.checks.find(c => c.name === name);
-}
-
-function countFromCheck(systemCheck, name){
-  const c = findCheck(systemCheck, name);
-  if(!c) return "-";
-  if(c.data && typeof c.data.count !== "undefined") return c.data.count;
-  return c.ok ? "OK" : "NG";
-}
-
-function setStats(systemCheck){
-  $("areaCount").textContent = countFromCheck(systemCheck, "areas");
-  $("propertyCount").textContent = countFromCheck(systemCheck, "properties");
-  $("reservationCount").textContent = countFromCheck(systemCheck, "reservations");
-  $("templateCount").textContent = countFromCheck(systemCheck, "message_templates");
-}
-
-async function runAllChecks(){
-  $("todayTop").textContent = tokyoDateString();
-  setPill("loginPill", "warn", "確認中");
-  setPill("overallPill", "warn", "確認中");
-  $("statusTop").textContent = "確認中";
-  setMessage("mainMessage", "warn", "チェック中です。少し待ってください。");
-  $("checkList").innerHTML = "";
-  $("rawBox").textContent = "取得中...";
-
-  const results = [];
-  let raw = {};
-  let okCount = 0;
-  let ngCount = 0;
-
-  async function addCheck(label, fn, detailOk){
-    try{
-      const data = await fn();
-      raw[label] = data;
-      const ok = data && (data.ok !== false);
-      if(ok) okCount++; else ngCount++;
-      results.push(checkItem(label, ok, detailOk(data), false));
-      return data;
-    }catch(e){
-      ngCount++;
-      raw[label] = { ok:false, error:e.message };
-      results.push(checkItem(label, false, e.message || "エラー", false));
-      return null;
-    }
-  }
-
-  const health = await addCheck(
-    "Worker health",
-    ()=>getJson("/api/health"),
-    d=>`service: ${d.service || "-"} / db_ok: ${d.db_ok === true ? "true" : String(d.db_ok)} / shop_code: ${d.shop_code || "-"}`
-  );
-
-  const systemCheck = await addCheck(
-    "admin system-check",
-    ()=>getJson(`/api/admin/system-check?admin_code=${encodeURIComponent(adminCode())}`),
-    d=>`checks: ${Array.isArray(d.checks) ? d.checks.length : 0} / today: ${d.today || "-"}`
-  );
-
-  await addCheck(
-    "public settings",
-    ()=>getJson("/api/public/settings"),
-    d=>`店舗設定取得: ${d.shop_name || d.shop?.shop_name || "取得OK"}`
-  );
-
-  await addCheck(
-    "public areas",
-    ()=>getJson("/api/public/areas"),
-    d=>`対応エリア取得: ${Array.isArray(d.areas) ? d.areas.length : (Array.isArray(d.data) ? d.data.length : "取得OK")}件`
-  );
-
-  await addCheck(
-    "public properties",
-    ()=>getJson("/api/public/properties"),
-    d=>`公開物件取得: ${Array.isArray(d.properties) ? d.properties.length : (Array.isArray(d.data) ? d.data.length : "取得OK")}件`
-  );
-
-  await addCheck(
-    "admin dashboard",
-    ()=>getJson(`/api/admin/dashboard?admin_code=${encodeURIComponent(adminCode())}`),
-    d=>`管理画面データ取得OK`
-  );
-
-  if(systemCheck){
-    setStats(systemCheck);
-    if(systemCheck.shop_code) $("shopNameTop").textContent = systemCheck.service || "DPRO 不動産・賃貸内見 LINE";
-    const shop = findCheck(systemCheck, "shop");
-    if(shop && shop.data && shop.data.shop_name) $("shopNameTop").textContent = shop.data.shop_name;
-
-    if(Array.isArray(systemCheck.checks)){
-      systemCheck.checks.forEach(c=>{
-        const detail = c.data ? JSON.stringify(c.data) : "";
-        results.push(checkItem(`DB check: ${c.name}`, !!c.ok, detail));
+      runButton.addEventListener('click', async () => {
+        const code = adminInput.value.trim();
+        sessionStorage.setItem(storageKey, code);
+        runButton.disabled = true;
+        copyButton.disabled = true;
+        message.textContent = '検査中です。APIと公開画面を順番に確認しています。';
+        try { render(await api.run({ adminCode: code, demoMode })); }
+        catch (error) {
+          render({ system: cfg.systemName, version: cfg.version, generatedAt: new Date().toISOString(), overall: 'NG', counts: { ok:0, attention:0, ng:1 }, checks: [{ key:'unexpected', label:'予期しないエラー', category:'システム', status:'NG', message:error.message || String(error) }] });
+        } finally { runButton.disabled = false; }
       });
-    }
-  }
 
-  $("checkList").innerHTML = results.join("");
-  $("rawBox").textContent = JSON.stringify(raw, null, 2);
+      copyButton.addEventListener('click', copySafeResult);
+      clearButton.addEventListener('click', () => {
+        sessionStorage.removeItem(storageKey);
+        localStorage.removeItem(storageKey);
+        adminInput.value = demoMode ? (cfg?.demo?.adminCode || '1234') : '';
+        message.textContent = 'この端末に保存されていた管理コードを削除しました。';
+      });
+      demoButton.addEventListener('click', async () => {
+        if (!confirm('デモデータを今日基準に整えます。実行しますか？')) return;
+        demoButton.disabled = true;
+        const response = await api.prepareDemo(adminInput.value.trim());
+        message.textContent = response.ok && response.data?.ok !== false ? 'デモ準備が完了しました。続けて一括チェックを実行してください。' : `デモ準備に失敗しました。HTTP ${response.status}`;
+        demoButton.disabled = false;
+      });
 
-  if(ngCount === 0){
-    setPill("loginPill", "ok", "確認OK");
-    setPill("overallPill", "ok", "全体OK");
-    $("statusTop").textContent = "チェックOK";
-    setMessage("mainMessage", "ok", "営業前チェックOKです。お客様画面・PC管理画面・iPad画面を開いて、見た目と予約導線を確認してください。");
-  }else{
-    setPill("loginPill", "ng", "要確認");
-    setPill("overallPill", "ng", `${ngCount}件NG`);
-    $("statusTop").textContent = "要確認";
-    setMessage("mainMessage", "ng", `${ngCount}件の確認項目でエラーがあります。API URL、管理コード、環境変数、Supabaseデータを確認してください。`);
-  }
-}
+      document.querySelectorAll('[data-filter]').forEach((button) => {
+        button.addEventListener('click', () => {
+          activeFilter = button.dataset.filter;
+          document.querySelectorAll('[data-filter]').forEach((item) => item.classList.toggle('active', item === button));
+          if (latestResult) render(latestResult);
+        });
+      });
 
-async function prepareDemo(){
-  const ok = confirm("営業前デモ準備を実行します。志免・宇美・須恵のデモデータを今日基準に整えます。実行してよいですか？");
-  if(!ok) return;
-  setMessage("demoMessage", "warn", "営業前デモ準備を実行中です...");
-  try{
-    let data;
-    try{
-      data = await getJson(`/api/admin/demo/prepare?admin_code=${encodeURIComponent(adminCode())}`);
-    }catch(getErr){
-      data = await postJson("/api/admin/demo/prepare", { admin_code: adminCode() });
-    }
-    $("rawBox").textContent = JSON.stringify(data, null, 2);
-    if(data && data.ok !== false){
-      setMessage("demoMessage", "ok", "営業前デモ準備OKです。続けて一括チェックを実行してください。");
-      setMessage("mainMessage", "ok", "営業前デモ準備が完了しました。");
-      setTimeout(runAllChecks, 500);
-    }else{
-      throw new Error(data && (data.error || data.message) ? (data.error || data.message) : "営業前デモ準備に失敗しました");
-    }
-  }catch(e){
-    setMessage("demoMessage", "ng", "営業前デモ準備エラー：" + e.message);
-  }
-}
-
-function openUrl(btn){
-  const input = btn.parentElement.querySelector("input");
-  if(input && input.value) window.open(input.value, "_blank", "noopener");
-}
-
-async function copyUrl(btn){
-  const input = btn.parentElement.querySelector("input");
-  if(!input) return;
-  await navigator.clipboard.writeText(input.value);
-  btn.textContent = "コピー済";
-  setTimeout(()=>btn.textContent="コピー", 1200);
-}
-
-async function copyRaw(){
-  const text = $("rawBox").textContent || "";
-  await navigator.clipboard.writeText(text);
-  alert("API応答をコピーしました。");
-}
-
-document.addEventListener("DOMContentLoaded", ()=>{
-  $("todayTop").textContent = tokyoDateString();
-});
-</script>
+      const base = String(cfg.pageBase || '').replace(/\/+$/, '');
+      document.getElementById('pageLinks').innerHTML = api.pages.map((page) => `<a class="link" href="${base}/${page.path}?v=estate-next-9" target="_blank" rel="noopener">${escapeHtml(page.label)}</a>`).join('');
+    }());
+  </script>
 </body>
 </html>

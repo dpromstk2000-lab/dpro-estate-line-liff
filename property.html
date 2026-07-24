@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>STEP ESTATE-12｜物件詳細｜DPRO 不動産・賃貸内見 LINE</title>
+  <title>物件詳細｜DPRO 不動産・賃貸内見 LINE</title>
   <style>
     :root{
       --bg:#edf5f1;
@@ -465,9 +465,9 @@
   <header class="hero">
     <div class="wrap">
       <div class="badge-row">
-        <span class="badge">STEP ESTATE-12</span>
-        <span class="badge">全体導線ブラッシュアップ</span>
-        <span class="badge">物件詳細 property.html</span>
+        <span class="badge">物件詳細</span>
+        <span class="badge">公開物件</span>
+        <span class="badge">内見予約</span>
         <span class="badge">物件QR・チラシ導線</span>
       </div>
       <h1>この物件を見たい、から<br>内見予約までつなげる</h1>
@@ -478,8 +478,8 @@
       <nav class="hero-nav" aria-label="page links">
         <button type="button" onclick="scrollToReservation()">この物件で予約</button>
         <button type="button" onclick="copyPropertyUrl()">物件URLコピー</button>
-        <a href="index.html?v=estate-12">通常予約へ</a>
-        <a href="member.html?v=estate-12">予約確認へ</a>
+        <a href="index.html?v=estate-next-9">通常予約へ</a>
+        <a href="member.html?v=estate-next-9">予約確認へ</a>
       </nav>
       <div class="summary-grid">
         <div class="summary-card">
@@ -506,10 +506,10 @@
     <section class="card">
       <div class="card-head">
         <div>
-          <h2>物件QRで見せる流れ</h2>
-          <div class="desc">営業デモでは「物件ごとにQRを作って、チラシや店頭POPから直接内見予約に誘導できます」と説明できます。</div>
+          <h2>物件ページのご利用方法</h2>
+          <div class="desc">物件情報を確認し、そのままご希望の内見日時を選択できます。</div>
         </div>
-        <span class="pill ok">営業向け</span>
+        <span class="pill ok">ご利用方法</span>
       </div>
       <div class="step-row">
         <div class="step-card">
@@ -536,7 +536,7 @@
           <div class="card-head">
             <div>
               <h2 id="propertyTitle">物件を読み込み中</h2>
-              <div class="desc" id="propertyLead">APIから公開物件を取得しています。</div>
+              <div class="desc" id="propertyLead">公開中の物件情報を取得しています。</div>
             </div>
             <span class="pill" id="propertyPill">読込中</span>
           </div>
@@ -545,7 +545,7 @@
             <div class="photo-box">
               <div class="photo-text">
                 <b id="photoTitle">DPRO Estate</b>
-                <span id="photoSub">物件写真はデモ表示です。実運用では外観・室内写真に差し替えできます。</span>
+                <span id="photoSub">外観・室内写真の詳細は店舗からご案内します。</span>
               </div>
             </div>
             <div class="price-box">
@@ -631,7 +631,7 @@
 
           <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
             <button class="btn" onclick="reserveProperty()">この物件で内見予約する</button>
-            <button class="btn secondary" onclick="location.href='index.html?v=estate-12'">通常予約画面へ</button>
+            <button class="btn secondary" onclick="location.href='index.html?v=estate-next-9'">通常予約画面へ</button>
           </div>
           <div id="reserveMessage" class="alert warn">物件と日時を確認して予約してください。</div>
         </section>
@@ -686,12 +686,12 @@
             </div>
             <div class="url-row">
               <b>通常予約</b>
-              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/index.html?v=estate-12" readonly />
+              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/index.html?v=estate-next-9" readonly />
               <button onclick="openUrl(this)">開く</button>
             </div>
             <div class="url-row">
               <b>予約確認</b>
-              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/member.html?v=estate-12" readonly />
+              <input value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/member.html?v=estate-next-9" readonly />
               <button onclick="openUrl(this)">開く</button>
             </div>
           </div>
@@ -701,12 +701,12 @@
   </main>
 
   <footer class="footer">
-    DPRO 不動産・賃貸内見 LINE ｜ STEP ESTATE-12 ｜ API: https://dpro-estate-line-api.dpromstk2000.workers.dev
+    DPRO 不動産・賃貸内見 LINE ｜ 物件詳細・内見予約
   </footer>
 
 <script>
 const API_BASE = "https://dpro-estate-line-api.dpromstk2000.workers.dev";
-const PAGE_BASE = "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/property.html?v=estate-12";
+const PAGE_BASE = "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/property.html?v=estate-next-9";
 let allProperties = [];
 let currentProperty = null;
 let selectedSlot = null;
@@ -887,7 +887,7 @@ function renderProperty(){
   $("propertyNameTop").textContent = p.property_name || "-";
   $("areaTop").textContent = p.area_name || "-";
   $("photoTitle").textContent = p.property_name || "DPRO Estate";
-  $("photoSub").textContent = `${p.area_name || "-"} / ${p.floor_plan || "-"} / ${rentText(p.rent_amount)} のデモ物件`;
+  $("photoSub").textContent = `${p.area_name || "-"} / ${p.floor_plan || "-"} / ${rentText(p.rent_amount)} の物件`;
   $("rentText").innerHTML = `${rentText(p.rent_amount)}<small> 家賃</small>`;
   $("feeText").textContent = `${feeText(p.management_fee)} / 初期費用目安：${p.initial_cost_memo || "確認中"}`;
   const status = p.property_status || "確認中";
@@ -1033,9 +1033,17 @@ async function reserveProperty(){
     lastLineMessage = lineText || buildFallbackLineMessage(data);
     $("linePreview").textContent = lastLineMessage;
     setPill("reservePill","ok","予約OK");
-    setMessage("reserveMessage","ok","内見予約を受け付けました。LINE文面をコピーして保存できます。");
+    setMessage("reserveMessage","ok",reservationCode ? `内見予約を受け付けました。受付番号：${reservationCode}。マイページ確認に必要です。` : "内見予約を受け付けました。LINE文面をコピーして保存できます。");
     setMessage("copyMessage","ok","予約完了文面をコピーできます。");
-    localStorage.setItem("estate_last_phone", phone);
+    const reservationCode = String(
+      lastReservation.reservation_code ||
+      lastReservation.id ||
+      data.reservation_code ||
+      ""
+    ).replace(/[^a-zA-Z0-9]/g,"").slice(0,8).toUpperCase();
+    if(reservationCode){
+      sessionStorage.setItem("dpro_estate_last_reservation_code", reservationCode);
+    }
   }catch(e){
     setPill("reservePill","ng","予約NG");
     setMessage("reserveMessage","ng","予約エラー：" + e.message);
@@ -1054,12 +1062,7 @@ async function copyLineMessage(){
   setMessage("copyMessage","ok","LINE文面をコピーしました。");
 }
 function goMember(){
-  const phone = normalizePhone($("phone").value);
-  if(phone){
-    location.href = `member.html?v=estate-12&phone=${encodeURIComponent(phone)}`;
-  }else{
-    location.href = "member.html?v=estate-12";
-  }
+  location.href = "member.html?v=estate-next-9";
 }
 function openUrl(btn){
   const input = btn.parentElement.querySelector("input");

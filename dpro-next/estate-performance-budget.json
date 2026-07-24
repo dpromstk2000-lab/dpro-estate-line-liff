@@ -1,0 +1,13 @@
+{
+  "step": "ESTATE-NEXT-9",
+  "budgets_ms": {
+    "health": 2000,
+    "admin_system_check": 5000,
+    "public_api": 3500,
+    "page": 5000
+  },
+  "hard_failure_ms": 15000,
+  "notes": [
+    "CI network variance is treated as ATTENTION before hard failure."
+  ]
+}

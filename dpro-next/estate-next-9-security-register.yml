@@ -1,0 +1,18 @@
+step: ESTATE-NEXT-9-R3
+status: ATTENTION
+public_ui_phone_only_reference_removed: true
+property_phone_localstorage_removed: true
+property_member_phone_url_removed: true
+property_reservation_code_session_handoff: true
+admin_code_query_parameter_removed: true
+system_check_header_auth_only: true
+service_binding_required: true
+legacy_phone_only_endpoint:
+  status: ATTENTION
+  direct_block_verified: false
+  reason: legacy Worker source is not stored in this repository
+  current_mitigation:
+    - production member UI uses secure session and reservation code
+    - public pages do not call the legacy phone-only endpoint
+    - random anonymous probe is checked during live verification
+  next_action: recover or retire the legacy Worker source before changing the old endpoint itself
