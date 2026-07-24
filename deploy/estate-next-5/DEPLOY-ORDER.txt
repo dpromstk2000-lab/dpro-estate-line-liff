@@ -1,0 +1,11 @@
+DPRO ESTATE NEXT-5 適用順序
+
+1. Supabase SQL Editorで sql/estate-next-5.sql を実行
+2. Cloudflare Worker dpro-estate-next4-api のコードを worker.js へ差し替え
+3. SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY / DPRO_ESTATE_ADMIN_CODE Secretを維持
+4. LEGACY_API_BASE / ALLOWED_ORIGIN Variableを維持
+5. Deploy後、/api/health で ESTATE-NEXT-5-EXTENSION-20260724 を確認
+6. GitHub Actionsの DPRO ESTATE NEXT-5 Application Operations を開く
+7. Run workflow → mode=verify を実行
+
+電子契約、オンライン決済、一括LINE自動送信は追加しません。

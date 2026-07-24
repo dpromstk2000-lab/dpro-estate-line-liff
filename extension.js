@@ -4,20 +4,21 @@
   const CONFIG = window.DPRO_ESTATE_CONFIG || {};
   const BASE = String(CONFIG.nextApiBase || '').replace(/\/$/, '');
 
-  async function request(path, { method = 'GET', adminCode = '', shopCode = CONFIG.shopCode || 'dpro_estate_demo', query = {}, body = null } = {}) {
-    if (!BASE) throw new Error('NEXT-4拡張APIが未設定です。');
+  async function request(path, { method = 'GET', adminCode = '', shopCode = CONFIG.shopCode || 'dpro_estate_demo', query = {}, body = null, operationId = '' } = {}) {
+    if (!BASE) throw new Error('NEXT-5拡張APIが未設定です。');
     const url = new URL(BASE + path);
     url.searchParams.set('shop_code', shopCode);
     Object.entries(query || {}).forEach(([key, value]) => {
       if (value !== '' && value !== null && value !== undefined) url.searchParams.set(key, value);
     });
     const headers = { 'Content-Type': 'application/json' };
+    if (operationId) headers['X-Idempotency-Key'] = operationId;
     if (adminCode) {
       headers['X-DPRO-Admin-Code'] = adminCode;
       headers['X-Admin-Code'] = adminCode;
     }
     const init = { method, headers };
-    if (body !== null) init.body = JSON.stringify({ ...body, shop_code: shopCode, admin_code: adminCode });
+    if (body !== null) init.body = JSON.stringify({ ...body, shop_code: shopCode, admin_code: adminCode, operation_id: operationId || body.operation_id || undefined });
     const response = await fetch(url.toString(), init);
     const text = await response.text();
     let data = null;
@@ -26,8 +27,13 @@
     return data;
   }
 
+  function newOperationId(prefix = 'estate') {
+    const random = globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    return `${prefix}-${random}`;
+  }
+
   const client = {
-    version: 'ESTATE-NEXT-4',
+    version: 'ESTATE-NEXT-5',
     base: BASE,
     health() {
       return request('/api/health', { query: {} });
@@ -39,17 +45,18 @@
       return request('/api/admin/application-cases', { adminCode, query: { limit, offset, stage_key: stageKey, customer_id: customerId } });
     },
     createCase(adminCode, payload) {
-      return request('/api/admin/application-cases', { method: 'POST', adminCode, body: payload });
+      return request('/api/admin/application-cases', { method: 'POST', adminCode, body: payload, operationId: payload.operation_id || newOperationId('case-create') });
     },
     updateCase(adminCode, payload) {
-      return request('/api/admin/application-cases', { method: 'PATCH', adminCode, body: payload });
+      return request('/api/admin/application-cases', { method: 'PATCH', adminCode, body: payload, operationId: payload.operation_id || newOperationId('case-update') });
     },
     listVacancyChecks(adminCode, propertyId, limit = 20) {
       return request('/api/admin/vacancy-checks', { adminCode, query: { property_id: propertyId, limit } });
     },
     recordVacancyCheck(adminCode, payload) {
-      return request('/api/admin/vacancy-checks', { method: 'POST', adminCode, body: payload });
+      return request('/api/admin/vacancy-checks', { method: 'POST', adminCode, body: payload, operationId: payload.operation_id || newOperationId('vacancy') });
     },
+    newOperationId,
     prepareDemo(adminCode) {
       return request('/api/admin/demo/prepare', { method: 'POST', adminCode, body: {} });
     },

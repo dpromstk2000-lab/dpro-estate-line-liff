@@ -91,3 +91,14 @@ next_3:
     worker: unchanged
     supabase: unchanged
     api: unchanged
+
+estate_next_5:
+  status: DEPLOY-PENDING
+  application_intent: prepared
+  initial_cost_estimate: prepared
+  required_documents_checklist: prepared
+  individual_line_copy: prepared
+  duplicate_operation_guard: prepared
+  electronic_contract: not_added
+  online_payment: not_added
+  bulk_line_auto_send: not_added

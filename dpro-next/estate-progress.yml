@@ -1,34 +1,30 @@
 system: DPRO 不動産・賃貸内見 LINE
 repository: dpromstk2000-lab/dpro-estate-line-liff
-previous_step: ESTATE-NEXT-4-DEPLOY-PENDING
-current_step: ESTATE-NEXT-4-COMPLETE
-next_step: ESTATE-NEXT-5
+previous_step: ESTATE-NEXT-4-COMPLETE
+current_step: ESTATE-NEXT-5-DEPLOY-PENDING
+next_step: ESTATE-NEXT-5-VERIFY
 baseline_tag: dpro-estate-next-baseline-20260723
-step_backup_tag: dpro-estate-next-4-before-20260723
-completed_at_jst: "2026-07-24T13:54:12+09:00"
+step_backup_tag: dpro-estate-next-5-before-20260724
+prepared_at_jst: "2026-07-24T14:32:59+09:00"
 modified_files:
   - owner.html
-  - config.js
   - extension.js
+  - config.js
 extension_worker_name: dpro-estate-next4-api
 extension_worker_url: https://dpro-estate-next4-api.dpromstk2000.workers.dev
-extension_auth_strategy: local-secret-with-legacy-fallback
-extension_admin_secret_set: true
-legacy_worker_changed: false
-extension_worker_added: true
-worker_changed: true
-supabase_changed: true
-api_changed: true
-application_cases_persistent: true
-assigned_staff_persistent: true
-next_action_due_persistent: true
-lost_reason_persistent: true
-viewing_memo_persistent: true
-vacancy_history_persistent: true
-required_documents_deferred_to_next5: true
+worker_update_prepared: true
+supabase_migration_prepared: true
+application_intent_ui: true
+initial_cost_ui: true
+required_documents_ui: true
+individual_line_copy_ui: true
+duplicate_operation_guard_prepared: true
+electronic_contract_added: false
+online_payment_added: false
+bulk_line_auto_send_added: false
+worker_changed: false
+supabase_changed: false
+api_changed: false
 existing_features_preserved: true
-live_health_check: PASS
-live_table_check: PASS
-live_write_test: PASS
-legacy_health_check: PASS
-published_owner_check: PASS
+manual_sql_required: true
+manual_worker_deploy_required: true

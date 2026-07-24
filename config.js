@@ -3,7 +3,7 @@
 
   const CONFIG = {
     systemName: 'DPRO 不動産・賃貸内見 LINE',
-    version: 'ESTATE-NEXT-4',
+    version: 'ESTATE-NEXT-5',
     apiBase: 'https://dpro-estate-line-api.dpromstk2000.workers.dev',
     nextApiBase: 'https://dpro-estate-next4-api.dpromstk2000.workers.dev',
     pageBase: 'https://dpromstk2000-lab.github.io/dpro-estate-line-liff',
