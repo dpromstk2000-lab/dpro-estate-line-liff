@@ -1,30 +1,34 @@
 system: DPRO 不動産・賃貸内見 LINE
 repository: dpromstk2000-lab/dpro-estate-line-liff
-previous_step: ESTATE-NEXT-3-COMPLETE
-current_step: ESTATE-NEXT-4-DEPLOY-PENDING
-next_step: ESTATE-NEXT-4-VERIFY
+previous_step: ESTATE-NEXT-4-DEPLOY-PENDING
+current_step: ESTATE-NEXT-4-COMPLETE
+next_step: ESTATE-NEXT-5
 baseline_tag: dpro-estate-next-baseline-20260723
 step_backup_tag: dpro-estate-next-4-before-20260723
-prepared_at_jst: "2026-07-24T11:56:33+09:00"
+completed_at_jst: "2026-07-24T13:54:12+09:00"
 modified_files:
   - owner.html
   - config.js
   - extension.js
-deployment_files:
-  - deploy/estate-next-4/worker.js
-  - deploy/estate-next-4/sql/estate-next-4.sql
 extension_worker_name: dpro-estate-next4-api
 extension_worker_url: https://dpro-estate-next4-api.dpromstk2000.workers.dev
+extension_auth_strategy: local-secret-with-legacy-fallback
+extension_admin_secret_set: true
 legacy_worker_changed: false
-extension_worker_prepared: true
-supabase_migration_prepared: true
-worker_changed: false
-supabase_changed: false
-api_changed: false
+extension_worker_added: true
+worker_changed: true
+supabase_changed: true
+api_changed: true
+application_cases_persistent: true
+assigned_staff_persistent: true
+next_action_due_persistent: true
+lost_reason_persistent: true
+viewing_memo_persistent: true
+vacancy_history_persistent: true
+required_documents_deferred_to_next5: true
 existing_features_preserved: true
-html_syntax_check: PASS
-javascript_syntax_check: PASS
-html_id_duplicate_check: PASS
-worker_mock_test: PASS
-manual_sql_required: true
-manual_worker_deploy_required: true
+live_health_check: PASS
+live_table_check: PASS
+live_write_test: PASS
+legacy_health_check: PASS
+published_owner_check: PASS

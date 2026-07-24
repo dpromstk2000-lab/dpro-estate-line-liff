@@ -1,0 +1,36 @@
+{
+  "extension_health": {
+    "ok": true,
+    "service": "DPRO Estate NEXT-4 Extension API",
+    "version": "ESTATE-NEXT-4-EXTENSION-20260723",
+    "supabase_url_set": true,
+    "supabase_service_key_set": true,
+    "admin_code_secret_set": true,
+    "auth_strategy": "local-secret-with-legacy-fallback"
+  },
+  "system_check": {
+    "ok": true,
+    "tables": [
+      {
+        "table": "estate_application_cases",
+        "ok": true
+      },
+      {
+        "table": "estate_case_events",
+        "ok": true
+      },
+      {
+        "table": "estate_vacancy_checks",
+        "ok": true
+      }
+    ],
+    "write_test": {
+      "ok": true
+    }
+  },
+  "legacy_health": {
+    "ok": true,
+    "service": "DPRO Estate Viewing LINE API",
+    "version": "estate-3-worker-api-20260710"
+  }
+}

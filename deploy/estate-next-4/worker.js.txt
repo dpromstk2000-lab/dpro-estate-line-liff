@@ -74,9 +74,32 @@ async function parseJson(request) {
   catch { throw new HttpError(400, 'JSON形式を確認してください。'); }
 }
 
+async function secureEqualText(left, right) {
+  const encoder = new TextEncoder();
+  const [leftHash, rightHash] = await Promise.all([
+    crypto.subtle.digest('SHA-256', encoder.encode(String(left ?? ''))),
+    crypto.subtle.digest('SHA-256', encoder.encode(String(right ?? ''))),
+  ]);
+  const a = new Uint8Array(leftHash);
+  const b = new Uint8Array(rightHash);
+  let diff = a.length ^ b.length;
+  const length = Math.max(a.length, b.length);
+  for (let index = 0; index < length; index += 1) {
+    diff |= (a[index % a.length] || 0) ^ (b[index % b.length] || 0);
+  }
+  return diff === 0;
+}
+
 async function verifyAdmin(request, env, body, shop) {
   const code = adminCode(request, body);
   if (!code) throw new HttpError(401, '管理コードが必要です。');
+
+  // Cloudflare Worker間の認証経路が環境により401になる場合に備え、
+  // 拡張Worker側のSecretを第一認証元として使用します。
+  const localCode = cleanText(env.DPRO_ESTATE_ADMIN_CODE || env.ADMIN_CODE, 100);
+  if (localCode && await secureEqualText(code, localCode)) return code;
+
+  // Secret未設定時や移行期間は、従来WorkerのログインAPIも試します。
   const base = (env.LEGACY_API_BASE || DEFAULT_LEGACY_API).replace(/\/$/, '');
   const response = await fetch(`${base}/api/admin/login`, {
     method: 'POST',
@@ -89,7 +112,11 @@ async function verifyAdmin(request, env, body, shop) {
   });
   let data = null;
   try { data = await response.json(); } catch { data = null; }
-  if (!response.ok || data?.ok === false) throw new HttpError(401, data?.error || data?.message || '管理コードを確認できませんでした。');
+  if (!response.ok || data?.ok === false) {
+    throw new HttpError(401, localCode
+      ? '拡張Workerの管理コードSecretと入力値が一致しません。'
+      : '拡張WorkerへDPRO_ESTATE_ADMIN_CODE Secretを設定してください。');
+  }
   return code;
 }
 
@@ -373,6 +400,8 @@ export default {
           legacy_api: env.LEGACY_API_BASE || DEFAULT_LEGACY_API,
           supabase_url_set: Boolean(env.SUPABASE_URL),
           supabase_service_key_set: Boolean(env.SUPABASE_SERVICE_ROLE_KEY),
+          admin_code_secret_set: Boolean(env.DPRO_ESTATE_ADMIN_CODE || env.ADMIN_CODE),
+          auth_strategy: 'local-secret-with-legacy-fallback',
           time: new Date().toISOString(),
         });
       }

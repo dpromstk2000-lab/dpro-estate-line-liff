@@ -10,3 +10,4 @@ ALLOWED_ORIGIN = "https://dpromstk2000-lab.github.io"
 # Cloudflare Workerの「Settings > Variables and Secrets」で次をSecret登録してください。
 # SUPABASE_URL
 # SUPABASE_SERVICE_ROLE_KEY
+# DPRO_ESTATE_ADMIN_CODE（既存不動産システムと同じ管理コード。デモは1234）
