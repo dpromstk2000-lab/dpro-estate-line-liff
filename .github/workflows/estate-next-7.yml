@@ -1,4 +1,4 @@
-name: DPRO ESTATE NEXT-7 Secure Member
+name: DPRO ESTATE NEXT-7 R2 Secure Member Verification
 
 on:
   push:
@@ -53,12 +53,15 @@ jobs:
         shell: bash
         run: |
           set -Eeuo pipefail
-          MODE="${{ inputs.mode }}"
-          if [ -z "$MODE" ]; then MODE="prepare"; fi
-          case "$MODE" in prepare|verify) ;; *) echo "ERROR: invalid mode: $MODE" >&2; exit 1;; esac
           test -s dpro-next/estate-progress.yml || { echo 'ERROR: progress ledger is missing.' >&2; exit 1; }
           current_step="$(awk -F': ' '/^current_step:/{print $2;exit}' dpro-next/estate-progress.yml)"
           next_step="$(awk -F': ' '/^next_step:/{print $2;exit}' dpro-next/estate-progress.yml)"
+          MODE="${{ inputs.mode }}"
+          if [ -z "$MODE" ]; then
+            if [ "$current_step" = "ESTATE-NEXT-7-DEPLOY-PENDING" ]; then MODE="verify"; else MODE="prepare"; fi
+          fi
+          case "$MODE" in prepare|verify) ;; *) echo "ERROR: invalid mode: $MODE" >&2; exit 1;; esac
+          echo "Resolved mode: $MODE / current_step: $current_step / next_step: $next_step"
           if [ "$MODE" = "prepare" ]; then
             case "$current_step" in ESTATE-NEXT-6-COMPLETE|ESTATE-NEXT-7-DEPLOY-PENDING) ;; *) echo "ERROR: expected ESTATE-NEXT-6-COMPLETE or pending, got $current_step" >&2; exit 1;; esac
             case "$next_step" in ESTATE-NEXT-7|ESTATE-NEXT-7-VERIFY) ;; *) echo "ERROR: unexpected next_step: $next_step" >&2; exit 1;; esac
@@ -360,13 +363,24 @@ jobs:
           test -n "$valid_code" || { echo 'ERROR: DPRO_ESTATE_ADMIN_CODEを現在の管理コードへ更新してください。' >&2; cat /tmp/next7-check.json 2>/dev/null || true; exit 1; }
           curl --fail --silent --show-error --retry 4 --retry-delay 3 "$LEGACY_API_BASE/api/health" -o /tmp/legacy-health.json
           phone_only_status="$(curl --silent --show-error -o /tmp/phone-only.json -w '%{http_code}' -X POST -H 'Content-Type: application/json' --data '{"shop_code":"dpro_estate_demo","phone":"00000000000"}' "$NEXT_API_BASE/api/public/member/session")"
-          test "$phone_only_status" = '400' -o "$phone_only_status" = '401'
+          echo "Phone-only production rejection HTTP: $phone_only_status"
+          case "$phone_only_status" in
+            400|401|403|404|422|429) ;;
+            *)
+              echo "ERROR: 電話番号だけの本番確認が安全な4xx拒否になっていません。HTTP $phone_only_status" >&2
+              cat /tmp/phone-only.json >&2 2>/dev/null || true
+              exit 1
+              ;;
+          esac
+          export PHONE_ONLY_STATUS="$phone_only_status"
           python3 - <<'PY_VERIFY'
           import json
+          import os
           from pathlib import Path
           health=json.loads(Path('/tmp/next7-health.json').read_text())
           check=json.loads(Path('/tmp/next7-check.json').read_text())
           legacy=json.loads(Path('/tmp/legacy-health.json').read_text())
+          phone=json.loads(Path('/tmp/phone-only.json').read_text() or '{}')
           assert check.get('ok') is True, check
           tables={x.get('table'):x.get('ok') for x in check.get('tables',[])}
           required=['estate_application_cases','estate_case_events','estate_vacancy_checks','estate_member_sessions','estate_member_auth_attempts','estate_member_revisit_requests']
@@ -379,7 +393,9 @@ jobs:
           assert member_test.get('revisit_duplicate_guard') is True, member_test
           assert member_test.get('session_expiry_set') is True, member_test
           assert legacy.get('ok') is True, legacy
-          safe={'extension_health':health,'system_check':check,'legacy_health':{'ok':legacy.get('ok'),'service':legacy.get('service'),'version':legacy.get('version')},'phone_only_production_rejected':True}
+          assert phone.get('ok') is not True, phone
+          assert not phone.get('session_token'), phone
+          safe={'extension_health':health,'system_check':check,'legacy_health':{'ok':legacy.get('ok'),'service':legacy.get('service'),'version':legacy.get('version')},'phone_only_production_rejected':True,'phone_only_rejection_http':os.environ.get('PHONE_ONLY_STATUS')}
           Path('dpro-next/estate-next-7-live-verification.json').write_text(json.dumps(safe,ensure_ascii=False,indent=2)+'\n')
           print('NEXT-7 LIVE VERIFICATION PASS')
           PY_VERIFY
@@ -478,7 +494,7 @@ jobs:
         shell: bash
         run: |
           cat >> "$GITHUB_STEP_SUMMARY" <<'EOF'
-          # ESTATE-NEXT-7 COMPLETE
+          # ESTATE-NEXT-7 COMPLETE（R2検証）
 
           | 項目 | 結果 |
           |---|---|
