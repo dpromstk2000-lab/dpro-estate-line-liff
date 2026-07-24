@@ -1,0 +1,156 @@
+{
+  "extension_health": {
+    "ok": true,
+    "service": "DPRO Estate NEXT-8 Extension API",
+    "version": "ESTATE-NEXT-8-R3-EXTENSION-20260724",
+    "legacy_api": "https://dpro-estate-line-api.dpromstk2000.workers.dev",
+    "supabase_url_set": true,
+    "supabase_service_key_set": true,
+    "admin_code_secret_set": true,
+    "auth_strategy": "local-secret-with-legacy-fallback",
+    "idempotency_guard": true,
+    "application_features": [
+      "application_intent",
+      "initial_cost",
+      "required_documents",
+      "individual_line_copy"
+    ],
+    "followup_features": {
+      "followup_tasks": true,
+      "revisit_workflow": true,
+      "post_viewing_generation": true,
+      "property_candidate_matching": true,
+      "proposal_history": true,
+      "customer_exclusions": true,
+      "individual_line_copy": true
+    },
+    "diagnostics": {
+      "legacy_fetch_limit": 200,
+      "verification_revision": "R3",
+      "legacy_service_binding_set": true,
+      "legacy_transport": "service_binding"
+    },
+    "member_security": {
+      "secure_session": true,
+      "reservation_code_verification": true,
+      "phone_only_production": false,
+      "phone_only_demo": true,
+      "line_id_token_ready": true,
+      "line_channel_configured": false,
+      "rate_limit": true,
+      "revisit_request": true
+    },
+    "time": "2026-07-24T12:54:00.843Z"
+  },
+  "system_check": {
+    "ok": true,
+    "service": "DPRO Estate NEXT-8 Extension API",
+    "version": "ESTATE-NEXT-8-R3-EXTENSION-20260724",
+    "shop_code": "dpro_estate_demo",
+    "tables": [
+      {
+        "table": "estate_application_cases",
+        "ok": true
+      },
+      {
+        "table": "estate_case_events",
+        "ok": true
+      },
+      {
+        "table": "estate_vacancy_checks",
+        "ok": true
+      },
+      {
+        "table": "estate_member_sessions",
+        "ok": true
+      },
+      {
+        "table": "estate_member_auth_attempts",
+        "ok": true
+      },
+      {
+        "table": "estate_member_revisit_requests",
+        "ok": true
+      },
+      {
+        "table": "estate_followup_tasks",
+        "ok": true
+      },
+      {
+        "table": "estate_property_proposals",
+        "ok": true
+      },
+      {
+        "table": "estate_customer_exclusions",
+        "ok": true
+      }
+    ],
+    "legacy_transport": {
+      "ok": true,
+      "binding_set": true,
+      "binding": "LEGACY_ESTATE_API",
+      "target_worker": "dpro-estate-line-api",
+      "service": "DPRO Estate Viewing LINE API",
+      "version": "estate-3-worker-api-20260710"
+    },
+    "features": {
+      "application_intent": true,
+      "initial_cost": true,
+      "required_documents": true,
+      "idempotency_guard": true,
+      "individual_line_copy": true,
+      "secure_member_session": true,
+      "reservation_code_verification": true,
+      "line_id_token_ready": true,
+      "previous_preferences": true,
+      "revisit_request": true,
+      "followup_center": true,
+      "post_viewing_followup": true,
+      "property_candidate_matching": true,
+      "proposal_history": true,
+      "customer_exclusions": true
+    },
+    "write_test": {
+      "ok": true,
+      "duplicate_case_guard": true,
+      "duplicate_vacancy_guard": true,
+      "event_count": 2
+    },
+    "member_security_test": {
+      "ok": true,
+      "token_hash_only": true,
+      "revisit_duplicate_guard": true,
+      "session_expiry_set": true
+    },
+    "followup_test": {
+      "ok": true,
+      "task_duplicate_guard": true,
+      "proposal_duplicate_guard": true,
+      "exclusion_duplicate_guard": true,
+      "revisit_duplicate_guard": true,
+      "candidate_match_logic": true,
+      "revisit_status": "対応中"
+    }
+  },
+  "legacy_health": {
+    "ok": true,
+    "service": "DPRO Estate Viewing LINE API",
+    "version": "estate-3-worker-api-20260710"
+  },
+  "followup_task_list": {
+    "ok": true,
+    "count": 0
+  },
+  "revisit_list": {
+    "ok": true,
+    "count": 0
+  },
+  "property_candidate_endpoint": {
+    "ok": true,
+    "count": 2
+  },
+  "customer_exclusion_endpoint": {
+    "ok": true
+  },
+  "verification_revision": "R3"
+}

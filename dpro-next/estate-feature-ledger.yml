@@ -139,7 +139,7 @@ estate_next_7:
   legacy_phone_only_endpoint_direct_block: pending_legacy_worker_source
 
 estate_next_8:
-  status: DEPLOY-PENDING
+  status: COMPLETE
   features:
     - followup_center
     - revisit_workflow
