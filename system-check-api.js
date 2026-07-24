@@ -220,7 +220,7 @@
     const overall = counts[STATUS.NG] ? STATUS.NG : (counts[STATUS.ATTENTION] ? STATUS.ATTENTION : STATUS.OK);
     return {
       system: cfg.systemName || 'DPRO 不動産・賃貸内見 LINE',
-      version: cfg.version || 'ESTATE-NEXT-9',
+      version: cfg.version || 'ESTATE-NEXT-10',
       generatedAt: nowIso(),
       overall,
       counts: { ok: counts[STATUS.OK] || 0, attention: counts[STATUS.ATTENTION] || 0, ng: counts[STATUS.NG] || 0 },
