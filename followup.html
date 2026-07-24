@@ -19,7 +19,7 @@
     @media(max-width:980px){.candidate-grid{grid-template-columns:1fr 1fr}.grid2{grid-template-columns:1fr}.kpi{grid-template-columns:1fr 1fr}}@media(max-width:660px){.top-row{display:block}.back{margin-top:10px}.auth-grid,.toolbar,.form-grid,.candidate-grid{grid-template-columns:1fr}.btn{width:100%}.actions .btn,.actions .small{width:auto;flex:1}.tabs{overflow:auto;flex-wrap:nowrap}.tab{white-space:nowrap}}
   </style>
 </head>
-<body>
+<body>\n  <!-- ESTATE-NEXT-10-HOTFIX-FOLLOWUP-AUTH-R2 / 20260725 -->
   <header class="top">
     <div class="wrap top-row">
       <div><small>オーナー・スタッフ専用</small><h1>追客・再相談</h1><p>再相談、内見後フォロー、新着物件提案を一つの流れで管理します。</p></div>
@@ -106,8 +106,8 @@
   </dialog>
 
   <div class="toast" id="toast"></div>
-  <script src="config.js?v=estate-next-8"></script>
-  <script src="followup-api.js?v=estate-next-8"></script>
+  <script src="config.js?v=estate-next-10-followup-auth-r2"></script>
+  <script src="followup-api.js?v=estate-next-10-followup-auth-r2"></script>
   <script>
     'use strict';
     const CONFIG=window.DPRO_ESTATE_CONFIG||{};
@@ -127,7 +127,7 @@
     async function legacy(path,query={}){const url=new URL((CONFIG.apiBase||'')+path);Object.entries(query).forEach(([k,v])=>{if(v!==''&&v!==null&&v!==undefined)url.searchParams.set(k,v)});const headers={'X-DPRO-Admin-Code':state.adminCode,'X-Admin-Code':state.adminCode};const response=await fetch(url,{headers,cache:'no-store'});const data=await response.json().catch(()=>({}));if(!response.ok||data?.ok===false)throw new Error(data?.error||`既存APIエラー ${response.status}`);return data}
 
     document.addEventListener('DOMContentLoaded',()=>{
-      $('ownerBackLink').href=`${CONFIG.pageBase||'.'}/owner.html?v=estate-next-8`;
+      $('ownerBackLink').href=`${CONFIG.pageBase||'.'}/owner.html?v=estate-next-10-followup-auth-r2`;
       state.adminCode=localStorage.getItem(STORAGE_KEY)||'';
       const demo=new URLSearchParams(location.search).get(CONFIG.demo?.queryKey||'demo')===(CONFIG.demo?.queryValue||'1');
       if(!state.adminCode&&demo)state.adminCode=CONFIG.demo?.adminCode||'1234';
@@ -142,7 +142,7 @@
       if(state.adminCode)authenticate(true);
     });
 
-    async function authenticate(silent){state.adminCode=$('adminCodeInput').value.trim();if(!state.adminCode){if(!silent)toast('管理コードを入力してください。','error');return}try{setBusy(true);await legacy('/api/admin/login');localStorage.setItem(STORAGE_KEY,state.adminCode);state.authenticated=true;$('authCard').classList.add('hidden');$('appArea').classList.remove('hidden');await Promise.all([loadTasks(),loadRevisits(),loadCustomers()]);if(!silent)toast('追客画面を開きました。')}catch(error){state.authenticated=false;$('authCard').classList.remove('hidden');$('appArea').classList.add('hidden');if(!silent)toast(error.message,'error')}finally{setBusy(false)}}
+    async function authenticate(silent){state.adminCode=$('adminCodeInput').value.trim();if(!state.adminCode){if(!silent)toast('管理コードを入力してください。','error');return}try{setBusy(true);await API.listTasks(state.adminCode,{status:'open',limit:1});localStorage.setItem(STORAGE_KEY,state.adminCode);state.authenticated=true;$('authCard').classList.add('hidden');$('appArea').classList.remove('hidden');await Promise.all([loadTasks(),loadRevisits(),loadCustomers()]);if(!silent)toast('追客画面を開きました。')}catch(error){state.authenticated=false;$('authCard').classList.remove('hidden');$('appArea').classList.add('hidden');if(!silent)toast(error.message,'error')}finally{setBusy(false)}}
     function clearCode(){localStorage.removeItem(STORAGE_KEY);state.adminCode='';state.authenticated=false;$('adminCodeInput').value='';$('authCard').classList.remove('hidden');$('appArea').classList.add('hidden');toast('この端末の管理コードを削除しました。')}
     async function openPanel(name,load=true){state.currentPanel=name;localStorage.setItem(PANEL_KEY,name);document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.panel===name));document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===`panel-${name}`));if(!load||!state.authenticated)return;if(name==='today')await loadTasks();if(name==='revisit')await loadRevisits();if((name==='proposal'||name==='exclusion')&&!state.customers.length)await loadCustomers()}
 
