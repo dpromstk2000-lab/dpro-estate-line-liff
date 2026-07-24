@@ -1,4 +1,4 @@
-name: DPRO ESTATE NEXT-4 R4 Local Auth Verification
+name: DPRO ESTATE NEXT-4 R5 Local Auth Verification
 
 on:
   push:
@@ -180,7 +180,7 @@ jobs:
         run: |
           set -Eeuo pipefail
           curl --fail --silent --show-error --retry 8 --retry-delay 5 \
-            "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner.html?v=estate-next-4-r4-${{GITHUB_RUN_ID}}" \
+            "https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner.html?v=estate-next-4-r5-${GITHUB_RUN_ID}" \
             -o /tmp/owner-live.html
           grep -q 'extension.js?v=estate-next-4' /tmp/owner-live.html
           grep -q '案件を保存・更新' /tmp/owner-live.html
