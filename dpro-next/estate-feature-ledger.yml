@@ -125,3 +125,15 @@ estate_next_6:
   worker_changed: false
   supabase_changed: false
   api_changed: false
+
+estate_next_7:
+  status: DEPLOY-PENDING
+  secure_member_session: prepared
+  reservation_code_verification: prepared
+  line_id_token_verification: ready_optional
+  phone_only_production: removed
+  phone_only_demo: limited
+  past_viewing_history: prepared
+  previous_preferences: prepared
+  revisit_request: prepared
+  legacy_phone_only_endpoint_direct_block: pending_legacy_worker_source

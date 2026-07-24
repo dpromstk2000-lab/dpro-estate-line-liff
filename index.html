@@ -939,6 +939,7 @@
             </div>
             <div class="btn-row">
               <button class="secondary-btn" type="button" id="copyLineBtn">文面をコピー</button>
+              <button class="ghost-btn" type="button" id="memberPageBtn">マイページを開く</button>
               <button class="ghost-btn" type="button" id="newReserveBtn">続けて予約</button>
             </div>
           </div>
@@ -947,17 +948,13 @@
         <section class="section" id="member">
           <div class="section-title">
             <div>
-              <h2>予約確認</h2>
-              <p>電話番号で予約内容を確認できます。</p>
+              <h2>安全な予約確認</h2>
+              <p>電話番号だけでは表示せず、受付番号と組み合わせて確認します。</p>
             </div>
-            <span class="badge">確認</span>
+            <span class="badge">本人確認</span>
           </div>
-          <div class="field">
-            <label class="label" for="memberPhone">電話番号</label>
-            <input id="memberPhone" type="tel" inputmode="tel" placeholder="予約時の電話番号" />
-          </div>
-          <button class="ghost-btn" type="button" id="memberSearchBtn" style="width:100%;">予約を確認する</button>
-          <div id="memberResult" style="margin-top:12px;"></div>
+          <div class="notice ok">予約完了時の受付番号を使って、お客様マイページから予約履歴・希望条件を確認できます。</div>
+          <button class="ghost-btn" type="button" id="memberPageOpenBtn" style="width:100%;margin-top:10px;">お客様マイページを開く</button>
         </section>
       </aside>
     </main>
@@ -1045,22 +1042,16 @@
       $('submitBtn').addEventListener('click', submitReservation);
       $('copyLineBtn').addEventListener('click', copyLineMessage);
       $('newReserveBtn').addEventListener('click', resetAfterComplete);
-      $('memberSearchBtn').addEventListener('click', searchMember);
+      $('memberPageBtn').addEventListener('click', openMemberPage);
+      $('memberPageOpenBtn').addEventListener('click', openMemberPage);
     }
 
     function hydrateFromQuery() {
       const params = new URLSearchParams(location.search);
-      const phone = params.get('phone') || localStorage.getItem('estate_last_phone') || '';
-      const name = params.get('name') || localStorage.getItem('estate_last_name') || '';
       const propertyCode = params.get('property_code') || '';
       const propertyId = params.get('property_id') || '';
       const area = params.get('area') || '';
 
-      if (phone) {
-        $('phone').value = phone;
-        $('memberPhone').value = phone;
-      }
-      if (name) $('customerName').value = name;
       if (area) window.__initialArea = area;
       if (propertyCode) window.__initialPropertyCode = propertyCode;
       if (propertyId) window.__initialPropertyId = propertyId;
@@ -1416,8 +1407,6 @@
         if (!data.ok) throw new Error(data.error || '予約送信に失敗しました。');
         state.lastReservation = data.reservation || null;
         state.lastLineMessage = data.line_message_preview || '';
-        localStorage.setItem('estate_last_phone', $('phone').value.trim());
-        localStorage.setItem('estate_last_name', $('customerName').value.trim());
         showComplete(data);
         setNotice('topNotice', '内見予約を受け付けました。店舗側管理画面にも反映されています。', 'ok');
       } catch (error) {
@@ -1481,8 +1470,10 @@
     function showComplete(data) {
       const reservation = data.reservation || {};
       const property = data.property || state.selectedProperty || null;
+      const reservationCode = reservation.id ? reservation.id.slice(0, 8).toUpperCase() : '';
+      if (reservationCode) sessionStorage.setItem('dpro_estate_last_reservation_code', reservationCode);
       $('completeSummary').innerHTML = `
-        ${summaryRow('受付ID', reservation.id ? reservation.id.slice(0, 8) : '受付済み')}
+        ${summaryRow('受付番号', reservation.id ? reservation.id.slice(0, 8).toUpperCase() : '受付済み')}
         ${summaryRow('物件', property?.property_name || '希望条件相談')}
         ${summaryRow('日時', `${reservation.reservation_date || $('reservationDate').value} ${trimTime(reservation.reservation_time || state.selectedTime)}`)}
         ${summaryRow('集合', `${reservation.meeting_type || $('meetingType').value} / ${reservation.meeting_place || $('meetingPlace').value}`)}
@@ -1505,6 +1496,10 @@
       }
     }
 
+    function openMemberPage() {
+      location.href = 'member.html';
+    }
+
     function resetAfterComplete() {
       state.selectedTime = '';
       state.lastReservation = null;
@@ -1513,49 +1508,6 @@
       loadSlots(state.selectedDate);
       updateSummary();
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    async function searchMember() {
-      const phone = $('memberPhone').value.trim() || $('phone').value.trim();
-      const result = $('memberResult');
-      if (!phone) {
-        result.innerHTML = '<div class="notice error">電話番号を入力してください。</div>';
-        return;
-      }
-      result.innerHTML = '<span class="loading"><span class="spinner"></span>予約を確認中</span>';
-      try {
-        const data = await apiGet(`/api/public/member?phone=${encodeURIComponent(phone)}`);
-        if (!data.found) {
-          result.innerHTML = '<div class="notice warn">この電話番号の予約は見つかりませんでした。</div>';
-          return;
-        }
-        const reservations = Array.isArray(data.reservations) ? data.reservations : [];
-        const preference = data.preference || {};
-        const cards = reservations.map((r) => {
-          const propertyName = r.property?.property_name || '希望条件相談';
-          const status = r.status || '予約受付';
-          return `
-            <div class="summary-box" style="margin-top:10px;">
-              ${summaryRow('日時', `${r.reservation_date} ${trimTime(r.reservation_time)}`)}
-              ${summaryRow('物件', propertyName)}
-              ${summaryRow('集合', `${r.meeting_type || ''} / ${r.meeting_place || ''}`)}
-              ${summaryRow('状態', status)}
-            </div>
-          `;
-        }).join('') || '<div class="notice warn">予約履歴はありません。</div>';
-        result.innerHTML = `
-          <div class="notice ok"><b>${escapeHtml(data.customer.customer_name || 'お客様')}</b> の予約情報です。</div>
-          <div class="summary-box">
-            ${summaryRow('希望エリア', Array.isArray(preference.desired_areas) ? preference.desired_areas.join('・') : '未登録')}
-            ${summaryRow('家賃上限', preference.max_rent ? formatYen(preference.max_rent) : '未登録')}
-            ${summaryRow('入居時期', preference.move_in_timing || '未登録')}
-          </div>
-          ${cards}
-        `;
-      } catch (error) {
-        console.error(error);
-        result.innerHTML = `<div class="notice error">予約確認に失敗しました。${escapeHtml(formatError(error))}</div>`;
-      }
     }
 
     async function apiGet(path) {

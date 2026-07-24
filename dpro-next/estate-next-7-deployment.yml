@@ -1,0 +1,14 @@
+system: DPRO 不動産・賃貸内見 LINE
+step: ESTATE-NEXT-7
+status: DEPLOY-PENDING
+worker_name: dpro-estate-next4-api
+worker_url: https://dpro-estate-next4-api.dpromstk2000.workers.dev
+sql_file: deploy/estate-next-7/sql/estate-next-7.sql
+worker_file: deploy/estate-next-7/worker.js
+secure_member_session: prepared
+reservation_code_verification: prepared
+line_id_token_verification: ready_optional
+auth_rate_limit: prepared
+previous_preferences: prepared
+revisit_request: prepared
+next_step: ESTATE-NEXT-7-VERIFY

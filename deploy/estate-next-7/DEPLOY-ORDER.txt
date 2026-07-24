@@ -1,0 +1,13 @@
+DPRO ESTATE NEXT-7 適用順序
+
+1. Supabase SQL Editorで sql/estate-next-7.sql を実行
+2. Cloudflare Worker dpro-estate-next4-api のコードを worker.js へ差し替え
+3. SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY / DPRO_ESTATE_ADMIN_CODE Secretを維持
+4. MEMBER_AUTH_SALT Secretは任意。未設定時は既存Secretを認証試行ハッシュへ利用
+5. LEGACY_API_BASE / ALLOWED_ORIGIN Variableを維持
+6. LINE本人確認を有効にする場合だけ LINE_CHANNEL_ID Variable と config.jsのLIFF IDを設定
+7. Deploy後、/api/health で ESTATE-NEXT-7-EXTENSION-20260724 を確認
+8. GitHub Actionsの DPRO ESTATE NEXT-7 Secure Member を開く
+9. Run workflow → mode=verify を実行
+
+本番の会員確認は電話番号＋受付番号です。電話番号だけの確認はdemo=1のデモ店舗に限定します。

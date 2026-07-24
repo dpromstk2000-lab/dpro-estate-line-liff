@@ -56,3 +56,8 @@ owner-ipad.htmlを現場スタッフの日常操作へ限定しました。
 管理コードをURLへ含めず、デモ準備・API入力・内部URL一覧を日常画面から除外しました。
 案件更新と空室確認にはNEXT-5のoperation_idを使用し、連続操作を防止します。
 Worker・Supabase・APIの変更はありません。
+
+[ESTATE-NEXT-7 DEPLOY-PENDING]
+新しいindex.html・member.htmlは電話番号だけの照会を廃止し、拡張Workerの安全な会員セッションへ移行します。
+既存legacy Worker原本は現在のリポジトリにないため、旧 /api/public/member?phone= エンドポイント自体の停止は本STEPでは行いません。
+公開画面からの呼出し・リンク・電話番号保存は除去し、旧エンドポイントの完全停止はWorker統合を行うセキュリティSTEPで対応します。
