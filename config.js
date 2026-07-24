@@ -3,7 +3,7 @@
 
   const CONFIG = {
     systemName: 'DPRO 不動産・賃貸内見 LINE',
-    version: 'ESTATE-NEXT-7',
+    version: 'ESTATE-NEXT-8',
     apiBase: 'https://dpro-estate-line-api.dpromstk2000.workers.dev',
     nextApiBase: 'https://dpro-estate-next4-api.dpromstk2000.workers.dev',
     pageBase: 'https://dpromstk2000-lab.github.io/dpro-estate-line-liff',
@@ -15,7 +15,8 @@
       ownerPanel: 'dpro_estate_owner_panel',
       ipadPanel: 'dpro_estate_ipad_panel',
       settingsPanel: 'dpro_estate_settings_panel',
-      memberSession: 'dpro_estate_member_session'
+      memberSession: 'dpro_estate_member_session',
+      followupPanel: 'dpro_estate_followup_panel'
     },
     demo: {
       queryKey: 'demo',

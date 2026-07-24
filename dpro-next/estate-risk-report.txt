@@ -61,3 +61,9 @@ Worker・Supabase・APIの変更はありません。
 新しいindex.html・member.htmlは電話番号だけの照会を廃止し、拡張Workerの安全な会員セッションへ移行します。
 既存legacy Worker原本は現在のリポジトリにないため、旧 /api/public/member?phone= エンドポイント自体の停止は本STEPでは行いません。
 公開画面からの呼出し・リンク・電話番号保存は除去し、旧エンドポイントの完全停止はWorker統合を行うセキュリティSTEPで対応します。
+
+ESTATE-NEXT-8 preparation:
+- LINEは自動送信せず、文面確認後のコピーだけを提供する。
+- 候補物件は募集中・内見可能・非公開でないことを前提に絞り込む。
+- 顧客の明示除外、予算、間取り、ペット、駐車場、提案済み物件を除外する。
+- 既存Workerは変更せず、拡張Worker dpro-estate-next4-apiを更新する。

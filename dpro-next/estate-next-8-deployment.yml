@@ -1,0 +1,12 @@
+step: ESTATE-NEXT-8
+status: DEPLOY-PENDING
+next_step: ESTATE-NEXT-8-VERIFY
+worker_name: dpro-estate-next4-api
+worker_file: deploy/estate-next-8/worker.js
+sql_file: deploy/estate-next-8/sql/estate-next-8.sql
+rollback_sql: deploy/estate-next-8/sql/estate-next-8-rollback.sql
+verify_sql: deploy/estate-next-8/sql/estate-next-8-verify.sql
+worker_changed: pending
+supabase_changed: pending
+legacy_worker_changed: false
+line_auto_send: false

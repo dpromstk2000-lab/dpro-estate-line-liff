@@ -1,39 +1,30 @@
 system: DPRO 不動産・賃貸内見 LINE
 repository: dpromstk2000-lab/dpro-estate-line-liff
-previous_step: ESTATE-NEXT-7-DEPLOY-PENDING
-current_step: ESTATE-NEXT-7-COMPLETE
-next_step: ESTATE-NEXT-8
+previous_step: ESTATE-NEXT-7-COMPLETE
+current_step: ESTATE-NEXT-8-DEPLOY-PENDING
+next_step: ESTATE-NEXT-8-VERIFY
 baseline_tag: dpro-estate-next-baseline-20260723
-step_backup_tag: dpro-estate-next-7-before-20260724
-completed_at_jst: "2026-07-24T16:27:25+09:00"
+step_backup_tag: dpro-estate-next-8-before-20260724
+prepared_at_jst: "2026-07-24T17:00:01+09:00"
 modified_files:
-  - index.html
-  - member.html
-  - member-api.js
+  - owner.html
   - config.js
+  - followup.html
+  - followup-api.js
 extension_worker_name: dpro-estate-next4-api
 extension_worker_url: https://dpro-estate-next4-api.dpromstk2000.workers.dev
-worker_changed: true
-supabase_changed: true
-api_changed: true
-secure_member_session: true
-reservation_code_verification: true
-line_id_token_ready: true
-phone_only_production_removed: true
-phone_only_demo_limited: true
-auth_attempt_rate_limit: true
-session_token_hash_only: true
-past_viewing_history: true
-previous_preferences: true
-revisit_request_persistent: true
-raw_phone_local_storage_removed: true
-legacy_phone_only_endpoint_ui_removed: true
-legacy_phone_only_endpoint_source_unavailable: true
-legacy_phone_only_endpoint_direct_blocked: false
+followup_center_ui: true
+revisit_workflow_ui: true
+post_viewing_followup_ui: true
+property_candidate_matching_ui: true
+proposal_history_ui: true
+customer_exclusions_ui: true
+individual_line_copy_only: true
+worker_update_prepared: true
+supabase_migration_prepared: true
+worker_changed: false
+supabase_changed: false
+api_changed: false
 existing_features_preserved: true
-live_health_check: PASS
-live_schema_check: PASS
-live_member_security_test: PASS
-live_phone_only_rejection: PASS
-published_member_check: PASS
-published_index_check: PASS
+manual_sql_required: true
+manual_worker_deploy_required: true

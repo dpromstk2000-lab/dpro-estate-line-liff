@@ -1,0 +1,15 @@
+name = "dpro-estate-next4-api"
+main = "worker.js"
+compatibility_date = "2026-07-24"
+workers_dev = true
+
+[vars]
+LEGACY_API_BASE = "https://dpro-estate-line-api.dpromstk2000.workers.dev"
+ALLOWED_ORIGIN = "https://dpromstk2000-lab.github.io"
+# LINE_CHANNEL_ID = "LINEログインチャネルID（任意。LIFF本人確認を有効にする場合）"
+
+# Secrets（Cloudflare画面で維持）
+# SUPABASE_URL
+# SUPABASE_SERVICE_ROLE_KEY
+# DPRO_ESTATE_ADMIN_CODE
+# MEMBER_AUTH_SALT（任意）

@@ -137,7 +137,7 @@
   </style>
 </head>
 <body>
-  <!-- DPRO ESTATE NEXT-5 / owner.html -->
+  <!-- DPRO ESTATE NEXT-8 / owner.html -->
   <div class="app">
     <aside class="sidebar" id="sidebar">
       <div class="brand">
@@ -153,6 +153,7 @@
         <button class="nav-btn" data-panel-button="customers" onclick="openPanel('customers')">顧客カルテ</button>
         <button class="nav-btn" data-panel-button="properties" onclick="openPanel('properties')">物件管理 <span class="count" id="sidePropertyCount">-</span></button>
         <button class="nav-btn" data-panel-button="cases" onclick="openPanel('cases')">案件進捗 <span class="count" id="sideCaseCount">-</span></button>
+        <a class="nav-link" id="followupLink" href="followup.html?v=estate-next-8">追客・再相談 <span class="count">NEXT</span></a>
         <button class="nav-btn" data-panel-button="messages" onclick="openPanel('messages')">LINE文面コピー</button>
       </div>
 
@@ -423,7 +424,7 @@
   </dialog>
 
   <div class="toast" id="toast"></div>
-  <script src="config.js?v=estate-next-5"></script>
+  <script src="config.js?v=estate-next-8"></script>
   <script src="domain.js?v=estate-next-5"></script>
   <script src="extension.js?v=estate-next-5"></script>
   <script>
@@ -475,7 +476,7 @@
     });
 
     function setPageLinks(){
-      const version = 'estate-next-5';
+      const version = 'estate-next-8';
       $('settingsLink').href = `${CONFIG.pageBase}/owner-settings.html?v=${version}`;
       $('ipadLink').href = `${CONFIG.pageBase}/owner-ipad.html?v=${version}`;
       $('checkLink').href = `${CONFIG.pageBase}/system-check.html?v=${version}`;

@@ -137,3 +137,14 @@ estate_next_7:
   previous_preferences: prepared
   revisit_request: prepared
   legacy_phone_only_endpoint_direct_block: pending_legacy_worker_source
+
+estate_next_8:
+  status: DEPLOY-PENDING
+  features:
+    - followup_center
+    - revisit_workflow
+    - post_viewing_followup
+    - property_candidate_matching
+    - proposal_history
+    - customer_exclusions
+    - individual_line_copy
