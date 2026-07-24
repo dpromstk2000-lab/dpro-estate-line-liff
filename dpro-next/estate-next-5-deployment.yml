@@ -1,6 +1,6 @@
 system: DPRO 不動産・賃貸内見 LINE
 step: ESTATE-NEXT-5
-status: DEPLOY-PENDING
+status: COMPLETE
 worker_name: dpro-estate-next4-api
 worker_url: https://dpro-estate-next4-api.dpromstk2000.workers.dev
 sql_file: deploy/estate-next-5/sql/estate-next-5.sql
@@ -10,4 +10,6 @@ initial_cost_estimate: prepared
 required_documents_checklist: prepared
 individual_line_copy: prepared
 idempotency_guard: prepared
-next_step: ESTATE-NEXT-5-VERIFY
+next_step: ESTATE-NEXT-6
+live_verification: PASS
+duplicate_operation_test: PASS

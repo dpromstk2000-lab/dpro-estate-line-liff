@@ -1,0 +1,58 @@
+{
+  "extension_health": {
+    "ok": true,
+    "service": "DPRO Estate NEXT-5 Extension API",
+    "version": "ESTATE-NEXT-5-EXTENSION-20260724",
+    "legacy_api": "https://dpro-estate-line-api.dpromstk2000.workers.dev",
+    "supabase_url_set": true,
+    "supabase_service_key_set": true,
+    "admin_code_secret_set": true,
+    "auth_strategy": "local-secret-with-legacy-fallback",
+    "idempotency_guard": true,
+    "application_features": [
+      "application_intent",
+      "initial_cost",
+      "required_documents",
+      "individual_line_copy"
+    ],
+    "time": "2026-07-24T05:52:04.938Z"
+  },
+  "system_check": {
+    "ok": true,
+    "service": "DPRO Estate NEXT-5 Extension API",
+    "version": "ESTATE-NEXT-5-EXTENSION-20260724",
+    "shop_code": "dpro_estate_demo",
+    "tables": [
+      {
+        "table": "estate_application_cases",
+        "ok": true
+      },
+      {
+        "table": "estate_case_events",
+        "ok": true
+      },
+      {
+        "table": "estate_vacancy_checks",
+        "ok": true
+      }
+    ],
+    "features": {
+      "application_intent": true,
+      "initial_cost": true,
+      "required_documents": true,
+      "idempotency_guard": true,
+      "individual_line_copy": true
+    },
+    "write_test": {
+      "ok": true,
+      "duplicate_case_guard": true,
+      "duplicate_vacancy_guard": true,
+      "event_count": 2
+    }
+  },
+  "legacy_health": {
+    "ok": true,
+    "service": "DPRO Estate Viewing LINE API",
+    "version": "estate-3-worker-api-20260710"
+  }
+}
