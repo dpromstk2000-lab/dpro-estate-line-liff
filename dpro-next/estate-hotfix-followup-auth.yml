@@ -1,0 +1,16 @@
+system: DPRO 不動産・賃貸内見 LINE
+hotfix: ESTATE-NEXT-10-HOTFIX-FOLLOWUP-AUTH-R2
+status: COMPLETE
+completed_at_jst: "2026-07-25T07:08:32+09:00"
+defect: GET /api/admin/login endpoint did not exist
+resolution: GET /api/admin/followup-tasks with limit 1 for read-only authentication
+write_operation: false
+followup_login: PASS
+followup_tasks: PASS
+revisit_requests_preserved: true
+property_proposals_preserved: true
+customer_exclusions_preserved: true
+admin_code_delete_preserved: true
+worker_changed: false
+supabase_changed: false
+api_changed: false
