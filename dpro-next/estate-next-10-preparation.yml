@@ -1,0 +1,16 @@
+step: ESTATE-NEXT-10
+status: PRODUCT-SITE-PENDING
+next_action: UPLOAD_PRODUCT_SITE_WORKFLOW
+prepared_at_jst: "2026-07-25T00:06:29+09:00"
+operation_sheet_pdf: https://dpromstk2000-lab.github.io/dpro-estate-line-liff/assets/estate-next-10/dpro-estate-operation-experience.pdf
+operation_sheet_png: https://dpromstk2000-lab.github.io/dpro-estate-line-liff/assets/estate-next-10/dpro-estate-operation-experience.png
+qr_exact_match: true
+qr_count: 5
+actual_screenshots: true
+a4_portrait_one_page: true
+final_system_check: PASS
+product_site_repository: dpromstk2000-lab/dpro-line-systems-site
+product_page: https://dpromstk2000-lab.github.io/dpro-line-systems-site/systems/estate.html
+worker_changed: false
+supabase_changed: false
+api_changed: false

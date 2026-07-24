@@ -1,0 +1,34 @@
+{
+  "pdf_page_count": 1,
+  "pdf_size_points": [
+    595.2,
+    841.92
+  ],
+  "a4_portrait": true,
+  "render_verified": true,
+  "qr_expected_count": 5,
+  "qr_decoded_count": 5,
+  "qr_exact_match": true,
+  "screenshots": {
+    "customer.png": {
+      "width": 390,
+      "height": 844
+    },
+    "followup.png": {
+      "width": 1440,
+      "height": 1000
+    },
+    "owner-ipad.png": {
+      "width": 1024,
+      "height": 1366
+    },
+    "owner.png": {
+      "width": 1440,
+      "height": 1000
+    },
+    "system-check.png": {
+      "width": 1440,
+      "height": 1000
+    }
+  }
+}
