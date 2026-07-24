@@ -1,4 +1,4 @@
-name: DPRO ESTATE NEXT-9 R2 Security Performance Audit
+name: DPRO ESTATE NEXT-9 R3 Security Performance Audit
 
 'on':
   push:
@@ -51,20 +51,33 @@ jobs:
           next_step="$(awk -F': ' '/^next_step:/{print $2;exit}' dpro-next/estate-progress.yml)"
           test "$current_step" = 'ESTATE-NEXT-8-COMPLETE' || { echo "ERROR: expected ESTATE-NEXT-8-COMPLETE, got $current_step" >&2; exit 1; }
           test "$next_step" = 'ESTATE-NEXT-9' || { echo "ERROR: expected ESTATE-NEXT-9, got $next_step" >&2; exit 1; }
-          tag_commit="$(git rev-parse HEAD)"
-          while true; do
-            changed="$(git diff-tree --no-commit-id --name-only -r "$tag_commit" | sed '/^$/d')"
-            if [ "$changed" = "$WORKFLOW_PATH" ]; then
-              tag_commit="$(git rev-parse "$tag_commit^")"
-            else
-              break
+          if git rev-parse -q --verify "refs/tags/$STEP_BACKUP_TAG" >/dev/null 2>&1; then
+            # Annotated tagはtag objectではなく、必ず参照先commitへdereferenceして検査します。
+            backup_commit="$(git rev-parse "$STEP_BACKUP_TAG^{commit}")"
+            git merge-base --is-ancestor "$backup_commit" HEAD || {
+              echo 'ERROR: existing backup tag is not an ancestor of the current branch.' >&2
+              exit 1
+            }
+            unexpected="$(git diff --name-only "$backup_commit"..HEAD | grep -vFx "$WORKFLOW_PATH" || true)"
+            if [ -n "$unexpected" ]; then
+              echo 'ERROR: files other than the execution workflow changed after the backup tag:' >&2
+              printf '%s\n' "$unexpected" >&2
+              exit 1
             fi
-          done
-          if git rev-parse "$STEP_BACKUP_TAG" >/dev/null 2>&1; then
-            test "$(git rev-parse "$STEP_BACKUP_TAG")" = "$tag_commit" || { echo 'ERROR: backup tag points to a different commit.' >&2; exit 1; }
+            echo "Reusing verified backup tag $STEP_BACKUP_TAG at $backup_commit"
           else
+            tag_commit="$(git rev-parse HEAD)"
+            while true; do
+              changed="$(git diff-tree --no-commit-id --name-only -r "$tag_commit" | sed '/^$/d')"
+              if [ "$changed" = "$WORKFLOW_PATH" ]; then
+                tag_commit="$(git rev-parse "$tag_commit^")"
+              else
+                break
+              fi
+            done
             git tag -a "$STEP_BACKUP_TAG" "$tag_commit" -m 'DPRO ESTATE NEXT-9 backup'
             git push origin "$STEP_BACKUP_TAG"
+            echo "Created backup tag $STEP_BACKUP_TAG at $tag_commit"
           fi
 
       - name: Guard current application version
@@ -189,7 +202,7 @@ jobs:
           }
           Path('dpro-next/estate-performance-budget.json').write_text(json.dumps(performance, ensure_ascii=False, indent=2) + '\n')
           security = '\n'.join([
-              'step: ESTATE-NEXT-9-R2',
+              'step: ESTATE-NEXT-9-R3',
               'status: ATTENTION',
               'public_ui_phone_only_reference_removed: true',
               'property_phone_localstorage_removed: true',
@@ -329,7 +342,7 @@ jobs:
           legacy_phone_only_direct_block: attention_source_unavailable
           EOF_PREP
           git add config.js property.html system-check.html system-check-api.js dpro-next/estate-performance-budget.json dpro-next/estate-next-9-security-register.yml dpro-next/estate-next-9-static-audit.json dpro-next/estate-next-9-preparation.yml
-          git commit -m 'DPRO ESTATE NEXT-9 R2 secure property handoff and audit'
+          git commit -m 'DPRO ESTATE NEXT-9 R3 secure property handoff and audit'
           git push origin "$TARGET_BRANCH"
 
       - name: Verify live APIs security performance and published pages
