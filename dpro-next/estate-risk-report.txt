@@ -50,3 +50,9 @@ DPRO 不動産・賃貸内見 LINE / ESTATE-NEXT-1 危険箇所台帳
 - 既存の予約・顧客・物件・追客APIは従来Workerを継続利用するため、日常操作の速度と安定性への影響を避ける。
 - 申込案件・担当・期限・見送り理由・空室確認履歴だけを拡張Workerへ保存する。
 - 必要書類チェックはESTATE-NEXT-5で追加する。
+
+[ESTATE-NEXT-6 COMPLETE]
+owner-ipad.htmlを現場スタッフの日常操作へ限定しました。
+管理コードをURLへ含めず、デモ準備・API入力・内部URL一覧を日常画面から除外しました。
+案件更新と空室確認にはNEXT-5のoperation_idを使用し、連続操作を防止します。
+Worker・Supabase・APIの変更はありません。

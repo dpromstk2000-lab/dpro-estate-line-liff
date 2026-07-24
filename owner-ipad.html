@@ -1,712 +1,182 @@
 <!doctype html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>DPRO 不動産・賃貸内見 LINE｜STEP ESTATE-12 iPadスタッフ画面</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="DPRO 不動産・賃貸内見 LINEのiPad・現場スタッフ画面です。">
+  <title>DPRO 不動産・賃貸内見 LINE｜現場スタッフ</title>
   <style>
-    :root {
-      --green:#0f6f55;
-      --green2:#0a5744;
-      --green3:#e8f6f1;
-      --gold:#f3a712;
-      --red:#e65b5b;
-      --blue:#3c73d9;
-      --bg:#edf5f1;
-      --ink:#14251f;
-      --muted:#66756f;
-      --line:#dce8e3;
-      --card:#ffffff;
-      --shadow:0 12px 30px rgba(16,48,38,.10);
-      --radius:22px;
-    }
-    * { box-sizing:border-box; }
-    html { scroll-behavior:smooth; }
-    body {
-      margin:0;
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Hiragino Sans","Yu Gothic",Meiryo,sans-serif;
-      color:var(--ink);
-      background:
-        radial-gradient(circle at 86% 10%, rgba(243,167,18,.14), transparent 24rem),
-        radial-gradient(circle at 6% 6%, rgba(15,111,85,.11), transparent 30rem),
-        linear-gradient(135deg,#edf7f4 0%,#f7f8f5 58%,#fff6df 100%);
-      line-height:1.65;
-    }
-    button, input, select, textarea { font:inherit; }
-    button { cursor:pointer; }
-    .wrap { width:min(1120px, calc(100% - 28px)); margin:0 auto; }
-    .hero {
-      color:#fff;
-      padding:18px 0 24px;
-      border-bottom-left-radius:26px;
-      border-bottom-right-radius:26px;
-      background:
-        radial-gradient(circle at 92% 0%, rgba(255,255,255,.20) 0 5rem, transparent 5.1rem),
-        linear-gradient(135deg,#064e40,#0f6f55 58%,#819046);
-      box-shadow:var(--shadow);
-    }
-    .badge-row { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:10px; }
-    .badge {
-      display:inline-flex; align-items:center; gap:6px;
-      padding:4px 10px; border-radius:999px;
-      background:rgba(255,255,255,.18); color:#fff; font-weight:800; font-size:12px;
-      backdrop-filter:blur(6px);
-    }
-    h1 { margin:0; font-size:clamp(27px,4vw,42px); line-height:1.12; letter-spacing:-.04em; }
-    .hero p { margin:10px 0 0; color:rgba(255,255,255,.91); font-weight:650; max-width:860px; }
-    .hero-nav { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:18px; }
-    .hero-nav a {
-      display:flex; justify-content:center; align-items:center;
-      min-height:48px; border-radius:12px; color:#fff; text-decoration:none; font-weight:900;
-      border:1px solid rgba(255,255,255,.26); background:rgba(255,255,255,.14);
-    }
-    .status-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:12px; }
-    .status-card {
-      background:rgba(255,255,255,.94); color:var(--ink); border:1px solid rgba(255,255,255,.6);
-      border-radius:14px; padding:12px 14px; min-height:76px;
-    }
-    .status-card small { display:block; color:var(--muted); font-weight:900; }
-    .status-card strong { display:block; font-size:18px; margin-top:4px; }
-    main { padding:18px 0 44px; }
-    .panel {
-      background:rgba(255,255,255,.94); border:1px solid rgba(255,255,255,.75);
-      border-radius:var(--radius); box-shadow:var(--shadow); padding:18px; margin-bottom:16px;
-    }
-    .panel-head { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; margin-bottom:12px; }
-    .panel h2 { margin:0; font-size:22px; letter-spacing:-.03em; }
-    .panel p.sub { margin:2px 0 0; color:var(--muted); font-weight:650; font-size:13px; }
-    .pill { display:inline-flex; align-items:center; gap:6px; border-radius:999px; background:var(--green3); color:var(--green2); font-weight:900; padding:5px 10px; font-size:12px; white-space:nowrap; }
-    .pill.red { background:#ffeaea; color:#b84242; }
-    .pill.gold { background:#fff2cf; color:#956300; }
-    .pill.blue { background:#eaf0ff; color:#2858b3; }
-    .grid2 { display:grid; grid-template-columns:1.35fr .8fr; gap:16px; align-items:start; }
-    .toolbar { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
-    .field { display:grid; gap:6px; flex:1; min-width:180px; }
-    label { font-size:12px; color:var(--muted); font-weight:900; }
-    input, select, textarea {
-      width:100%; border:1px solid var(--line); background:#fff; border-radius:12px; padding:12px 13px; outline:none;
-    }
-    textarea { min-height:116px; resize:vertical; }
-    input:focus, select:focus, textarea:focus { border-color:#73b6a2; box-shadow:0 0 0 4px rgba(15,111,85,.10); }
-    .btn {
-      border:0; border-radius:12px; background:var(--green); color:#fff; font-weight:950;
-      min-height:46px; padding:11px 16px; display:inline-flex; justify-content:center; align-items:center; gap:8px;
-    }
-    .btn:hover { filter:brightness(.96); }
-    .btn.ghost { background:#eef8f4; color:var(--green2); border:1px solid #cae4db; }
-    .btn.warn { background:var(--gold); color:#3d2b00; }
-    .btn.red { background:#fff0f0; color:#b84242; border:1px solid #ffd5d5; }
-    .btn.blue { background:#eef3ff; color:#2858b3; border:1px solid #d7e2ff; }
-    .btn.small { min-height:34px; padding:7px 10px; border-radius:10px; font-size:13px; }
-    .login-card { display:grid; grid-template-columns:1fr 180px auto auto; gap:10px; align-items:end; }
-    .notice { border-radius:14px; padding:12px 14px; background:#eaf8f1; color:#14634e; font-weight:850; border:1px solid #cfeee2; margin-top:10px; }
-    .notice.error { background:#fff0f0; color:#a64040; border-color:#ffd8d8; }
-    .guide-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
-    .guide-card { border:1px solid var(--line); border-radius:16px; background:#fbfffd; padding:12px; }
-    .guide-no { width:28px; height:28px; border-radius:999px; background:var(--green); color:#fff; display:grid; place-items:center; font-weight:950; margin-bottom:8px; }
-    .guide-card strong { display:block; font-size:15px; }
-    .guide-card span { display:block; color:var(--muted); font-size:12px; font-weight:650; margin-top:2px; }
-    .cards { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:12px; }
-    .cards.one { grid-template-columns:1fr; }
-    .reservation-card, .follow-card, .mini-card {
-      border:1px solid var(--line); border-radius:18px; background:#fff; padding:15px; box-shadow:0 6px 18px rgba(15,45,35,.05);
-    }
-    .reservation-card.today { border-color:#b9e0d2; background:linear-gradient(180deg,#fff,#fbfffd); }
-    .card-top { display:flex; justify-content:space-between; gap:10px; align-items:flex-start; margin-bottom:10px; }
-    .time-box { min-width:86px; background:var(--green); color:#fff; border-radius:14px; padding:8px 10px; text-align:center; font-weight:950; }
-    .time-box small { display:block; font-size:11px; opacity:.86; }
-    .time-box strong { display:block; font-size:20px; line-height:1.1; }
-    .person { min-width:0; flex:1; }
-    .person h3 { margin:0; font-size:18px; letter-spacing:-.02em; }
-    .person .meta { color:var(--muted); font-size:12px; font-weight:800; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-    .info-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin:10px 0; }
-    .info-item { background:#f7faf9; border:1px solid #e9f0ed; border-radius:12px; padding:8px 10px; min-height:50px; }
-    .info-item small { display:block; color:var(--muted); font-size:11px; font-weight:900; }
-    .info-item strong { display:block; font-size:14px; overflow-wrap:anywhere; }
-    .memo-box { background:#f7faf9; border:1px solid #e9f0ed; border-radius:12px; padding:10px; color:#344941; font-size:13px; font-weight:650; margin:10px 0; }
-    .action-row { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
-    .empty { border:1px dashed #bfd5cd; border-radius:18px; padding:24px; text-align:center; background:#fbfffd; color:var(--muted); font-weight:850; }
-    .copy-area { position:sticky; top:12px; }
-    .template-preview { min-height:190px; white-space:pre-wrap; font-weight:650; background:#fbfffd; }
-    .url-list { display:grid; gap:9px; }
-    .url-row { display:grid; grid-template-columns:110px 1fr auto; gap:8px; align-items:center; }
-    .url-row input { font-size:12px; padding:9px 10px; color:#49605a; }
-    .footer { text-align:center; color:#789087; font-size:12px; padding:22px 0; }
-    .seg { display:flex; flex-wrap:wrap; gap:8px; margin:6px 0 12px; }
-    .seg button { border:1px solid var(--line); background:#fff; color:#30443d; border-radius:999px; padding:8px 12px; font-weight:900; }
-    .seg button.active { background:var(--green); color:#fff; border-color:var(--green); }
-    .big-phone { font-size:18px; font-weight:950; color:var(--green2); }
-    .hidden { display:none !important; }
-    @media (max-width: 900px) {
-      .wrap { width:min(100% - 18px, 760px); }
-      .hero-nav, .status-grid, .guide-grid { grid-template-columns:repeat(2,1fr); }
-      .grid2 { grid-template-columns:1fr; }
-      .copy-area { position:static; }
-      .cards { grid-template-columns:1fr; }
-      .login-card { grid-template-columns:1fr; }
-    }
-    @media (max-width: 560px) {
-      .hero { border-radius:0 0 20px 20px; }
-      .hero-nav, .status-grid, .guide-grid { grid-template-columns:1fr; }
-      .panel { padding:14px; border-radius:18px; }
-      .info-grid { grid-template-columns:1fr; }
-      .url-row { grid-template-columns:1fr; }
-      .btn { width:100%; }
-      .btn.small { width:auto; }
-    }
+    :root{--bg:#edf5f2;--card:#fff;--text:#14231e;--muted:#66756f;--line:#d7e5df;--main:#0d6b55;--main2:#07503f;--soft:#e8f7f1;--blue:#255ec7;--blue-soft:#eef4ff;--warn:#b96605;--warn-soft:#fff5df;--danger:#b3261e;--danger-soft:#fff0ef;--shadow:0 14px 34px rgba(15,60,46,.10);--radius:20px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:linear-gradient(180deg,#f8fbfa 0%,var(--bg) 100%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Yu Gothic",Meiryo,sans-serif;font-size:17px;line-height:1.62;min-height:100vh;padding-bottom:84px}button,input,select,textarea{font:inherit}button{cursor:pointer}button:disabled{opacity:.52;cursor:not-allowed}.hidden{display:none!important}
+    .topbar{position:sticky;top:0;z-index:30;background:rgba(7,80,63,.96);color:#fff;box-shadow:0 8px 24px rgba(7,50,40,.18)}.top-inner{max-width:1240px;margin:auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:14px}.brand small{display:block;color:rgba(255,255,255,.72);font-size:12px;font-weight:850}.brand strong{display:block;font-size:22px;line-height:1.25}.top-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}.status{display:inline-flex;align-items:center;gap:6px;border-radius:999px;background:rgba(255,255,255,.14);padding:6px 10px;font-size:12px;font-weight:900}.top-btn{border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.12);color:#fff;border-radius:12px;padding:9px 12px;font-weight:900}
+    .wrap{max-width:1240px;margin:0 auto;padding:18px 16px 40px}.auth{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin-bottom:14px}.auth-grid{display:grid;grid-template-columns:minmax(240px,420px) auto auto;gap:10px;align-items:end}.field label{display:block;margin-bottom:5px;color:#354a42;font-size:13px;font-weight:900}.input,.select,.textarea{width:100%;min-height:50px;border:1px solid var(--line);border-radius:13px;background:#fff;color:var(--text);padding:11px 13px;outline:none}.textarea{min-height:100px;resize:vertical}.input:focus,.select:focus,.textarea:focus{border-color:#72ad99;box-shadow:0 0 0 4px rgba(13,107,85,.10)}
+    .btn{border:0;border-radius:13px;min-height:48px;padding:10px 15px;background:var(--main);color:#fff;font-weight:950}.btn.secondary{background:var(--soft);color:var(--main2);border:1px solid #c8e5d9}.btn.light{background:#fff;color:var(--main2);border:1px solid var(--line)}.btn.blue{background:var(--blue)}.btn.warn{background:var(--warn)}.btn.danger{background:var(--danger)}.btn.small{min-height:39px;padding:7px 11px;border-radius:11px;font-size:13px}
+    .notice{border-radius:14px;background:var(--soft);color:var(--main2);border:1px solid #cbe7dc;padding:11px 13px;margin-top:10px;font-size:14px;font-weight:800}.notice.error{background:var(--danger-soft);color:#8e1d17;border-color:#ffd3d0}.notice.warn{background:var(--warn-soft);color:#7a4500;border-color:#f5ddb1}
+    .nav{position:sticky;top:69px;z-index:20;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;background:rgba(248,251,250,.94);backdrop-filter:blur(12px);padding:10px 0;margin-bottom:14px}.nav button{border:1px solid var(--line);background:#fff;color:#30483f;border-radius:14px;padding:10px 8px;font-weight:950;min-height:52px}.nav button.active{background:var(--main);border-color:var(--main);color:#fff}.nav .count{display:inline-flex;min-width:23px;justify-content:center;margin-left:4px;border-radius:999px;background:rgba(0,0,0,.07);padding:1px 6px;font-size:11px}.nav button.active .count{background:rgba(255,255,255,.20)}
+    .panel{display:none}.panel.active{display:block}.kpi{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:14px}.kpi-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;box-shadow:0 8px 20px rgba(15,60,46,.05)}.kpi-card strong{display:block;font-size:30px;line-height:1.1}.kpi-card span{display:block;color:var(--muted);font-size:13px;font-weight:900;margin-top:5px}.kpi-card.today{background:var(--soft)}.kpi-card.warn{background:var(--warn-soft)}.kpi-card.danger{background:var(--danger-soft)}
+    .section{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:14px;overflow:hidden}.section-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:15px 16px 11px;border-bottom:1px solid var(--line)}.section-head h2{margin:0;font-size:21px;line-height:1.35}.section-head p{margin:3px 0 0;color:var(--muted);font-size:13px;font-weight:750}.section-body{padding:14px 16px}.pill{display:inline-flex;align-items:center;border-radius:999px;background:var(--soft);color:var(--main2);padding:5px 9px;font-size:12px;font-weight:950;white-space:nowrap}.pill.blue{background:var(--blue-soft);color:#1d4ea5}.pill.warn{background:var(--warn-soft);color:#824900}.pill.danger{background:var(--danger-soft);color:#931f19}.pill.gray{background:#eef2f0;color:#50635c}
+    .list{display:grid;gap:11px}.task-card{border:1px solid var(--line);border-radius:17px;background:#fff;padding:14px}.card-top{display:flex;gap:10px;justify-content:space-between;align-items:flex-start}.person{min-width:0;flex:1}.person h3{margin:0;font-size:18px;line-height:1.35}.meta{color:var(--muted);font-size:12px;font-weight:800;margin-top:3px;overflow-wrap:anywhere}.time{min-width:84px;border-radius:14px;background:var(--main);color:#fff;text-align:center;padding:8px}.time small{display:block;font-size:11px;opacity:.82}.time strong{display:block;font-size:21px;line-height:1.05}.info-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}.info{border-radius:12px;background:#f7faf8;border:1px solid #e8efec;padding:8px 10px;font-size:13px;overflow-wrap:anywhere}.info b{display:block;color:#596b64;font-size:11px;margin-bottom:2px}.memo{margin-top:9px;border-left:4px solid var(--main);border-radius:10px;background:#f7fcfa;padding:9px 10px;font-size:13px}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.empty{border:1px dashed #bfd2ca;border-radius:16px;background:#fbfdfc;color:var(--muted);padding:22px;text-align:center;font-weight:850}
+    .filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.filter-row button{border:1px solid var(--line);background:#fff;color:#344840;border-radius:999px;padding:8px 12px;font-size:13px;font-weight:900}.filter-row button.active{background:var(--main);border-color:var(--main);color:#fff}.case-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.case-chip{border:1px solid var(--line);border-radius:12px;background:#f8fbfa;padding:9px;font-size:12px}.case-chip b{display:block;color:#586a63;font-size:11px}.progress{height:8px;border-radius:999px;background:#e8efec;overflow:hidden;margin-top:6px}.progress span{display:block;height:100%;background:var(--main)}
+    .message-grid{display:grid;grid-template-columns:minmax(260px,.8fr) minmax(320px,1.2fr);gap:14px}.message-summary{border-radius:13px;background:var(--soft);padding:10px;font-size:13px;margin:10px 0}.copy-text{min-height:250px}
+    dialog{width:min(820px,calc(100vw - 24px));max-height:92vh;border:0;border-radius:22px;padding:0;box-shadow:0 28px 80px rgba(0,0,0,.30)}dialog::backdrop{background:rgba(8,28,22,.48)}.dialog-head{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;background:#fff;border-bottom:1px solid var(--line);padding:15px 16px}.dialog-head h2{margin:0;font-size:21px}.dialog-body{padding:15px 16px 20px;overflow:auto}.dialog-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.subsection{border:1px solid var(--line);border-radius:16px;padding:12px;margin-top:12px}.subsection h3{margin:0 0 9px;font-size:17px}.doc-row{display:grid;grid-template-columns:minmax(150px,1fr) 150px;gap:8px;align-items:center;padding:7px 0;border-bottom:1px solid #edf2ef}.doc-row:last-child{border-bottom:0}.dialog-actions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:14px}.history{display:grid;gap:7px;margin-top:10px}.history-item{border:1px solid var(--line);border-radius:12px;background:#fafcfb;padding:9px;font-size:12px}.toast{position:fixed;right:16px;bottom:88px;z-index:80;max-width:min(460px,calc(100vw - 32px));background:#064e3b;color:#fff;border-radius:14px;padding:12px 14px;box-shadow:0 18px 44px rgba(0,0,0,.24);opacity:0;transform:translateY(16px);pointer-events:none;transition:.18s;font-weight:850}.toast.show{opacity:1;transform:none}.toast.error{background:#7f1d1d}
+    @media(max-width:900px){body{font-size:16px}.top-inner{padding:10px 12px}.brand strong{font-size:19px}.wrap{padding:14px 10px 34px}.nav{top:61px;gap:5px}.nav button{font-size:13px;padding:8px 4px}.kpi{grid-template-columns:repeat(2,1fr)}.message-grid,.case-grid{grid-template-columns:1fr}.auth-grid{grid-template-columns:1fr 1fr}.auth-grid .field{grid-column:1/-1}.dialog-grid{grid-template-columns:1fr 1fr}}
+    @media(max-width:560px){.top-actions .status{display:none}.nav{position:fixed;top:auto;bottom:0;left:0;right:0;z-index:50;background:#fff;border-top:1px solid var(--line);padding:6px;box-shadow:0 -8px 24px rgba(15,60,46,.10);margin:0}.nav button{border:0;background:transparent;min-height:58px;font-size:12px;padding:5px 2px}.nav button.active{border-radius:12px}.section-head,.section-body{padding-left:12px;padding-right:12px}.info-grid,.dialog-grid{grid-template-columns:1fr}.auth-grid{grid-template-columns:1fr}.btn{width:100%}.btn.small{width:auto}.doc-row{grid-template-columns:1fr}.actions .btn.small{flex:1}.time{min-width:72px}.person h3{font-size:17px}}
   </style>
 </head>
 <body>
-  <header class="hero">
-    <div class="wrap">
-      <div class="badge-row">
-        <span class="badge">STEP ESTATE-12</span>
-        <span class="badge">全体導線ブラッシュアップ</span>
-        <span class="badge">iPad・スタッフ画面 owner-ipad.html</span>
-        <span class="badge">管理コード 1234</span>
-      </div>
-      <h1>今日の内見・案内を<br>スタッフ画面で確認</h1>
-      <p>店舗スタッフ・案内担当者が、今日の予定、顧客希望条件、集合場所、LINE文面をすぐ確認できる画面です。PC管理画面より操作を絞っています。</p>
-      <nav class="hero-nav">
-        <a href="#today">今日の案内</a>
-        <a href="#follow">追客</a>
-        <a href="#copy">LINE文面</a>
-        <a href="#urls">画面URL</a>
-      </nav>
-      <div class="status-grid">
-        <div class="status-card"><small>店舗</small><strong id="shopNameTop">読み込み前</strong></div>
-        <div class="status-card"><small>API</small><strong>dpro-estate-line-api</strong></div>
-        <div class="status-card"><small>本日</small><strong id="todayTop">-</strong></div>
-        <div class="status-card"><small>状態</small><strong id="apiStatusTop">未確認</strong></div>
-      </div>
+  <header class="topbar">
+    <div class="top-inner">
+      <div class="brand"><small>現場スタッフ用</small><strong>DPRO 不動産・賃貸内見</strong></div>
+      <div class="top-actions"><span class="status" id="todayLabel">-</span><span class="status" id="connectionLabel">未接続</span><button class="top-btn" id="refreshTopBtn">更新</button></div>
     </div>
   </header>
 
-  <main>
-    <div class="wrap">
-      <section class="panel" id="login">
-        <div class="panel-head">
-          <div>
-            <h2>管理コード確認</h2>
-            <p class="sub">デモ初期値は 1234 です。iPad画面では、案内業務に必要な内容だけを表示します。</p>
-          </div>
-          <span class="pill">接続確認</span>
-        </div>
-        <div class="login-card">
-          <div class="field">
-            <label>Cloudflare Worker API</label>
-            <input id="apiBaseInput" value="https://dpro-estate-line-api.dpromstk2000.workers.dev" />
-          </div>
-          <div class="field">
-            <label>管理コード</label>
-            <input id="adminCodeInput" type="password" value="1234" inputmode="numeric" />
-          </div>
-          <button class="btn" id="loadBtn">読み込む</button>
-          <button class="btn warn" id="demoBtn">営業前デモ準備</button>
-        </div>
-        <div id="notice" class="notice">管理コードを入れて「読み込む」を押してください。</div>
+  <main class="wrap">
+    <section class="auth" id="authCard">
+      <div class="auth-grid">
+        <div class="field"><label for="adminCodeInput">管理コード</label><input class="input" id="adminCodeInput" type="password" inputmode="numeric" autocomplete="current-password" placeholder="管理コードを入力"></div>
+        <button class="btn" id="loginBtn">スタッフ画面を開く</button>
+        <button class="btn light" id="clearCodeBtn">この端末から削除</button>
+      </div>
+      <div class="notice" id="notice">管理コードを確認すると、今日の現場業務を表示します。</div>
+    </section>
+
+    <nav class="nav" aria-label="スタッフ画面メニュー">
+      <button class="active" data-panel="today">今日 <span class="count" id="navTodayCount">0</span></button>
+      <button data-panel="followups">追客 <span class="count" id="navFollowCount">0</span></button>
+      <button data-panel="cases">案件 <span class="count" id="navCaseCount">0</span></button>
+      <button data-panel="vacancy">空室 <span class="count" id="navVacancyCount">0</span></button>
+      <button data-panel="messages">LINE</button>
+    </nav>
+
+    <section class="panel active" data-panel="today">
+      <div class="kpi" id="kpiArea">
+        <div class="kpi-card today"><strong id="countToday">-</strong><span>今日の内見</span></div>
+        <div class="kpi-card"><strong id="countTomorrow">-</strong><span>明日の予定</span></div>
+        <div class="kpi-card warn"><strong id="countFollow">-</strong><span>本日追客</span></div>
+        <div class="kpi-card danger"><strong id="countVacancy">-</strong><span>空室確認</span></div>
+      </div>
+      <section class="section">
+        <div class="section-head"><div><h2>今日・明日の内見</h2><p>時間、顧客、物件、集合場所を一画面で確認します。</p></div><span class="pill blue" id="reservationCountPill">0件</span></div>
+        <div class="section-body"><div class="filter-row" id="reservationFilters"><button class="active" data-filter="today">本日</button><button data-filter="tomorrow">明日</button><button data-filter="all">本日＋明日</button></div><div class="list" id="reservationList"><div class="empty">管理コードを確認してください。</div></div></div>
       </section>
+    </section>
 
-      <section class="panel">
-        <div class="panel-head">
-          <div>
-            <h2>スタッフが見る順番</h2>
-            <p class="sub">営業デモでも、実運用でも、この順番で見せると分かりやすいです。</p>
-          </div>
-          <span class="pill gold">まずここ</span>
-        </div>
-        <div class="guide-grid">
-          <div class="guide-card"><div class="guide-no">1</div><strong>今日の案内</strong><span>時間・顧客・集合場所を確認</span></div>
-          <div class="guide-card"><div class="guide-no">2</div><strong>希望条件</strong><span>家賃・間取り・こだわりを確認</span></div>
-          <div class="guide-card"><div class="guide-no">3</div><strong>文面コピー</strong><span>前日確認・当日案内をLINEへ</span></div>
-          <div class="guide-card"><div class="guide-no">4</div><strong>案内後メモ</strong><span>内見済み・申込検討・追客へ</span></div>
-        </div>
-      </section>
+    <section class="panel" data-panel="followups">
+      <section class="section"><div class="section-head"><div><h2>本日対応の追客</h2><p>連絡後は、その場で対応済みまたは延期へ更新します。</p></div><span class="pill warn" id="followCountPill">0件</span></div><div class="section-body"><div class="list" id="followupList"><div class="empty">このメニューを開くと表示します。</div></div></div></section>
+    </section>
 
-      <section class="grid2">
-        <div>
-          <section class="panel" id="dashboard">
-            <div class="panel-head">
-              <div>
-                <h2>本日の状況</h2>
-                <p class="sub">iPadで朝一番に見る集計です。</p>
-              </div>
-              <button class="btn ghost small" id="refreshBtn">最新に更新</button>
-            </div>
-            <div class="status-grid">
-              <div class="status-card"><small>今日の内見</small><strong id="countToday">0</strong></div>
-              <div class="status-card"><small>明日の予定</small><strong id="countTomorrow">0</strong></div>
-              <div class="status-card"><small>本日追客</small><strong id="countFollow">0</strong></div>
-              <div class="status-card"><small>空室確認</small><strong id="countProperty">0</strong></div>
-            </div>
-          </section>
+    <section class="panel" data-panel="cases">
+      <section class="section"><div class="section-head"><div><h2>申込・書類案件</h2><p>現場で必要な申込意思、次回期限、必要書類だけを素早く更新します。</p></div><button class="btn secondary small" id="reloadCasesBtn">再読み込み</button></div><div class="section-body"><div class="notice" id="caseNotice">案件を読み込んでいません。</div><div class="filter-row" id="caseFilters"><button class="active" data-filter="action">要対応</button><button data-filter="documents">書類対応</button><button data-filter="application">申込関連</button><button data-filter="all">すべて</button></div><div class="list" id="caseList"><div class="empty">このメニューを開くと案件を読み込みます。</div></div></div></section>
+    </section>
 
-          <section class="panel" id="today">
-            <div class="panel-head">
-              <div>
-                <h2>今日の案内予定</h2>
-                <p class="sub">タップしやすいカードで、案内前に必要な情報だけを確認できます。</p>
-              </div>
-              <span class="pill" id="todayDatePill">本日</span>
-            </div>
-            <div class="seg" id="reservationFilter">
-              <button data-filter="today" class="active">本日</button>
-              <button data-filter="tomorrow">明日</button>
-              <button data-filter="all">本日＋明日</button>
-            </div>
-            <div id="todayReservations" class="cards one"></div>
-          </section>
+    <section class="panel" data-panel="vacancy">
+      <section class="section"><div class="section-head"><div><h2>空室確認</h2><p>管理会社への確認結果と次回確認日を現場から記録します。</p></div><span class="pill danger" id="vacancyCountPill">0件</span></div><div class="section-body"><div class="list" id="vacancyList"><div class="empty">このメニューを開くと表示します。</div></div></div></section>
+    </section>
 
-          <section class="panel" id="follow">
-            <div class="panel-head">
-              <div>
-                <h2>本日対応の追客</h2>
-                <p class="sub">内見前確認、当日案内、申込確認など、今日対応するものを表示します。</p>
-              </div>
-              <span class="pill red" id="followCountPill">0件</span>
-            </div>
-            <div id="followups" class="cards one"></div>
-          </section>
-        </div>
-
-        <aside>
-          <section class="panel copy-area" id="copy">
-            <div class="panel-head">
-              <div>
-                <h2>LINE文面コピー</h2>
-                <p class="sub">対象予約を選ぶと、顧客名・日時・物件名を差し込んでコピーできます。</p>
-              </div>
-              <span class="pill">コピー</span>
-            </div>
-            <div class="field">
-              <label>文面テンプレート</label>
-              <select id="templateSelect"></select>
-            </div>
-            <div class="field" style="margin-top:10px;">
-              <label>対象予約</label>
-              <select id="reservationSelect"></select>
-            </div>
-            <div id="selectedSummary" class="notice" style="margin-top:10px;">対象予約を選択してください。</div>
-            <div class="field" style="margin-top:10px;">
-              <label>文面プレビュー</label>
-              <textarea id="messagePreview" class="template-preview"></textarea>
-            </div>
-            <div class="action-row">
-              <button class="btn" id="copyBtn">文面をコピー</button>
-              <button class="btn ghost" id="rebuildBtn">再作成</button>
-            </div>
-          </section>
-
-          <section class="panel" id="propertiesNeedCheck">
-            <div class="panel-head">
-              <div>
-                <h2>空室確認が必要な物件</h2>
-                <p class="sub">案内前に確認したい物件です。</p>
-              </div>
-              <span class="pill gold" id="propertyNeedCount">0件</span>
-            </div>
-            <div id="needCheckProperties" class="cards one"></div>
-          </section>
-
-          <section class="panel" id="urls">
-            <div class="panel-head">
-              <div>
-                <h2>画面URL</h2>
-                <p class="sub">そのままコピーして使えます。</p>
-              </div>
-              <span class="pill">URL</span>
-            </div>
-            <div class="url-list">
-              <div class="url-row"><strong>お客様画面</strong><input readonly value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/index.html?v=estate-12"><button class="btn ghost small" data-copy-url>コピー</button></div>
-              <div class="url-row"><strong>PC管理画面</strong><input readonly value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner.html?v=estate-12"><button class="btn ghost small" data-copy-url>コピー</button></div>
-              <div class="url-row"><strong>iPad画面</strong><input readonly value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner-ipad.html?v=estate-12"><button class="btn ghost small" data-copy-url>コピー</button></div>
-              <div class="url-row"><strong>店舗設定</strong><input readonly value="https://dpromstk2000-lab.github.io/dpro-estate-line-liff/owner-settings.html?v=estate-12"><button class="btn ghost small" data-copy-url>コピー</button></div>
-              <div class="url-row"><strong>system-check</strong><input readonly value="https://dpro-estate-line-api.dpromstk2000.workers.dev/api/admin/system-check?admin_code=1234"><button class="btn ghost small" data-copy-url>コピー</button></div>
-            </div>
-          </section>
-        </aside>
-      </section>
-    </div>
+    <section class="panel" data-panel="messages">
+      <section class="section"><div class="section-head"><div><h2>個別LINE文面</h2><p>対象と文面を確認してからコピーします。自動送信はしません。</p></div><span class="pill">個別確認型</span></div><div class="section-body"><div class="message-grid"><div><div class="field"><label for="messageType">文面種類</label><select class="select" id="messageType"><option value="reservation">予約・内見案内</option><option value="intent">申込意思の確認</option><option value="initial_cost">初期費用概算の案内</option><option value="documents">必要書類の案内</option></select></div><div class="field" style="margin-top:9px"><label for="messageTarget">対象</label><select class="select" id="messageTarget"><option value="">対象を選択してください</option></select></div><div class="message-summary" id="messageSummary">対象を選択してください。</div><button class="btn secondary" id="rebuildMessageBtn">文面を再作成</button></div><div><div class="field"><label for="messagePreview">送信前確認・編集</label><textarea class="textarea copy-text" id="messagePreview">対象を選択すると文面を作成します。</textarea></div><div class="actions"><button class="btn" id="copyMessageBtn">確認した文面をコピー</button></div></div></div></div></section>
+    </section>
   </main>
 
-  <footer class="footer">DPRO 不動産・賃貸内見 LINE ｜ STEP ESTATE-12 ｜ API: https://dpro-estate-line-api.dpromstk2000.workers.dev</footer>
+  <dialog id="caseDialog">
+    <form method="dialog" onsubmit="return false">
+      <div class="dialog-head"><div><h2>案件クイック更新</h2><div class="meta" id="caseDialogTitle">対象案件</div></div><button class="btn light small" id="closeCaseDialogBtn">閉じる</button></div>
+      <div class="dialog-body">
+        <input type="hidden" id="caseId"><input type="hidden" id="caseVersion"><input type="hidden" id="caseCustomerId"><input type="hidden" id="casePropertyId"><input type="hidden" id="caseReservationId">
+        <div class="dialog-grid"><div class="field"><label for="caseStage">進捗</label><select class="select" id="caseStage"><option value="inquiry">新規問い合わせ</option><option value="conditions">希望条件確認</option><option value="proposal">物件提案</option><option value="viewing">内見調整・予約</option><option value="viewed">内見済み</option><option value="application">申込検討・希望</option><option value="contracted">成約</option><option value="closed">見送り</option></select></div><div class="field"><label for="caseApplicationStatus">申込状況</label><select class="select" id="caseApplicationStatus"><option>申込前</option><option>申込検討中</option><option>申込希望</option><option>申込受付</option><option>審査中</option><option>成約</option><option>見送り</option></select></div><div class="field"><label for="caseIntent">申込意思</label><select class="select" id="caseIntent"><option>未確認</option><option>検討中</option><option>申込希望</option><option>保留</option><option>申込しない</option></select></div><div class="field"><label for="caseDueDate">次回期限</label><input class="input" id="caseDueDate" type="date"></div></div>
+        <div class="field" style="margin-top:10px"><label for="caseNextAction">次に行う対応</label><input class="input" id="caseNextAction" placeholder="例：必要書類を再案内"></div>
+        <div class="subsection"><h3>必要書類</h3><div class="dialog-grid"><div class="field"><label for="caseDocumentsStatus">全体状況</label><select class="select" id="caseDocumentsStatus"><option>未案内</option><option>案内済み</option><option>回収中</option><option>確認中</option><option>完了</option></select></div><div class="field"><label for="caseInitialCostStatus">初期費用</label><select class="select" id="caseInitialCostStatus"><option>未確認</option><option>概算作成中</option><option>概算提示済み</option><option>説明済み</option><option>合意</option></select></div></div><div id="documentList"></div><div class="field" style="margin-top:8px"><label for="caseDocumentsNote">書類メモ</label><input class="input" id="caseDocumentsNote" placeholder="不足・再提出・期限"></div></div>
+        <div class="field" style="margin-top:10px"><label for="caseViewingMemo">内見・接客メモ</label><textarea class="textarea" id="caseViewingMemo"></textarea></div>
+        <div class="field" style="margin-top:10px"><label for="caseLostReason">見送り理由</label><input class="input" id="caseLostReason" placeholder="見送り時のみ必須"></div>
+        <div class="dialog-actions"><button class="btn secondary" id="caseLineBtn">LINE文面を作る</button><button class="btn" id="caseSaveBtn">案件を保存</button></div>
+      </div>
+    </form>
+  </dialog>
 
+  <dialog id="vacancyDialog">
+    <form method="dialog" onsubmit="return false">
+      <div class="dialog-head"><div><h2>空室確認を記録</h2><div class="meta" id="vacancyDialogTitle">対象物件</div></div><button class="btn light small" id="closeVacancyDialogBtn">閉じる</button></div>
+      <div class="dialog-body"><input type="hidden" id="vacancyPropertyId"><div class="dialog-grid"><div class="field"><label for="vacancyResult">確認結果</label><select class="select" id="vacancyResult"><option>募集中</option><option>確認中</option><option>申込あり</option><option>成約済み</option><option>不明</option></select></div><div class="field"><label for="vacancyNextDate">次回確認日</label><input class="input" id="vacancyNextDate" type="date"></div></div><div class="field" style="margin-top:10px"><label for="vacancyMemo">確認メモ</label><input class="input" id="vacancyMemo" placeholder="管理会社へ電話、回答待ちなど"></div><div class="history" id="vacancyHistory"><div class="empty">履歴を読み込みます。</div></div><div class="dialog-actions"><button class="btn" id="vacancySaveBtn">確認履歴を保存</button></div></div>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast"></div>
+  <script src="config.js?v=estate-next-6"></script>
+  <script src="extension.js?v=estate-next-6"></script>
   <script>
-    const DEFAULT_API_BASE = 'https://dpro-estate-line-api.dpromstk2000.workers.dev';
-    const STEP = 'STEP ESTATE-12';
-
-    const state = {
-      apiBase: DEFAULT_API_BASE,
-      adminCode: '1234',
-      dashboard: null,
-      customers: [],
-      customerMap: new Map(),
-      templates: [],
-      reservations: [],
-      filter: 'today',
-      loading: false,
-    };
-
-    const $ = (id) => document.getElementById(id);
-    const yen = (n) => (n || n === 0) ? `${Number(n).toLocaleString('ja-JP')}円` : '未設定';
-    const rentMan = (n) => n ? `${(Number(n) / 10000).toFixed(Number(n) % 10000 === 0 ? 0 : 1)}万円` : '未設定';
-    const esc = (s) => String(s ?? '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
-    const compactTime = (t) => String(t || '').slice(0,5);
-    const ymdLabel = (ymd) => {
-      if (!ymd) return '-';
-      const d = new Date(`${ymd}T00:00:00+09:00`);
-      const w = ['日','月','火','水','木','金','土'][d.getDay()];
-      return `${ymd.replaceAll('-', '/')}（${w}）`;
-    };
-    const addDays = (ymd, days) => {
-      const d = new Date(`${ymd}T00:00:00+09:00`);
-      d.setDate(d.getDate() + days);
-      return d.toISOString().slice(0,10);
-    };
-
-    function setNotice(message, type = 'ok') {
-      const n = $('notice');
-      n.textContent = message;
-      n.className = `notice${type === 'error' ? ' error' : ''}`;
-    }
-
-    function getApiBase() {
-      return ($('apiBaseInput').value || DEFAULT_API_BASE).trim().replace(/\/$/, '');
-    }
-
-    async function api(path, options = {}) {
-      const method = options.method || 'GET';
-      const query = new URLSearchParams(options.query || {});
-      query.set('admin_code', state.adminCode);
-      const url = `${state.apiBase}${path}?${query.toString()}`;
-      const headers = { 'Content-Type': 'application/json', 'X-DPRO-Admin-Code': state.adminCode };
-      const res = await fetch(url, {
-        method,
-        headers,
-        body: options.body ? JSON.stringify({ admin_code: state.adminCode, ...options.body }) : undefined,
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok || data.ok === false) throw new Error(data.error || data.message || `APIエラー ${res.status}`);
-      return data;
-    }
-
-    async function loadAll() {
-      if (state.loading) return;
-      state.loading = true;
-      state.apiBase = getApiBase();
-      state.adminCode = $('adminCodeInput').value || '1234';
-      localStorage.setItem('estate_admin_code', state.adminCode);
-      localStorage.setItem('estate_api_base', state.apiBase);
-      setNotice('読み込み中です。少しお待ちください。');
-      $('apiStatusTop').textContent = '読込中';
-      try {
-        const [dashboard, customers, templates] = await Promise.all([
-          api('/api/admin/dashboard'),
-          api('/api/admin/customers', { query: { limit: 100 } }),
-          api('/api/admin/templates'),
-        ]);
-        state.dashboard = dashboard;
-        state.customers = customers.customers || [];
-        state.customerMap = new Map(state.customers.map(c => [c.id, c]));
-        state.templates = templates.message_templates || [];
-        state.reservations = [...(dashboard.today_reservations || []), ...(dashboard.tomorrow_reservations || [])];
-        renderAll();
-        setNotice('読み込み完了。iPadで今日の案内予定を確認できます。');
-        $('apiStatusTop').textContent = '接続OK';
-      } catch (e) {
-        console.error(e);
-        setNotice(e.message || '読み込みに失敗しました。管理コードとAPIを確認してください。', 'error');
-        $('apiStatusTop').textContent = 'エラー';
-      } finally {
-        state.loading = false;
-      }
-    }
-
-    function renderAll() {
-      const d = state.dashboard;
-      if (!d) return;
-      $('shopNameTop').textContent = d.shop?.shop_name || 'DPRO不動産';
-      $('todayTop').textContent = d.today?.replaceAll('-', '/') || '-';
-      $('todayDatePill').textContent = ymdLabel(d.today);
-      $('countToday').textContent = d.counts?.today_reservations || 0;
-      $('countTomorrow').textContent = d.counts?.tomorrow_reservations || 0;
-      $('countFollow').textContent = d.counts?.due_followups || 0;
-      $('countProperty').textContent = d.counts?.need_check_properties || 0;
-      $('followCountPill').textContent = `${d.counts?.due_followups || 0}件`;
-      $('propertyNeedCount').textContent = `${d.counts?.need_check_properties || 0}件`;
-      renderReservations();
-      renderFollowups();
-      renderNeedCheckProperties();
-      renderCopyPanel();
-    }
-
-    function getReservationCustomer(reservation) {
-      return reservation.customer || state.customerMap.get(reservation.customer_id) || {};
-    }
-
-    function getCustomerPreference(customerOrReservation) {
-      const c = customerOrReservation.customer ? getReservationCustomer(customerOrReservation) : customerOrReservation;
-      const p = c.preference || null;
-      if (!p) return null;
-      return Array.isArray(p) ? p[0] : p;
-    }
-
-    function preferenceText(reservation) {
-      const c = getReservationCustomer(reservation);
-      const p = getCustomerPreference(reservation);
-      if (!p) return c.memo || '希望条件は顧客メモを確認してください。';
-      const parts = [];
-      if (p.desired_areas?.length) parts.push(`エリア：${p.desired_areas.join('・')}`);
-      if (p.max_rent) parts.push(`家賃：〜${rentMan(p.max_rent)}`);
-      if (p.floor_plans?.length) parts.push(`間取り：${p.floor_plans.join('・')}`);
-      if (p.move_in_timing) parts.push(`入居：${p.move_in_timing}`);
-      const flags = [];
-      if (p.parking_required) flags.push('駐車場');
-      if (p.pet_required) flags.push('ペット');
-      if (p.two_people) flags.push('2人入居');
-      if (p.low_initial_cost) flags.push('初期費用抑えたい');
-      if (p.near_station) flags.push('駅・バス停近く');
-      if (flags.length) parts.push(`こだわり：${flags.join('・')}`);
-      if (p.workplace_or_school) parts.push(`通勤・通学：${p.workplace_or_school}`);
-      if (p.other_request) parts.push(`希望：${p.other_request}`);
-      if (p.priority_memo) parts.push(`メモ：${p.priority_memo}`);
-      return parts.join('\n') || c.memo || '希望条件は未入力です。';
-    }
-
-    function reservationCard(reservation) {
-      const c = getReservationCustomer(reservation);
-      const p = reservation.property || {};
-      const statusClass = reservation.status === 'キャンセル' ? 'red' : reservation.status === '申込検討中' ? 'gold' : reservation.status === '確認済み' ? 'blue' : '';
-      return `
-        <article class="reservation-card today">
-          <div class="card-top">
-            <div class="time-box"><small>${ymdLabel(reservation.reservation_date).split('（')[0]}</small><strong>${compactTime(reservation.reservation_time)}</strong></div>
-            <div class="person">
-              <h3>${esc(c.customer_name || '顧客名未入力')}</h3>
-              <div class="meta">${esc(c.line_display_name || 'LINE名未登録')} ｜ <span class="big-phone">${esc(c.phone || '')}</span></div>
-            </div>
-            <span class="pill ${statusClass}">${esc(reservation.status || '予約受付')}</span>
-          </div>
-          <div class="info-grid">
-            <div class="info-item"><small>物件</small><strong>${esc(p.property_name || '物件未定・条件相談')}</strong></div>
-            <div class="info-item"><small>エリア / 家賃 / 間取り</small><strong>${esc([p.area_name, rentMan(p.rent_amount), p.floor_plan].filter(Boolean).join(' / ') || '未設定')}</strong></div>
-            <div class="info-item"><small>集合方法</small><strong>${esc(reservation.meeting_type || '-')}</strong></div>
-            <div class="info-item"><small>集合場所</small><strong>${esc(reservation.meeting_place || '店舗・現地・オンラインなど')}</strong></div>
-          </div>
-          <div class="memo-box"><strong>希望条件</strong><br>${esc(preferenceText(reservation)).replaceAll('\n','<br>')}</div>
-          <div class="memo-box"><strong>案内メモ</strong><br>${esc(reservation.internal_note || reservation.customer_note || 'メモなし')}</div>
-          <div class="action-row">
-            <button class="btn ghost small" onclick="selectReservation('${reservation.id}')">文面作成</button>
-            <button class="btn blue small" onclick="updateReservationStatus('${reservation.id}', '確認済み')">確認済み</button>
-            <button class="btn small" onclick="updateReservationStatus('${reservation.id}', '内見済み')">内見済み</button>
-            <button class="btn warn small" onclick="updateReservationStatus('${reservation.id}', '申込検討中')">申込検討中</button>
-            <button class="btn ghost small" onclick="createThreeDayFollow('${reservation.id}')">3日後フォロー</button>
-          </div>
-        </article>`;
-    }
-
-    function renderReservations() {
-      const box = $('todayReservations');
-      const d = state.dashboard;
-      let list = [];
-      if (state.filter === 'today') list = d.today_reservations || [];
-      if (state.filter === 'tomorrow') list = d.tomorrow_reservations || [];
-      if (state.filter === 'all') list = state.reservations;
-      box.innerHTML = list.length ? list.map(reservationCard).join('') : `<div class="empty">対象の内見・相談予定はありません。</div>`;
-    }
-
-    function renderFollowups() {
-      const list = state.dashboard?.due_followups || [];
-      $('followups').innerHTML = list.length ? list.map(f => {
-        const c = f.customer || {};
-        const r = f.reservation || {};
-        return `<article class="follow-card">
-          <div class="card-top">
-            <div><span class="pill ${f.priority === '高' ? 'red' : ''}">${esc(f.priority || '通常')}</span></div>
-            <span class="pill gold">${esc(f.status || '未対応')}</span>
-          </div>
-          <h3 style="margin:0 0 4px;">${esc(f.followup_type || '追客')}｜${esc(c.customer_name || '顧客名未入力')}</h3>
-          <div class="meta" style="color:var(--muted);font-weight:850;">${ymdLabel(f.followup_date)} ${compactTime(f.followup_time)} ｜ ${esc(c.phone || '')}</div>
-          <div class="memo-box">${esc(f.memo || 'メモなし')}</div>
-          <div class="memo-box">予約：${ymdLabel(r.reservation_date)} ${compactTime(r.reservation_time)} / ${esc(r.meeting_type || '')} / ${esc(r.meeting_place || '')}</div>
-          <div class="action-row">
-            <button class="btn ghost small" onclick="selectFollowupReservation('${f.reservation_id || ''}')">文面作成</button>
-            <button class="btn small" onclick="updateFollowup('${f.id}', '対応済み')">対応済み</button>
-            <button class="btn blue small" onclick="updateFollowup('${f.id}', '延期')">延期</button>
-          </div>
-        </article>`;
-      }).join('') : `<div class="empty">本日対応の追客はありません。</div>`;
-    }
-
-    function renderNeedCheckProperties() {
-      const list = state.dashboard?.need_check_properties || [];
-      $('needCheckProperties').innerHTML = list.length ? list.map(p => `
-        <article class="mini-card">
-          <div class="card-top"><strong>${esc(p.property_name)}</strong><span class="pill gold">${esc(p.property_status)}</span></div>
-          <div class="info-grid">
-            <div class="info-item"><small>エリア</small><strong>${esc(p.area_name || '-')}</strong></div>
-            <div class="info-item"><small>家賃 / 間取り</small><strong>${rentMan(p.rent_amount)} / ${esc(p.floor_plan || '-')}</strong></div>
-          </div>
-          <div class="memo-box">${esc(p.internal_memo || '空室状況を確認してください。')}</div>
-        </article>`).join('') : `<div class="empty">空室確認が必要な物件はありません。</div>`;
-    }
-
-    function renderCopyPanel() {
-      const templateSelect = $('templateSelect');
-      templateSelect.innerHTML = state.templates.filter(t => t.is_active !== false).map(t => `<option value="${esc(t.template_key)}">${esc(t.title)}</option>`).join('');
-      if (!templateSelect.value && state.templates[0]) templateSelect.value = state.templates[0].template_key;
-      const reservationSelect = $('reservationSelect');
-      reservationSelect.innerHTML = state.reservations.map(r => {
-        const c = getReservationCustomer(r);
-        const p = r.property || {};
-        return `<option value="${esc(r.id)}">${ymdLabel(r.reservation_date)} ${compactTime(r.reservation_time)}｜${esc(c.customer_name || '顧客名未入力')}｜${esc(p.property_name || '物件未定')}</option>`;
-      }).join('');
-      buildMessage();
-    }
-
-    function currentReservation() {
-      const id = $('reservationSelect').value;
-      return state.reservations.find(r => r.id === id) || state.reservations[0] || null;
-    }
-
-    function currentTemplate() {
-      const key = $('templateSelect').value;
-      return state.templates.find(t => t.template_key === key) || state.templates[0] || { body: '' };
-    }
-
-    function replaceTemplate(body, reservation) {
-      const c = getReservationCustomer(reservation) || {};
-      const p = reservation.property || {};
-      const rep = {
-        customer_name: c.customer_name || 'お客様',
-        reservation_date: ymdLabel(reservation.reservation_date),
-        reservation_time: compactTime(reservation.reservation_time),
-        property_name: p.property_name || 'ご相談物件',
-        meeting_type: reservation.meeting_type || '店舗来店',
-        meeting_place: reservation.meeting_place || '店舗または現地',
-        shop_name: state.dashboard?.shop?.shop_name || 'DPRO不動産',
-        shop_phone: state.dashboard?.shop?.phone || '092-000-1234',
-        staff_name: reservation.staff?.staff_name || '担当スタッフ',
-        area_name: p.area_name || '',
-        rent_amount: rentMan(p.rent_amount),
-        floor_plan: p.floor_plan || '',
-      };
-      return String(body || '').replace(/\{\{\s*([a-zA-Z0-9_]+)\s*\}\}/g, (_, k) => rep[k] ?? '');
-    }
-
-    function buildMessage() {
-      const r = currentReservation();
-      const t = currentTemplate();
-      if (!r) {
-        $('messagePreview').value = '対象予約がありません。';
-        $('selectedSummary').textContent = '対象予約がありません。';
-        return;
-      }
-      const c = getReservationCustomer(r);
-      const p = r.property || {};
-      $('messagePreview').value = replaceTemplate(t.body || '', r).trim();
-      $('selectedSummary').innerHTML = `対象：<strong>${esc(c.customer_name || '顧客名未入力')}</strong> ｜ ${ymdLabel(r.reservation_date)} ${compactTime(r.reservation_time)} ｜ ${esc(p.property_name || '物件未定・条件相談')}`;
-    }
-
-    window.selectReservation = function(id) {
-      $('reservationSelect').value = id;
-      const preferred = state.templates.find(t => t.template_key === 'today_meeting') || state.templates.find(t => t.template_key === 'before_viewing');
-      if (preferred) $('templateSelect').value = preferred.template_key;
-      buildMessage();
-      document.querySelector('#copy').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    };
-
-    window.selectFollowupReservation = function(id) {
-      if (id && state.reservations.some(r => r.id === id)) $('reservationSelect').value = id;
-      const preferred = state.templates.find(t => t.template_key === 'application_check') || state.templates[0];
-      if (preferred) $('templateSelect').value = preferred.template_key;
-      buildMessage();
-      document.querySelector('#copy').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    };
-
-    window.updateReservationStatus = async function(id, status) {
-      if (!confirm(`この予約を「${status}」に変更しますか？`)) return;
-      try {
-        const body = { reservation_id: id, status };
-        if (status === '内見済み') body.customer_status = '内見済み';
-        if (status === '申込検討中') body.customer_status = '申込検討中';
-        await api('/api/admin/reservations', { method: 'PATCH', body });
-        setNotice(`予約ステータスを「${status}」に更新しました。`);
-        await loadAll();
-      } catch (e) { setNotice(e.message, 'error'); }
-    };
-
-    window.createThreeDayFollow = async function(id) {
-      const r = state.reservations.find(x => x.id === id);
-      if (!r) return;
-      try {
-        await api('/api/admin/followups', { method: 'POST', body: {
-          customer_id: r.customer_id,
-          reservation_id: r.id,
-          followup_type: '3日後フォロー',
-          followup_date: addDays(state.dashboard.today, 3),
-          followup_time: '10:00',
-          priority: '通常',
-          memo: 'iPad画面から作成。内見後の感想確認と追加物件提案。',
-          message_template_key: 'property_suggestion',
-        }});
-        setNotice('3日後フォローを作成しました。');
-        await loadAll();
-      } catch (e) { setNotice(e.message, 'error'); }
-    };
-
-    window.updateFollowup = async function(id, status) {
-      try {
-        await api('/api/admin/followups', { method: 'PATCH', body: { followup_id: id, status, complete: status === '対応済み' } });
-        setNotice(`追客を「${status}」に更新しました。`);
-        await loadAll();
-      } catch (e) { setNotice(e.message, 'error'); }
-    };
-
-    async function copyText(text) {
-      await navigator.clipboard.writeText(text);
-      setNotice('コピーしました。LINEトーク画面に貼り付けて送信できます。');
-    }
-
-    document.addEventListener('click', async (e) => {
-      const urlBtn = e.target.closest('[data-copy-url]');
-      if (urlBtn) {
-        const input = urlBtn.parentElement.querySelector('input');
-        if (input) await copyText(input.value);
-      }
-    });
-
-    $('loadBtn').addEventListener('click', loadAll);
-    $('refreshBtn').addEventListener('click', loadAll);
-    $('templateSelect').addEventListener('change', buildMessage);
-    $('reservationSelect').addEventListener('change', buildMessage);
-    $('rebuildBtn').addEventListener('click', buildMessage);
-    $('copyBtn').addEventListener('click', () => copyText($('messagePreview').value));
-    $('demoBtn').addEventListener('click', async () => {
-      if (!confirm('営業前デモデータを再準備します。現在のデモ予約・顧客は初期状態に戻ります。実行しますか？')) return;
-      state.apiBase = getApiBase();
-      state.adminCode = $('adminCodeInput').value || '1234';
-      try {
-        await api('/api/admin/demo/prepare', { method: 'POST', body: {} });
-        setNotice('営業前デモ準備が完了しました。最新状態を読み込みます。');
-        await loadAll();
-      } catch (e) { setNotice(e.message, 'error'); }
-    });
-
-    document.querySelectorAll('#reservationFilter button').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('#reservationFilter button').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        state.filter = btn.dataset.filter;
-        renderReservations();
-      });
-    });
-
-    window.addEventListener('DOMContentLoaded', () => {
-      $('adminCodeInput').value = localStorage.getItem('estate_admin_code') || '1234';
-      $('apiBaseInput').value = localStorage.getItem('estate_api_base') || DEFAULT_API_BASE;
-      loadAll();
-    });
+    'use strict';
+    const CONFIG=window.DPRO_ESTATE_CONFIG||{apiBase:'https://dpro-estate-line-api.dpromstk2000.workers.dev',nextApiBase:'https://dpro-estate-next4-api.dpromstk2000.workers.dev',shopCode:'dpro_estate_demo',storage:{adminCode:'dpro_estate_admin_code',ipadPanel:'dpro_estate_ipad_panel'},demo:{queryKey:'demo',queryValue:'1',adminCode:'1234'}};
+    const STORAGE_KEY=CONFIG.storage.adminCode;
+    const PANEL_KEY=CONFIG.storage.ipadPanel||'dpro_estate_ipad_panel';
+    const DOCUMENTS=[['identity','本人確認書類'],['income','収入証明'],['employment','在職証明'],['resident','住民票'],['emergency','緊急連絡先'],['guarantor','保証人関係書類'],['other','その他の指定書類']];
+    const DOC_STATUSES=['未案内','依頼済み','受領','確認済み','不要'];
+    const state={adminCode:'',authenticated:false,dashboard:null,templates:[],reservations:[],cases:[],customers:[],properties:[],reservationFilter:'today',caseFilter:'action',loaded:{dashboard:false,templates:false,cases:false},busy:new Set(),selectedMessage:{kind:'reservation',id:''}};
+    const $=id=>document.getElementById(id);
+    const esc=value=>String(value??'').replace(/[&<>'"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
+    const yen=value=>`${Number(value||0).toLocaleString('ja-JP')}円`;
+    const time=value=>String(value||'').slice(0,5);
+    function todayYmd(){return new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date())}
+    function addDays(ymd,days){const [y,m,d]=ymd.split('-').map(Number);const date=new Date(Date.UTC(y,m-1,d));date.setUTCDate(date.getUTCDate()+days);return date.toISOString().slice(0,10)}
+    function formatDate(value){if(!value)return'-';const [y,m,d]=String(value).split('-');return`${y}/${Number(m)}/${Number(d)}`}
+    function operationId(prefix){return window.DPRO_ESTATE_NEXT4_API?.newOperationId?.(prefix)||`${prefix}-${Date.now()}-${Math.random().toString(16).slice(2)}`}
+    function toast(message,type='ok'){const node=$('toast');node.textContent=message;node.className=`toast show${type==='error'?' error':''}`;clearTimeout(toast.timer);toast.timer=setTimeout(()=>node.className='toast',3000)}
+    function setNotice(message,type='ok'){const node=$('notice');node.textContent=message;node.className=`notice${type==='error'?' error':type==='warn'?' warn':''}`}
+    function getCustomer(row){return row?.customer||{}}
+    function getProperty(row){return row?.property||{}}
+    function preferenceText(reservation){const customer=getCustomer(reservation);const raw=customer.preference;const pref=Array.isArray(raw)?raw[0]:raw;if(!pref)return customer.memo||'希望条件は未入力です。';const parts=[];if(pref.desired_areas?.length)parts.push(`エリア：${pref.desired_areas.join('・')}`);if(pref.max_rent)parts.push(`家賃：〜${yen(pref.max_rent)}`);if(pref.floor_plans?.length)parts.push(`間取り：${pref.floor_plans.join('・')}`);const flags=[];if(pref.parking_required)flags.push('駐車場');if(pref.pet_required)flags.push('ペット');if(pref.low_initial_cost)flags.push('初期費用重視');if(pref.near_station)flags.push('駅・バス停近く');if(flags.length)parts.push(`こだわり：${flags.join('・')}`);if(pref.other_request)parts.push(`希望：${pref.other_request}`);return parts.join('\n')||'希望条件は未入力です。'}
+    async function api(path,{method='GET',query={},body=null}={}){if(!state.adminCode)throw new Error('管理コードを入力してください。');const url=new URL(String(CONFIG.apiBase).replace(/\/$/,'')+path);Object.entries(query).forEach(([key,value])=>{if(value!==''&&value!==null&&value!==undefined)url.searchParams.set(key,value)});const headers={'Content-Type':'application/json','X-DPRO-Admin-Code':state.adminCode,'X-Admin-Code':state.adminCode};const init={method,headers};if(body!==null)init.body=JSON.stringify({...body,admin_code:state.adminCode});const response=await fetch(url,init);const data=await response.json().catch(()=>({}));if(!response.ok||data.ok===false)throw new Error(data.error||data.message||`APIエラー ${response.status}`);return data}
+    function extension(){const client=window.DPRO_ESTATE_NEXT4_API;if(!client)throw new Error('案件拡張APIを読み込めません。');return client}
+    function setBusy(key,on){if(on)state.busy.add(key);else state.busy.delete(key);document.querySelectorAll(`[data-busy-key="${CSS.escape(key)}"]`).forEach(button=>button.disabled=on)}
+    async function runBusy(key,task){if(state.busy.has(key))return;setBusy(key,true);try{return await task()}finally{setBusy(key,false)}}
+    function openPanel(name){document.querySelectorAll('.panel').forEach(panel=>panel.classList.toggle('active',panel.dataset.panel===name));document.querySelectorAll('.nav button').forEach(button=>button.classList.toggle('active',button.dataset.panel===name));localStorage.setItem(PANEL_KEY,name);if(name==='cases')loadCases();if(name==='messages')renderMessageTargets();window.scrollTo({top:0,behavior:'smooth'})}
+    async function authenticate(){const code=$('adminCodeInput').value.trim();if(!code){setNotice('管理コードを入力してください。','error');return}state.adminCode=code;try{setNotice('接続を確認しています。');$('connectionLabel').textContent='確認中';await api('/api/admin/login',{method:'POST',body:{code}});state.authenticated=true;localStorage.setItem(STORAGE_KEY,code);await Promise.all([loadDashboard(),loadTemplates()]);const activePanel=document.querySelector('.panel.active')?.dataset.panel;if(activePanel==='cases')await loadCases();if(activePanel==='messages')renderMessageTargets();setNotice('スタッフ画面を表示しました。');$('connectionLabel').textContent='接続OK'}catch(error){state.authenticated=false;$('connectionLabel').textContent='エラー';setNotice(error.message||'管理コードを確認できませんでした。','error')}}
+    function clearCode(){localStorage.removeItem(STORAGE_KEY);state.adminCode='';state.authenticated=false;$('adminCodeInput').value='';$('connectionLabel').textContent='未接続';setNotice('この端末に保存した管理コードを削除しました。')}
+    async function loadDashboard(){if(!state.authenticated)return;await runBusy('dashboard',async()=>{const data=await api('/api/admin/dashboard');state.dashboard=data;state.reservations=[...(data.today_reservations||[]),...(data.tomorrow_reservations||[])];state.loaded.dashboard=true;renderDashboard();renderMessages()})}
+    async function loadTemplates(){if(state.loaded.templates)return;try{const data=await api('/api/admin/templates');state.templates=data.message_templates||[];state.loaded.templates=true}catch(error){state.templates=[];toast(error.message,'error')}}
+    function renderDashboard(){const data=state.dashboard;if(!data)return;const counts=data.counts||{};$('todayLabel').textContent=formatDate(data.today||todayYmd());$('countToday').textContent=counts.today_reservations||0;$('countTomorrow').textContent=counts.tomorrow_reservations||0;$('countFollow').textContent=counts.due_followups||0;$('countVacancy').textContent=counts.need_check_properties||0;$('navTodayCount').textContent=(counts.today_reservations||0)+(counts.tomorrow_reservations||0);$('navFollowCount').textContent=counts.due_followups||0;$('navVacancyCount').textContent=counts.need_check_properties||0;$('followCountPill').textContent=`${counts.due_followups||0}件`;$('vacancyCountPill').textContent=`${counts.need_check_properties||0}件`;renderReservations();renderFollowups();renderVacancies()}
+    function reservationRows(){if(!state.dashboard)return[];if(state.reservationFilter==='today')return state.dashboard.today_reservations||[];if(state.reservationFilter==='tomorrow')return state.dashboard.tomorrow_reservations||[];return state.reservations}
+    function reservationCard(row){const customer=getCustomer(row),property=getProperty(row);const status=row.status||'予約受付';return`<article class="task-card"><div class="card-top"><div class="time"><small>${formatDate(row.reservation_date)}</small><strong>${time(row.reservation_time)}</strong></div><div class="person"><h3>${esc(customer.customer_name||'名前未入力')}様</h3><div class="meta">${esc(customer.phone||'-')} / ${esc(property.property_name||'物件未定')}</div></div><span class="pill ${status==='申込検討中'?'warn':status==='確認済み'?'blue':''}">${esc(status)}</span></div><div class="info-grid"><div class="info"><b>集合</b>${esc(row.meeting_type||'-')} / ${esc(row.meeting_place||'-')}</div><div class="info"><b>物件</b>${esc([property.area_name,property.floor_plan,property.rent_amount?yen(property.rent_amount):''].filter(Boolean).join(' / ')||'未定')}</div></div><div class="memo"><b>希望条件</b><br>${esc(preferenceText(row)).replaceAll('\n','<br>')}</div><div class="memo"><b>案内メモ</b><br>${esc(row.internal_note||row.customer_note||'メモなし')}</div><div class="actions"><button class="btn secondary small" onclick="selectReservationMessage('${esc(row.id)}')">LINE文面</button><button class="btn blue small" data-busy-key="reservation-${esc(row.id)}" onclick="updateReservation('${esc(row.id)}','確認済み')">確認済み</button><button class="btn small" data-busy-key="reservation-${esc(row.id)}" onclick="updateReservation('${esc(row.id)}','内見済み')">内見済み</button><button class="btn warn small" data-busy-key="reservation-${esc(row.id)}" onclick="updateReservation('${esc(row.id)}','申込検討中')">申込検討</button><button class="btn light small" data-busy-key="follow-create-${esc(row.id)}" onclick="createFollow('${esc(row.id)}')">3日後追客</button><button class="btn light small" onclick="openCaseForReservation('${esc(row.id)}')">案件確認</button></div></article>`}
+    function renderReservations(){const rows=reservationRows();$('reservationCountPill').textContent=`${rows.length}件`;$('reservationList').innerHTML=rows.length?rows.map(reservationCard).join(''):'<div class="empty">対象の内見予定はありません。</div>'}
+    function renderFollowups(){const rows=state.dashboard?.due_followups||[];$('followupList').innerHTML=rows.length?rows.map(row=>{const customer=row.customer||{},reservation=row.reservation||{};return`<article class="task-card"><div class="card-top"><div class="person"><h3>${esc(row.followup_type||'追客')}｜${esc(customer.customer_name||'名前未入力')}様</h3><div class="meta">${formatDate(row.followup_date)} ${time(row.followup_time)} / ${esc(customer.phone||'-')}</div></div><span class="pill ${row.priority==='高'?'danger':'warn'}">${esc(row.status||'未対応')}</span></div><div class="memo">${esc(row.memo||'メモなし')}</div><div class="actions"><button class="btn secondary small" onclick="selectReservationMessage('${esc(row.reservation_id||'')}')">LINE文面</button><button class="btn small" data-busy-key="follow-${esc(row.id)}" onclick="updateFollowup('${esc(row.id)}','対応済み')">対応済み</button><button class="btn blue small" data-busy-key="follow-${esc(row.id)}" onclick="updateFollowup('${esc(row.id)}','延期')">延期</button></div></article>`}).join(''):'<div class="empty">本日対応の追客はありません。</div>'}
+    function renderVacancies(){const rows=state.dashboard?.need_check_properties||[];$('vacancyList').innerHTML=rows.length?rows.map(row=>`<article class="task-card"><div class="card-top"><div class="person"><h3>${esc(row.property_name||'物件名未入力')}</h3><div class="meta">${esc(row.area_name||'-')} / ${esc(row.floor_plan||'-')} / ${row.rent_amount?yen(row.rent_amount):'家賃未設定'}</div></div><span class="pill warn">${esc(row.property_status||'確認中')}</span></div><div class="memo">${esc(row.internal_memo||'空室状況を確認してください。')}</div><div class="actions"><button class="btn small" onclick="openVacancy('${esc(row.id)}')">確認結果を記録</button></div></article>`).join(''):'<div class="empty">空室確認が必要な物件はありません。</div>'}
+    async function updateReservation(id,status){if(!confirm(`予約を「${status}」へ変更しますか？`))return;await runBusy(`reservation-${id}`,async()=>{try{const body={reservation_id:id,status};if(status==='内見済み')body.customer_status='内見済み';if(status==='申込検討中')body.customer_status='申込検討中';await api('/api/admin/reservations',{method:'PATCH',body});toast(`「${status}」へ更新しました。`);await loadDashboard()}catch(error){toast(error.message,'error')}})}
+    async function createFollow(id){await runBusy(`follow-create-${id}`,async()=>{const row=state.reservations.find(item=>String(item.id)===String(id));if(!row)return;try{await api('/api/admin/followups',{method:'POST',body:{customer_id:row.customer_id,reservation_id:row.id,followup_type:'3日後フォロー',followup_date:addDays(state.dashboard?.today||todayYmd(),3),followup_time:'10:00',priority:'通常',memo:'iPadスタッフ画面から作成。内見後の感想確認と追加物件提案。',message_template_key:'property_suggestion'}});toast('3日後フォローを作成しました。');await loadDashboard()}catch(error){toast(error.message,'error')}})}
+    async function updateFollowup(id,status){await runBusy(`follow-${id}`,async()=>{try{await api('/api/admin/followups',{method:'PATCH',body:{followup_id:id,status,complete:status==='対応済み'}});toast(`追客を「${status}」へ更新しました。`);await loadDashboard()}catch(error){toast(error.message,'error')}})}
+    async function loadCases(force=false){if(!state.authenticated)return;if(state.loaded.cases&&!force){renderCases();return}await runBusy('cases',async()=>{try{const [caseData,customerData,propertyData]=await Promise.all([extension().listCases(state.adminCode,{limit:100}),api('/api/admin/customers',{query:{limit:100}}),api('/api/admin/properties',{query:{limit:100}})]);state.cases=caseData.application_cases||caseData.cases||[];state.customers=customerData.customers||[];state.properties=propertyData.properties||[];state.loaded.cases=true;$('navCaseCount').textContent=state.cases.length;$('caseNotice').textContent='申込・書類の現場更新ができます。';$('caseNotice').className='notice';renderCases()}catch(error){$('caseNotice').textContent=error.message;$('caseNotice').className='notice error';$('caseList').innerHTML='<div class="empty">案件を読み込めませんでした。</div>'}})}
+    function customerById(id){return state.customers.find(row=>String(row.id)===String(id))||state.reservations.map(getCustomer).find(row=>String(row.id)===String(id))||{}}
+    function propertyById(id){return state.properties.find(row=>String(row.id)===String(id))||state.reservations.map(getProperty).find(row=>String(row.id)===String(id))||{}}
+    function docsArray(saved){const raw=Array.isArray(saved?.required_documents)?saved.required_documents:[];return DOCUMENTS.map(([key,label])=>{const found=raw.find(row=>row.key===key);return{key,label,status:DOC_STATUSES.includes(found?.status)?found.status:'未案内'}})}
+    function documentProgress(saved){const rows=docsArray(saved),done=rows.filter(row=>['確認済み','不要'].includes(row.status)).length;return{done,total:rows.length}}
+    function caseNeedsAction(row){const due=row.next_action_due_date;return !due||due<=todayYmd()||!row.next_action||row.documents_status==='回収中'||row.application_intent==='未確認'}
+    function filteredCases(){if(state.caseFilter==='all')return state.cases;if(state.caseFilter==='documents')return state.cases.filter(row=>!['完了'].includes(row.documents_status));if(state.caseFilter==='application')return state.cases.filter(row=>row.stage_key==='application'||row.application_intent!=='未確認'||row.application_status!=='申込前');return state.cases.filter(caseNeedsAction)}
+    function caseCard(row){const customer=customerById(row.customer_id),property=propertyById(row.property_id),progress=documentProgress(row);return`<article class="task-card"><div class="card-top"><div class="person"><h3>${esc(customer.customer_name||'顧客名未取得')}様</h3><div class="meta">${esc(property.property_name||'物件未定')} / 担当：${esc(row.assigned_staff_name||'未設定')}</div></div><span class="pill ${row.next_action_due_date&&row.next_action_due_date<todayYmd()?'danger':'blue'}">${esc(row.application_intent||'未確認')}</span></div><div class="case-grid"><div class="case-chip"><b>進捗</b>${esc(row.stage_key||'-')} / ${esc(row.application_status||'申込前')}</div><div class="case-chip"><b>次回期限</b>${formatDate(row.next_action_due_date)}</div><div class="case-chip"><b>必要書類</b>${esc(row.documents_status||'未案内')}<div class="progress"><span style="width:${progress.total?Math.round(progress.done/progress.total*100):0}%"></span></div></div><div class="case-chip"><b>初期費用</b>${esc(row.initial_cost_status||'未確認')} / ${yen(row.initial_cost_total||0)}</div></div><div class="memo"><b>次の対応</b><br>${esc(row.next_action||'未設定')}</div><div class="actions"><button class="btn small" onclick="openCase('${esc(row.id)}')">クイック更新</button><button class="btn secondary small" onclick="selectCaseMessage('${esc(row.id)}','documents')">書類LINE</button><button class="btn secondary small" onclick="selectCaseMessage('${esc(row.id)}','intent')">意思確認LINE</button></div></article>`}
+    function renderCases(){const rows=filteredCases();$('caseList').innerHTML=rows.length?rows.map(caseCard).join(''):'<div class="empty">該当する案件はありません。</div>'}
+    function defaultDocuments(){return DOCUMENTS.map(([key,label])=>({key,label,status:'未案内'}))}
+    function renderDocumentRows(rows){$('documentList').innerHTML=rows.map(row=>`<div class="doc-row"><strong>${esc(row.label)}</strong><select class="select" data-doc-key="${esc(row.key)}">${DOC_STATUSES.map(status=>`<option${status===row.status?' selected':''}>${status}</option>`).join('')}</select></div>`).join('')}
+    async function openCase(id){if(!state.loaded.cases)await loadCases();const row=state.cases.find(item=>String(item.id)===String(id));if(!row){toast('案件を確認できません。','error');return}fillCaseDialog(row);$('caseDialog').showModal()}
+    async function openCaseForReservation(id){if(!state.loaded.cases)await loadCases();const reservation=state.reservations.find(row=>String(row.id)===String(id));if(!reservation)return;const saved=state.cases.find(row=>String(row.customer_id)===String(reservation.customer_id));if(saved){fillCaseDialog(saved)}else{fillCaseDialog({customer_id:reservation.customer_id,property_id:reservation.property_id||reservation.property?.id||null,reservation_id:reservation.id,stage_key:reservation.status==='内見済み'?'viewed':'viewing',application_status:reservation.status==='申込検討中'?'申込検討中':'申込前',application_intent:'未確認',documents_status:'未案内',required_documents:defaultDocuments(),initial_cost_status:'未確認',version:''})}$('caseDialog').showModal()}
+    function fillCaseDialog(row){const customer=customerById(row.customer_id),property=propertyById(row.property_id);$('caseId').value=row.id||'';$('caseVersion').value=row.version||'';$('caseCustomerId').value=row.customer_id||'';$('casePropertyId').value=row.property_id||'';$('caseReservationId').value=row.reservation_id||'';$('caseDialogTitle').textContent=`${customer.customer_name||'お客様'}様 / ${property.property_name||'物件未定'}`;$('caseStage').value=row.stage_key||'inquiry';$('caseApplicationStatus').value=row.application_status||'申込前';$('caseIntent').value=row.application_intent||'未確認';$('caseDueDate').value=row.next_action_due_date||'';$('caseNextAction').value=row.next_action||'';$('caseDocumentsStatus').value=row.documents_status||'未案内';$('caseInitialCostStatus').value=row.initial_cost_status||'未確認';$('caseDocumentsNote').value=row.documents_note||'';$('caseViewingMemo').value=row.viewing_memo||'';$('caseLostReason').value=row.lost_reason||'';renderDocumentRows(docsArray(row))}
+    function casePayload(){const id=$('caseId').value;return{id:id||undefined,version:$('caseVersion').value?Number($('caseVersion').value):undefined,customer_id:$('caseCustomerId').value,property_id:$('casePropertyId').value||null,reservation_id:$('caseReservationId').value||null,stage_key:$('caseStage').value,application_status:$('caseApplicationStatus').value,application_intent:$('caseIntent').value,next_action_due_date:$('caseDueDate').value||null,next_action:$('caseNextAction').value.trim()||null,documents_status:$('caseDocumentsStatus').value,initial_cost_status:$('caseInitialCostStatus').value,required_documents:[...document.querySelectorAll('[data-doc-key]')].map(select=>({key:select.dataset.docKey,label:DOCUMENTS.find(row=>row[0]===select.dataset.docKey)?.[1]||select.dataset.docKey,status:select.value})),documents_note:$('caseDocumentsNote').value.trim()||null,viewing_memo:$('caseViewingMemo').value.trim()||null,lost_reason:$('caseLostReason').value.trim()||null,operation_id:operationId(id?'ipad-case-update':'ipad-case-create')}}
+    async function saveCase(){const payload=casePayload();if(payload.stage_key==='closed'&&!payload.lost_reason){toast('見送り理由を入力してください。','error');return}await runBusy('case-save',async()=>{try{$('caseSaveBtn').disabled=true;const data=payload.id?await extension().updateCase(state.adminCode,payload):await extension().createCase(state.adminCode,payload);const saved=data.case;state.cases=state.cases.filter(row=>String(row.id)!==String(saved.id)&&String(row.customer_id)!==String(saved.customer_id));state.cases.push(saved);$('caseDialog').close();renderCases();$('navCaseCount').textContent=state.cases.length;toast('案件を保存しました。')}catch(error){toast(error.message,'error')}finally{$('caseSaveBtn').disabled=false}})}
+    function openVacancy(id){const row=(state.dashboard?.need_check_properties||[]).find(item=>String(item.id)===String(id));$('vacancyPropertyId').value=id;$('vacancyDialogTitle').textContent=row?.property_name||'対象物件';$('vacancyResult').value=row?.property_status==='成約済み'?'成約済み':row?.property_status==='確認中'?'確認中':'募集中';$('vacancyNextDate').value='';$('vacancyMemo').value='';$('vacancyDialog').showModal();loadVacancyHistory(id)}
+    async function loadVacancyHistory(id){try{const data=await extension().listVacancyChecks(state.adminCode,id,15),rows=data.vacancy_checks||[];$('vacancyHistory').innerHTML=rows.length?rows.map(row=>`<div class="history-item"><b>${esc(row.result||'-')}</b> / ${esc(String(row.checked_at||'').replace('T',' ').slice(0,16))}<br>次回：${formatDate(row.next_check_due_date)}<br>${esc(row.memo||'メモなし')}</div>`).join(''):'<div class="empty">空室確認履歴はありません。</div>'}catch(error){$('vacancyHistory').innerHTML='<div class="empty">履歴を読み込めませんでした。</div>';toast(error.message,'error')}}
+    async function saveVacancy(){const id=$('vacancyPropertyId').value;const payload={property_id:id,result:$('vacancyResult').value,next_check_due_date:$('vacancyNextDate').value||null,memo:$('vacancyMemo').value.trim()||null,source:'owner-ipad',operation_id:operationId('ipad-vacancy')};await runBusy('vacancy-save',async()=>{try{$('vacancySaveBtn').disabled=true;await extension().recordVacancyCheck(state.adminCode,payload);toast('空室確認履歴を保存しました。');await loadVacancyHistory(id);await loadDashboard()}catch(error){toast(error.message,'error')}finally{$('vacancySaveBtn').disabled=false}})}
+    function renderMessageTargets(){const kind=$('messageType').value;const select=$('messageTarget');if(kind==='reservation'){select.innerHTML='<option value="">対象を選択してください</option>'+state.reservations.map(row=>`<option value="reservation:${esc(row.id)}">${formatDate(row.reservation_date)} ${time(row.reservation_time)}｜${esc(getCustomer(row).customer_name||'お客様')}様</option>`).join('')}else{select.innerHTML='<option value="">対象を選択してください</option>'+state.cases.map(row=>`<option value="case:${esc(row.id)}">${esc(customerById(row.customer_id).customer_name||'お客様')}様｜${esc(propertyById(row.property_id).property_name||'物件未定')}</option>`).join('')}if(state.selectedMessage.id){select.value=`${state.selectedMessage.kind}:${state.selectedMessage.id}`}buildMessage()}
+    function templateByKey(key){return state.templates.find(row=>row.template_key===key)||null}
+    function documentRequestText(row){const waiting=docsArray(row).filter(item=>!['確認済み','不要'].includes(item.status));return waiting.length?waiting.map(item=>`・${item.label}（${item.status}）`).join('\n'):'・現在、追加でご提出いただく書類はありません。'}
+    function buildMessage(){const type=$('messageType').value,target=$('messageTarget').value;if(!target){$('messageSummary').textContent='対象を選択してください。';$('messagePreview').value='対象を選択すると文面を作成します。';return}const [kind,id]=target.split(':');if(kind==='reservation'){const row=state.reservations.find(item=>String(item.id)===String(id));if(!row)return;const customer=getCustomer(row),property=getProperty(row),template=templateByKey('before_viewing')||templateByKey('today_meeting');const replacements={customer_name:customer.customer_name||'お客様',reservation_date:formatDate(row.reservation_date),reservation_time:time(row.reservation_time),property_name:property.property_name||'ご相談物件',meeting_type:row.meeting_type||'店舗来店',meeting_place:row.meeting_place||'店舗または現地',staff_name:row.staff?.staff_name||'担当スタッフ'};let body=template?.body||'{{customer_name}}様\n\n内見日時は{{reservation_date}} {{reservation_time}}です。\n集合場所：{{meeting_place}}';$('messagePreview').value=body.replace(/\{\{\s*([a-zA-Z0-9_]+)\s*\}\}/g,(_,key)=>replacements[key]??'').trim();$('messageSummary').textContent=`${customer.customer_name||'お客様'}様 / ${property.property_name||'物件未定'}`;return}const row=state.cases.find(item=>String(item.id)===String(id));if(!row)return;const customer=customerById(row.customer_id),property=propertyById(row.property_id);let body='';if(type==='intent')body=`${customer.customer_name||'お客様'}様\n\n先日ご案内した「${property.property_name||'ご検討物件'}」について、現在のご検討状況をお聞かせいただけますでしょうか。\n\n・申込みを希望する\n・もう少し検討したい\n・今回は見送る\n\nご都合のよいタイミングでご返信ください。`;else if(type==='initial_cost')body=`${customer.customer_name||'お客様'}様\n\n「${property.property_name||'ご検討物件'}」の初期費用概算についてご案内します。\n現時点の概算合計は ${yen(row.initial_cost_total||0)} です。\n\n正式な金額は審査・契約条件の確定後に改めてご案内します。`;else body=`${customer.customer_name||'お客様'}様\n\nお申込みに必要な書類についてご案内します。\n\n${documentRequestText(row)}\n\n書類そのものをこのLINEへ送る前に、提出方法をご確認ください。`;$('messagePreview').value=body;$('messageSummary').textContent=`${customer.customer_name||'お客様'}様 / ${property.property_name||'物件未定'}`}
+    function renderMessages(){if(document.querySelector('.panel[data-panel="messages"]').classList.contains('active'))renderMessageTargets()}
+    function selectReservationMessage(id){state.selectedMessage={kind:'reservation',id};$('messageType').value='reservation';openPanel('messages');renderMessageTargets()}
+    async function selectCaseMessage(id,type){if(!state.loaded.cases)await loadCases();state.selectedMessage={kind:'case',id};$('messageType').value=type;openPanel('messages');renderMessageTargets()}
+    function caseDialogToLine(){const id=$('caseId').value;if(!id){toast('先に案件を保存してください。','error');return}$('caseDialog').close();selectCaseMessage(id,$('caseDocumentsStatus').value==='完了'?'intent':'documents')}
+    async function copyText(text){try{await navigator.clipboard.writeText(text);toast('文面をコピーしました。')}catch{const area=document.createElement('textarea');area.value=text;document.body.appendChild(area);area.select();document.execCommand('copy');area.remove();toast('文面をコピーしました。')}}
+    document.querySelectorAll('.nav button').forEach(button=>button.addEventListener('click',()=>openPanel(button.dataset.panel)));
+    document.querySelectorAll('#reservationFilters button').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('#reservationFilters button').forEach(item=>item.classList.remove('active'));button.classList.add('active');state.reservationFilter=button.dataset.filter;renderReservations()}));
+    document.querySelectorAll('#caseFilters button').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('#caseFilters button').forEach(item=>item.classList.remove('active'));button.classList.add('active');state.caseFilter=button.dataset.filter;renderCases()}));
+    $('loginBtn').addEventListener('click',authenticate);$('clearCodeBtn').addEventListener('click',clearCode);$('refreshTopBtn').addEventListener('click',async()=>{if(state.authenticated){await loadDashboard();if(state.loaded.cases)await loadCases(true);toast('最新状態へ更新しました。')}});$('reloadCasesBtn').addEventListener('click',()=>loadCases(true));$('closeCaseDialogBtn').addEventListener('click',()=>$('caseDialog').close());$('caseSaveBtn').addEventListener('click',saveCase);$('caseLineBtn').addEventListener('click',caseDialogToLine);$('closeVacancyDialogBtn').addEventListener('click',()=>$('vacancyDialog').close());$('vacancySaveBtn').addEventListener('click',saveVacancy);$('messageType').addEventListener('change',()=>{state.selectedMessage={kind:$('messageType').value==='reservation'?'reservation':'case',id:''};renderMessageTargets()});$('messageTarget').addEventListener('change',buildMessage);$('rebuildMessageBtn').addEventListener('click',buildMessage);$('copyMessageBtn').addEventListener('click',()=>copyText($('messagePreview').value));
+    window.updateReservation=updateReservation;window.createFollow=createFollow;window.updateFollowup=updateFollowup;window.openCase=openCase;window.openCaseForReservation=openCaseForReservation;window.openVacancy=openVacancy;window.selectReservationMessage=selectReservationMessage;window.selectCaseMessage=selectCaseMessage;
+    document.addEventListener('DOMContentLoaded',async()=>{$('todayLabel').textContent=formatDate(todayYmd());const saved=localStorage.getItem(STORAGE_KEY)||'';const demo=new URLSearchParams(location.search).get(CONFIG.demo?.queryKey||'demo')===(CONFIG.demo?.queryValue||'1');state.adminCode=saved||(demo?CONFIG.demo?.adminCode||'1234':'');$('adminCodeInput').value=state.adminCode;const remembered=localStorage.getItem(PANEL_KEY)||'today';openPanel(['today','followups','cases','vacancy','messages'].includes(remembered)?remembered:'today');if(state.adminCode)await authenticate()});
   </script>
 </body>
 </html>

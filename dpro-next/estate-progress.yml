@@ -1,34 +1,33 @@
 system: DPRO 不動産・賃貸内見 LINE
 repository: dpromstk2000-lab/dpro-estate-line-liff
-previous_step: ESTATE-NEXT-5-DEPLOY-PENDING
-current_step: ESTATE-NEXT-5-COMPLETE
-next_step: ESTATE-NEXT-6
+previous_step: ESTATE-NEXT-5-COMPLETE
+current_step: ESTATE-NEXT-6-COMPLETE
+next_step: ESTATE-NEXT-7
 baseline_tag: dpro-estate-next-baseline-20260723
-step_backup_tag: dpro-estate-next-5-before-20260724
-completed_at_jst: "2026-07-24T14:52:11+09:00"
+step_backup_tag: dpro-estate-next-6-before-20260724
+completed_at_jst: "2026-07-24T15:16:43+09:00"
 modified_files:
-  - owner.html
-  - extension.js
+  - owner-ipad.html
   - config.js
-extension_worker_name: dpro-estate-next4-api
-extension_worker_url: https://dpro-estate-next4-api.dpromstk2000.workers.dev
-worker_changed: true
-supabase_changed: true
-api_changed: true
-application_intent_persistent: true
-initial_cost_estimate_persistent: true
-required_documents_checklist_persistent: true
-documents_binary_storage_added: false
-individual_line_copy_added: true
-bulk_line_auto_send_added: false
-duplicate_operation_guard: true
-optimistic_version_guard: true
-electronic_contract_added: false
-online_payment_added: false
+ipad_staff_today_first: true
+ipad_bottom_navigation: true
+ipad_lazy_case_loading: true
+ipad_reservation_quick_actions: true
+ipad_followup_quick_actions: true
+ipad_case_quick_update: true
+ipad_required_documents_update: true
+ipad_vacancy_history_update: true
+ipad_individual_line_copy: true
+admin_code_local_delete: true
+demo_prepare_removed_from_daily_screen: true
+internal_urls_removed: true
+admin_code_query_removed: true
+duplicate_operation_guard_used: true
+worker_changed: false
+supabase_changed: false
+api_changed: false
 existing_features_preserved: true
-live_health_check: PASS
-live_schema_check: PASS
-live_write_test: PASS
-live_duplicate_guard_test: PASS
-legacy_health_check: PASS
-published_owner_check: PASS
+html_syntax_check: PASS
+javascript_syntax_check: PASS
+html_id_duplicate_check: PASS
+local_http_check: PASS

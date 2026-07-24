@@ -102,3 +102,26 @@ estate_next_5:
   electronic_contract: not_added
   online_payment: not_added
   bulk_line_auto_send: not_added
+
+estate_next_6:
+  status: COMPLETE
+  target: owner-ipad.html
+  features:
+    - 今日・明日の内見を最優先表示
+    - 予約ステータスの現場クイック更新
+    - 追客の対応済み・延期
+    - 申込意思・必要書類・次回期限の案件クイック更新
+    - 空室確認履歴の記録
+    - 個別LINE文面コピー
+    - 管理コードの端末削除
+  performance:
+    - 初期表示はdashboardとtemplatesのみ
+    - 案件・顧客・物件は案件タブを開いた時だけ取得
+  excluded:
+    - 営業前demo_prepare
+    - API入力欄
+    - 管理コード入りURL
+    - 内部STEP・Worker情報
+  worker_changed: false
+  supabase_changed: false
+  api_changed: false
