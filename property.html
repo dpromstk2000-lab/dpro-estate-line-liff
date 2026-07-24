@@ -1032,9 +1032,6 @@ async function reserveProperty(){
     const lineText = normalizeLineMessage(data.line_message_preview || data.line_message || data.message_preview || data.message);
     lastLineMessage = lineText || buildFallbackLineMessage(data);
     $("linePreview").textContent = lastLineMessage;
-    setPill("reservePill","ok","予約OK");
-    setMessage("reserveMessage","ok",reservationCode ? `内見予約を受け付けました。受付番号：${reservationCode}。マイページ確認に必要です。` : "内見予約を受け付けました。LINE文面をコピーして保存できます。");
-    setMessage("copyMessage","ok","予約完了文面をコピーできます。");
     const reservationCode = String(
       lastReservation.reservation_code ||
       lastReservation.id ||
@@ -1044,6 +1041,9 @@ async function reserveProperty(){
     if(reservationCode){
       sessionStorage.setItem("dpro_estate_last_reservation_code", reservationCode);
     }
+    setPill("reservePill","ok","予約OK");
+    setMessage("reserveMessage","ok",reservationCode ? `内見予約を受け付けました。受付番号：${reservationCode}。マイページ確認に必要です。` : "内見予約を受け付けました。LINE文面をコピーして保存できます。");
+    setMessage("copyMessage","ok","予約完了文面をコピーできます。");
   }catch(e){
     setPill("reservePill","ng","予約NG");
     setMessage("reserveMessage","ng","予約エラー：" + e.message);

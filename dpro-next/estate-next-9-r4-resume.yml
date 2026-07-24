@@ -1,0 +1,8 @@
+step: ESTATE-NEXT-9-R4
+status: LIVE-VERIFY-RESUME
+fixes:
+  - property_reservation_code_declaration_order
+  - system_check_write_test_enabled
+worker_changed: false
+supabase_changed: false
+api_changed: false
