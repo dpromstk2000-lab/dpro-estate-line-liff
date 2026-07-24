@@ -1,0 +1,11 @@
+DPRO ESTATE NEXT-4 適用順序
+
+1. Supabase SQL Editorで sql/estate-next-4.sql を実行
+2. Cloudflare Workersで新規Worker名 dpro-estate-next4-api を作成
+3. ESTATE-NEXT-4-WORKER.zip 内の worker.js を貼り付け
+4. Worker Secretsへ SUPABASE_URL と SUPABASE_SERVICE_ROLE_KEY を登録
+5. Variablesへ LEGACY_API_BASE と ALLOWED_ORIGIN を登録（wrangler.toml参照）
+6. Deploy後、GitHub Actionsの DPRO ESTATE NEXT-4 Persistent Cases を開く
+7. Run workflow → mode=verify を実行
+
+既存Worker dpro-estate-line-api は変更しません。

@@ -105,7 +105,7 @@
       .topbar-inner{padding:11px 13px}.content{padding:15px 12px 42px}.task-grid,.kpi{grid-template-columns:1fr 1fr}.auth-grid,.toolbar{grid-template-columns:1fr}
       .auth-grid .btn,.toolbar .btn{width:100%}.top-status{display:none}
     }
-    @media(max-width:560px){.pipeline,.case-grid,.task-grid,.kpi,.info-grid{grid-template-columns:1fr}.card-head,.card-body{padding-left:14px;padding-right:14px}.page-title h1{font-size:20px}}
+    @media(max-width:560px){.pipeline,.case-grid,.dialog-grid,.task-grid,.kpi,.info-grid{grid-template-columns:1fr}.card-head,.card-body{padding-left:14px;padding-right:14px}.page-title h1{font-size:20px}}
 
     .pipeline{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:14px}
     .pipeline-box{border:1px solid var(--line);border-radius:15px;background:#fff;padding:12px;text-align:left}
@@ -117,10 +117,16 @@
     .case-stage{display:inline-flex;border-radius:999px;padding:5px 9px;background:var(--soft);color:var(--main2);font-size:12px;font-weight:950}
     .case-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.case-info{border:1px solid #edf2ef;border-radius:11px;background:var(--surface2);padding:8px;font-size:12px}
     .case-info b{display:block;color:#52635d;font-size:11px;margin-bottom:2px}.case-next{margin-top:10px;border-left:4px solid var(--warn);background:var(--warn-soft);border-radius:10px;padding:9px;font-size:12px;color:#704000}
+    .case-persist{margin-top:9px;border-radius:10px;padding:9px;background:#eef4ff;color:#1d4ed8;font-size:12px}.case-persist.offline{background:#f1f5f9;color:#475569}
+    .due-over{color:#991b1b;font-weight:950}.due-today{color:#92400e;font-weight:950}.extension-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+    dialog{width:min(760px,calc(100% - 24px));border:0;border-radius:20px;padding:0;box-shadow:0 28px 80px rgba(0,0,0,.28);color:var(--text)}
+    dialog::backdrop{background:rgba(5,30,24,.55);backdrop-filter:blur(3px)}.dialog-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:18px 19px 13px;border-bottom:1px solid var(--line)}
+    .dialog-body{padding:18px 19px}.dialog-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}.dialog-actions{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:14px}
+    .history-list{display:grid;gap:8px;max-height:230px;overflow:auto;margin-top:12px}.history-item{border:1px solid var(--line);border-radius:12px;background:var(--surface2);padding:9px;font-size:12px}
   </style>
 </head>
 <body>
-  <!-- DPRO ESTATE NEXT-2 / owner.html -->
+  <!-- DPRO ESTATE NEXT-4 / owner.html -->
   <div class="app">
     <aside class="sidebar" id="sidebar">
       <div class="brand">
@@ -280,7 +286,7 @@
               <span class="pill">統合表示</span>
             </div>
             <div class="card-body">
-              <div class="notice">このSTEPでは既存の顧客・予約・物件データから案件を統合表示します。申込案件の永続保存、担当者、期限、必要書類はAPI調査結果に基づき次STEPで追加します。</div>
+              <div class="extension-row"><div class="notice" id="caseModeNotice" style="margin:0;flex:1">拡張APIを確認しています。未接続でも既存データから案件を表示できます。</div><button class="btn secondary" onclick="reloadPersistentCases()">案件を再読み込み</button></div>
               <div class="pipeline" id="casePipeline"></div>
               <div class="case-toolbar" id="caseFilters"></div>
               <div class="case-list" id="caseList"><div class="empty">このメニューを開くと案件を組み立てます。</div></div>
@@ -320,13 +326,53 @@
     </div>
   </div>
 
+
+  <dialog id="caseDialog">
+    <form method="dialog" onsubmit="return false">
+      <div class="dialog-head"><div><h2 class="card-title" style="margin:0">案件を保存・更新</h2><p class="card-sub" id="caseDialogCustomer">対象顧客</p></div><button class="btn light" onclick="closeCaseDialog()">閉じる</button></div>
+      <div class="dialog-body">
+        <input type="hidden" id="caseDialogId"><input type="hidden" id="caseDialogCustomerId"><input type="hidden" id="caseDialogPropertyId"><input type="hidden" id="caseDialogReservationId"><input type="hidden" id="caseDialogVersion">
+        <div class="dialog-grid">
+          <div><label for="caseStage">進捗</label><select class="select" id="caseStage"><option value="inquiry">新規問い合わせ</option><option value="conditions">希望条件確認</option><option value="proposal">物件提案</option><option value="viewing">内見調整・予約</option><option value="viewed">内見済み</option><option value="application">申込検討・希望</option><option value="contracted">成約</option><option value="closed">見送り</option></select></div>
+          <div><label for="caseApplicationStatus">申込状況</label><select class="select" id="caseApplicationStatus"><option>申込前</option><option>申込検討中</option><option>申込希望</option><option>申込受付</option><option>審査中</option><option>成約</option><option>見送り</option></select></div>
+          <div><label for="caseStaff">担当者</label><select class="select" id="caseStaff"><option value="">未設定</option></select></div>
+          <div><label for="caseDueDate">次アクション期限</label><input class="input" id="caseDueDate" type="date"></div>
+        </div>
+        <div class="field" style="margin-top:11px"><label for="caseNextAction">次に行う対応</label><input class="input" id="caseNextAction" placeholder="例：申込意思を確認"></div>
+        <div class="field"><label for="caseViewingMemo">内見メモ</label><textarea class="textarea" id="caseViewingMemo" style="min-height:95px" placeholder="内見時の反応、気になった点など"></textarea></div>
+        <div class="field"><label for="caseLostReason">見送り理由</label><input class="input" id="caseLostReason" placeholder="進捗を見送りにする場合は必須"></div>
+        <div class="field"><label for="caseInternalMemo">社内メモ</label><textarea class="textarea" id="caseInternalMemo" style="min-height:90px"></textarea></div>
+        <div class="dialog-actions"><button class="btn light" onclick="closeCaseDialog()">キャンセル</button><button class="btn" id="caseSaveBtn" onclick="saveCaseDialog()">案件を保存</button></div>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="vacancyDialog">
+    <form method="dialog" onsubmit="return false">
+      <div class="dialog-head"><div><h2 class="card-title" style="margin:0">空室確認を記録</h2><p class="card-sub" id="vacancyDialogProperty">対象物件</p></div><button class="btn light" onclick="closeVacancyDialog()">閉じる</button></div>
+      <div class="dialog-body">
+        <input type="hidden" id="vacancyPropertyId">
+        <div class="dialog-grid">
+          <div><label for="vacancyResult">確認結果</label><select class="select" id="vacancyResult"><option>募集中</option><option>確認中</option><option>申込あり</option><option>成約済み</option><option>不明</option></select></div>
+          <div><label for="vacancyStaff">確認担当</label><select class="select" id="vacancyStaff"><option value="">未設定</option></select></div>
+          <div><label for="vacancyNextDate">次回確認日</label><input class="input" id="vacancyNextDate" type="date"></div>
+          <div><label for="vacancyMemo">確認メモ</label><input class="input" id="vacancyMemo" placeholder="管理会社へ電話、回答待ちなど"></div>
+        </div>
+        <div class="history-list" id="vacancyHistory"><div class="empty">履歴を読み込みます。</div></div>
+        <div class="dialog-actions"><button class="btn light" onclick="closeVacancyDialog()">キャンセル</button><button class="btn" id="vacancySaveBtn" onclick="saveVacancyDialog()">確認履歴を保存</button></div>
+      </div>
+    </form>
+  </dialog>
+
   <div class="toast" id="toast"></div>
-  <script src="config.js?v=estate-next-3"></script>
-  <script src="domain.js?v=estate-next-3"></script>
+  <script src="config.js?v=estate-next-4"></script>
+  <script src="domain.js?v=estate-next-4"></script>
+  <script src="extension.js?v=estate-next-4"></script>
   <script>
     'use strict';
     const CONFIG = window.DPRO_ESTATE_CONFIG || {
       apiBase: 'https://dpro-estate-line-api.dpromstk2000.workers.dev',
+      nextApiBase: 'https://dpro-estate-next4-api.dpromstk2000.workers.dev',
       pageBase: 'https://dpromstk2000-lab.github.io/dpro-estate-line-liff',
       shopCode: 'dpro_estate_demo',
       storage: {adminCode:'dpro_estate_admin_code', ownerPanel:'dpro_estate_owner_panel'},
@@ -335,9 +381,10 @@
     const STORAGE_KEY = CONFIG.storage.adminCode;
     const PANEL_KEY = CONFIG.storage.ownerPanel;
     const state = {
-      adminCode:'', authenticated:false, dashboard:null, templates:[], reservations:[], customers:[], properties:[],
+      adminCode:'', authenticated:false, dashboard:null, templates:[], reservations:[], customers:[], properties:[], staffs:[],
+      persistentCases:[], extensionOnline:false, extensionChecked:false,
       reservationFilter:'all', propertyArea:'', caseFilter:'all', selectedReservationId:'', selectedCustomerId:'', currentMessage:'',
-      loaded:{dashboard:false,templates:false,reservations:false,customers:false,properties:false},
+      loaded:{dashboard:false,templates:false,reservations:false,customers:false,properties:false,staffs:false,persistentCases:false},
       limits:{reservations:30,customers:30,properties:30}, loading:false, actionBusy:false
     };
     const PANEL_META = {
@@ -363,7 +410,7 @@
     });
 
     function setPageLinks(){
-      const version = 'estate-next-3';
+      const version = 'estate-next-4';
       $('settingsLink').href = `${CONFIG.pageBase}/owner-settings.html?v=${version}`;
       $('ipadLink').href = `${CONFIG.pageBase}/owner-ipad.html?v=${version}`;
       $('checkLink').href = `${CONFIG.pageBase}/system-check.html?v=${version}`;
@@ -426,7 +473,7 @@
       if(name==='reservations'&&!state.loaded.reservations)await loadReservations(true);
       if(name==='customers'&&!state.loaded.customers)await loadCustomers(true);
       if(name==='properties'&&!state.loaded.properties)await loadProperties(true);
-      if(name==='cases'){ if(!state.loaded.reservations)await loadReservations(true); if(!state.loaded.customers)await loadCustomers(true); renderCases(); }
+      if(name==='cases'){ if(!state.loaded.reservations)await loadReservations(true); if(!state.loaded.customers)await loadCustomers(true); if(!state.loaded.staffs)await loadStaffs(); await loadPersistentCases(); renderCases(); }
       if(name==='messages'){ await loadTemplates(); if(!state.loaded.reservations)await loadReservations(true); renderTargetSelect(); }
     }
 
@@ -484,7 +531,7 @@
       <button class="small-btn danger" onclick="updateReservationStatus('${escapeAttr(r.id)}','キャンセル','見送り')">キャンセル</button></div></article>`;
     }
     function followupCardHtml(f){ const c=f.customer||{}; return `<article class="item"><div class="item-head"><div><div class="item-title">${escapeHtml(c.customer_name||'顧客未設定')}様｜${escapeHtml(f.followup_type||'フォロー')}</div><div class="item-meta">${formatDate(f.followup_date)} ${formatTime(f.followup_time)} / ${escapeHtml(f.priority||'通常')}</div></div>${statusPill(f.status)}</div><div class="item-note">${escapeHtml(f.memo||'メモなし')}</div><div class="actions"><button class="small-btn main" onclick="completeFollowup('${escapeAttr(f.id)}')">対応済み</button><button class="small-btn" onclick="selectCustomerForSuggestion('${escapeAttr(c.id||'')}')">提案文面</button></div></article>`; }
-    function propertyMiniHtml(p){ return `<article class="item"><div class="item-head"><div><div class="item-title">${escapeHtml(p.property_name||'物件名未設定')}</div><div class="item-meta">${escapeHtml(p.area_name||'-')} / ${yen(p.rent_amount)} / ${escapeHtml(p.floor_plan||'-')}</div></div>${statusPill(p.property_status)}</div><div class="item-note">${escapeHtml(p.internal_memo||'空室状況を確認してください。')}</div></article>`; }
+    function propertyMiniHtml(p){ return `<article class="item"><div class="item-head"><div><div class="item-title">${escapeHtml(p.property_name||'物件名未設定')}</div><div class="item-meta">${escapeHtml(p.area_name||'-')} / ${yen(p.rent_amount)} / ${escapeHtml(p.floor_plan||'-')}</div></div>${statusPill(p.property_status)}</div><div class="item-note">${escapeHtml(p.internal_memo||'空室状況を確認してください。')}</div><div class="actions"><button class="small-btn main" onclick="openVacancyDialog('${escapeAttr(p.id)}')">空室確認を記録</button></div></article>`; }
 
     async function loadCustomers(reset=false){
       if(!isAuthenticated())return; if(reset)state.limits.customers=30;
@@ -526,34 +573,110 @@
       return `<article class="property-card"><div class="card-top"><div><div class="name">${escapeHtml(p.property_name||'物件名未設定')}</div><div class="subline">${escapeHtml(p.address||p.property_code||'')}</div></div>${statusPill(p.property_status)}</div>
       <div class="info-grid"><div class="info"><b>家賃</b>${yen(p.rent_amount)}</div><div class="info"><b>管理費</b>${yen(p.management_fee)}</div><div class="info"><b>広さ</b>${escapeHtml(p.room_size||'-')}</div><div class="info"><b>内見</b>${p.viewing_available?'内見可':'内見不可'}</div></div>
       <div class="memo">${tags.map(escapeHtml).join('・')}<br>${escapeHtml(p.internal_memo||p.public_memo||'メモなし')}</div>
-      <div class="actions"><button class="small-btn main" onclick="updatePropertyStatus('${escapeAttr(p.id)}','募集中',true)">募集中</button><button class="small-btn warn" onclick="updatePropertyStatus('${escapeAttr(p.id)}','確認中',true)">確認中</button><button class="small-btn danger" onclick="updatePropertyStatus('${escapeAttr(p.id)}','成約済み',false)">成約済み</button></div></article>`;
+      <div class="actions"><button class="small-btn main" onclick="updatePropertyStatus('${escapeAttr(p.id)}','募集中',true)">募集中</button><button class="small-btn warn" onclick="updatePropertyStatus('${escapeAttr(p.id)}','確認中',true)">確認中</button><button class="small-btn danger" onclick="updatePropertyStatus('${escapeAttr(p.id)}','成約済み',false)">成約済み</button><button class="small-btn blue" onclick="openVacancyDialog('${escapeAttr(p.id)}')">空室確認履歴</button></div></article>`;
     }
 
 
     function domainModel(){ return window.DPRO_ESTATE_DOMAIN || null; }
-    function buildCaseItems(){ const domain=domainModel(); return domain?domain.buildCases(state.customers,state.reservations):[]; }
+    function extensionClient(){ return window.DPRO_ESTATE_NEXT4_API || null; }
+    function caseCustomerId(item){ return String(item?.customer?.id||item?.id||''); }
+    function persistentFor(item){ const id=caseCustomerId(item); return state.persistentCases.find(row=>String(row.customer_id)===id)||null; }
+    function buildCaseItems(){
+      const domain=domainModel(); if(!domain)return [];
+      return domain.buildCases(state.customers,state.reservations).map(item=>{
+        const saved=persistentFor(item); if(!saved)return {...item,persistentCase:null};
+        const stage=domain.stages.find(row=>row.key===saved.stage_key)||domain.stages.find(row=>row.key===item.stageKey);
+        return {...item,persistentCase:saved,stageKey:stage?.key||item.stageKey,stageLabel:stage?.label||item.stageLabel,stageOrder:stage?.order||item.stageOrder,
+          applicationState:saved.application_status||item.applicationState,nextAction:saved.next_action||item.nextAction,hasPersistentApplicationCase:true};
+      }).sort((a,b)=>b.stageOrder-a.stageOrder);
+    }
     function renderCasesIfReady(){ if(state.loaded.customers&&state.loaded.reservations&&document.querySelector('[data-panel="cases"]'))renderCases(); }
     function setCaseFilter(filter){ state.caseFilter=filter; renderCases(); }
+    function extensionNotice(){
+      const box=$('caseModeNotice'); if(!box)return;
+      if(state.extensionOnline){box.className='notice';box.textContent='案件・担当者・次アクション期限・見送り理由を永続保存できます。';}
+      else{box.className='notice warn';box.textContent='拡張APIは未接続です。既存データから案件を表示しています。SQLとNEXT-4 Workerの適用後に永続保存が有効になります。';}
+    }
+    async function checkExtension(){
+      if(state.extensionChecked)return state.extensionOnline;
+      const client=extensionClient(); state.extensionChecked=true;
+      if(!client){state.extensionOnline=false;extensionNotice();return false;}
+      try{const data=await client.health();state.extensionOnline=Boolean(data?.ok);}
+      catch{state.extensionOnline=false;}
+      extensionNotice(); return state.extensionOnline;
+    }
+    async function loadPersistentCases(){
+      const online=await checkExtension();
+      if(!online){state.persistentCases=[];state.loaded.persistentCases=true;renderCases();return;}
+      try{const data=await extensionClient().listCases(state.adminCode,{limit:200});state.persistentCases=data.cases||[];state.loaded.persistentCases=true;}
+      catch(error){state.extensionOnline=false;state.persistentCases=[];toast(error.message||'案件保存APIへ接続できません。','error');}
+      extensionNotice();
+    }
+    async function reloadPersistentCases(){state.extensionChecked=false;state.loaded.persistentCases=false;await loadPersistentCases();renderCases();}
+    async function loadStaffs(){
+      if(state.loaded.staffs)return;
+      try{const data=await api('/api/admin/settings');state.staffs=(data.staffs||[]).filter(row=>row.is_active!==false);state.loaded.staffs=true;renderStaffOptions();}
+      catch(error){state.staffs=[];state.loaded.staffs=true;toast(error.message||'担当者を読み込めませんでした。','error');}
+    }
+    function renderStaffOptions(){
+      const options='<option value="">未設定</option>'+state.staffs.map(row=>`<option value="${escapeAttr(row.id)}" data-name="${escapeAttr(row.staff_name||'')}">${escapeHtml(row.staff_name||'担当者')}</option>`).join('');
+      if($('caseStaff'))$('caseStaff').innerHTML=options;if($('vacancyStaff'))$('vacancyStaff').innerHTML=options;
+    }
     function renderCases(){
       const domain=domainModel();
-      if(!domain){ $('caseList').innerHTML='<div class="empty">案件モデルを読み込めませんでした。</div>'; return; }
-      const items=buildCaseItems(), counts=domain.counts(items);
-      $('sideCaseCount').textContent=counts.all||0;
+      if(!domain){$('caseList').innerHTML='<div class="empty">案件モデルを読み込めませんでした。</div>';return;}
+      extensionNotice(); const items=buildCaseItems(),counts=domain.counts(items);$('sideCaseCount').textContent=counts.all||0;
       $('casePipeline').innerHTML=domain.stages.map(stage=>`<button class="pipeline-box ${state.caseFilter===stage.key?'active':''}" onclick="setCaseFilter('${escapeAttr(stage.key)}')"><strong>${counts[stage.key]||0}</strong><span>${escapeHtml(stage.label)}</span></button>`).join('');
       $('caseFilters').innerHTML=`<button class="case-filter ${state.caseFilter==='all'?'active':''}" onclick="setCaseFilter('all')">すべて ${counts.all||0}</button>`+domain.stages.map(stage=>`<button class="case-filter ${state.caseFilter===stage.key?'active':''}" onclick="setCaseFilter('${escapeAttr(stage.key)}')">${escapeHtml(stage.label)}</button>`).join('');
       const rows=state.caseFilter==='all'?items:items.filter(item=>item.stageKey===state.caseFilter);
       $('caseList').innerHTML=rows.length?rows.map(caseCardHtml).join(''):'<div class="empty">該当する案件はありません。</div>';
     }
-    function caseCardHtml(item){
-      const c=item.customer||{},r=item.reservation||{},p=item.property||{};
-      const viewing=r.id?`${formatDate(r.reservation_date)} ${formatTime(r.reservation_time)} / ${r.status||'-'}`:'内見予約なし';
-      const property=p.property_name||'物件未定・条件相談';
-      return `<article class="case-card"><div class="card-top"><div><div class="name">${escapeHtml(c.customer_name||'名前未入力')}様</div><div class="subline">${escapeHtml(c.phone||'-')} / ${escapeHtml(c.customer_status||'状態未設定')}</div></div><span class="case-stage">${escapeHtml(item.stageLabel)}</span></div>
-      <div class="case-grid"><div class="case-info"><b>物件</b>${escapeHtml(property)}</div><div class="case-info"><b>内見</b>${escapeHtml(viewing)}</div><div class="case-info"><b>申込状況</b>${escapeHtml(item.applicationState)}</div><div class="case-info"><b>案件保存</b>${item.hasPersistentApplicationCase?'保存済み':'既存データから統合'}</div></div>
-      <div class="case-next"><b>次の対応</b><br>${escapeHtml(item.nextAction)}</div>
-      <div class="actions"><button class="small-btn main" onclick="selectCustomerForSuggestion('${escapeAttr(c.id||item.id)}')">提案文面</button>${r.id?`<button class="small-btn blue" onclick="selectReservationForMessage('${escapeAttr(r.id)}','before_viewing')">予約文面</button>`:''}<button class="small-btn" onclick="openCustomerFromCase('${escapeAttr(c.id||item.id)}')">顧客カルテ</button></div></article>`;
+    function dueLabel(date){
+      if(!date)return '未設定';const today=todayYmd();const cls=date<today?'due-over':date===today?'due-today':'';return `<span class="${cls}">${escapeHtml(formatDate(date))}</span>`;
     }
-    async function openCustomerFromCase(customerId){ await openPanel('customers'); const c=state.customers.find(x=>String(x.id)===String(customerId)); if(c){$('customerSearchInput').value=c.customer_name||c.phone||''; await searchCustomers();} }
+    function caseCardHtml(item){
+      const c=item.customer||{},r=item.reservation||{},p=item.property||{},saved=item.persistentCase||{};
+      const viewing=r.id?`${formatDate(r.reservation_date)} ${formatTime(r.reservation_time)} / ${r.status||'-'}`:'内見予約なし';
+      const property=p.property_name||'物件未定・条件相談';const staff=saved.assigned_staff_name||'未設定';
+      return `<article class="case-card"><div class="card-top"><div><div class="name">${escapeHtml(c.customer_name||'名前未入力')}様</div><div class="subline">${escapeHtml(c.phone||'-')} / ${escapeHtml(c.customer_status||'状態未設定')}</div></div><span class="case-stage">${escapeHtml(item.stageLabel)}</span></div>
+      <div class="case-grid"><div class="case-info"><b>物件</b>${escapeHtml(property)}</div><div class="case-info"><b>内見</b>${escapeHtml(viewing)}</div><div class="case-info"><b>申込状況</b>${escapeHtml(item.applicationState)}</div><div class="case-info"><b>担当者</b>${escapeHtml(staff)}</div><div class="case-info"><b>次回期限</b>${dueLabel(saved.next_action_due_date)}</div><div class="case-info"><b>保存状態</b>${saved.id?'永続保存済み':'既存データから統合'}</div></div>
+      <div class="case-next"><b>次の対応</b><br>${escapeHtml(item.nextAction||'未設定')}</div>
+      <div class="case-persist ${state.extensionOnline?'':'offline'}">${state.extensionOnline?'案件情報を保存・更新できます。':'拡張API適用前の表示モードです。'}</div>
+      <div class="actions"><button class="small-btn main" onclick="openCaseDialog('${escapeAttr(caseCustomerId(item))}')">${saved.id?'案件を編集':'案件を保存'}</button><button class="small-btn" onclick="selectCustomerForSuggestion('${escapeAttr(c.id||item.id)}')">提案文面</button>${r.id?`<button class="small-btn blue" onclick="selectReservationForMessage('${escapeAttr(r.id)}','before_viewing')">予約文面</button>`:''}<button class="small-btn" onclick="openCustomerFromCase('${escapeAttr(c.id||item.id)}')">顧客カルテ</button></div></article>`;
+    }
+    async function openCustomerFromCase(customerId){await openPanel('customers');const c=state.customers.find(x=>String(x.id)===String(customerId));if(c){$('customerSearchInput').value=c.customer_name||c.phone||'';await searchCustomers();}}
+    function findCaseItem(customerId){return buildCaseItems().find(item=>caseCustomerId(item)===String(customerId));}
+    async function openCaseDialog(customerId){
+      if(!state.extensionOnline){toast('先にNEXT-4拡張APIとSQLを適用してください。','error');return;}
+      if(!state.loaded.staffs)await loadStaffs();const item=findCaseItem(customerId);if(!item){toast('案件を確認できません。','error');return;}
+      const saved=item.persistentCase||{},c=item.customer||{},r=item.reservation||{},p=item.property||{};renderStaffOptions();
+      $('caseDialogId').value=saved.id||'';$('caseDialogCustomerId').value=customerId;$('caseDialogPropertyId').value=saved.property_id||p.id||'';$('caseDialogReservationId').value=saved.reservation_id||r.id||'';$('caseDialogVersion').value=saved.version||'';
+      $('caseDialogCustomer').textContent=`${c.customer_name||'お客様'}様 / ${p.property_name||'物件未定'}`;$('caseStage').value=saved.stage_key||item.stageKey;$('caseApplicationStatus').value=saved.application_status||item.applicationState||'申込前';
+      $('caseStaff').value=saved.assigned_staff_id||'';$('caseDueDate').value=saved.next_action_due_date||'';$('caseNextAction').value=saved.next_action||item.nextAction||'';$('caseViewingMemo').value=saved.viewing_memo||'';$('caseLostReason').value=saved.lost_reason||'';$('caseInternalMemo').value=saved.internal_memo||'';
+      $('caseDialog').showModal();
+    }
+    function closeCaseDialog(){$('caseDialog').close();}
+    async function saveCaseDialog(){
+      if(!state.extensionOnline)return;const staff=$('caseStaff'),option=staff.options[staff.selectedIndex];const payload={id:$('caseDialogId').value||undefined,version:$('caseDialogVersion').value?Number($('caseDialogVersion').value):undefined,customer_id:$('caseDialogCustomerId').value,property_id:$('caseDialogPropertyId').value||null,reservation_id:$('caseDialogReservationId').value||null,stage_key:$('caseStage').value,application_status:$('caseApplicationStatus').value,assigned_staff_id:staff.value||null,assigned_staff_name:staff.value?(option?.dataset.name||option?.textContent||null):null,next_action:$('caseNextAction').value.trim()||null,next_action_due_date:$('caseDueDate').value||null,viewing_memo:$('caseViewingMemo').value.trim()||null,lost_reason:$('caseLostReason').value.trim()||null,internal_memo:$('caseInternalMemo').value.trim()||null};
+      if(payload.stage_key==='closed'&&!payload.lost_reason){toast('見送り理由を入力してください。','error');return;}
+      try{$('caseSaveBtn').disabled=true;const data=payload.id?await extensionClient().updateCase(state.adminCode,payload):await extensionClient().createCase(state.adminCode,payload);const saved=data.case;state.persistentCases=state.persistentCases.filter(row=>String(row.customer_id)!==String(saved.customer_id));state.persistentCases.push(saved);closeCaseDialog();renderCases();toast('案件を保存しました。');}
+      catch(error){toast(error.message||'案件を保存できませんでした。','error');}finally{$('caseSaveBtn').disabled=false;}
+    }
+    function findProperty(propertyId){return state.properties.find(row=>String(row.id)===String(propertyId))||(state.dashboard?.need_check_properties||[]).find(row=>String(row.id)===String(propertyId));}
+    async function openVacancyDialog(propertyId){
+      if(!state.extensionOnline){await checkExtension();if(!state.extensionOnline){toast('先にNEXT-4拡張APIとSQLを適用してください。','error');return;}}
+      if(!state.loaded.staffs)await loadStaffs();renderStaffOptions();const p=findProperty(propertyId);$('vacancyPropertyId').value=propertyId;$('vacancyDialogProperty').textContent=p?.property_name||'対象物件';$('vacancyResult').value=p?.property_status==='成約済み'?'成約済み':p?.property_status==='確認中'?'確認中':'募集中';$('vacancyStaff').value='';$('vacancyNextDate').value='';$('vacancyMemo').value='';$('vacancyDialog').showModal();await loadVacancyHistory(propertyId);
+    }
+    function closeVacancyDialog(){$('vacancyDialog').close();}
+    async function loadVacancyHistory(propertyId){
+      try{const data=await extensionClient().listVacancyChecks(state.adminCode,propertyId,20),rows=data.vacancy_checks||[];$('vacancyHistory').innerHTML=rows.length?rows.map(row=>`<div class="history-item"><b>${escapeHtml(row.result||'-')}</b> / ${escapeHtml(String(row.checked_at||'').replace('T',' ').slice(0,16))}<br>担当：${escapeHtml(row.checked_by_staff_name||'未設定')} / 次回：${row.next_check_due_date?formatDate(row.next_check_due_date):'未設定'}<br>${escapeHtml(row.memo||'メモなし')}</div>`).join(''):'<div class="empty">空室確認履歴はまだありません。</div>';}
+      catch(error){$('vacancyHistory').innerHTML='<div class="empty">履歴を読み込めませんでした。</div>';toast(error.message||'空室確認履歴を読み込めませんでした。','error');}
+    }
+    async function saveVacancyDialog(){
+      const staff=$('vacancyStaff'),option=staff.options[staff.selectedIndex];const propertyId=$('vacancyPropertyId').value;const payload={property_id:propertyId,result:$('vacancyResult').value,checked_by_staff_id:staff.value||null,checked_by_staff_name:staff.value?(option?.dataset.name||option?.textContent||null):null,next_check_due_date:$('vacancyNextDate').value||null,memo:$('vacancyMemo').value.trim()||null,source:'owner'};
+      try{$('vacancySaveBtn').disabled=true;await extensionClient().recordVacancyCheck(state.adminCode,payload);toast('空室確認履歴を保存しました。');await loadVacancyHistory(propertyId);}
+      catch(error){toast(error.message||'空室確認履歴を保存できませんでした。','error');}finally{$('vacancySaveBtn').disabled=false;}
+    }
 
     async function loadTemplates(){
       if(state.loaded.templates)return;
@@ -614,7 +737,7 @@
     async function prepareDemo(){
       if(!isAuthenticated())return;
       if(!confirm('営業前デモデータを再準備します。現在のデモ予約・顧客・追客が初期状態に戻ります。実行しますか？'))return;
-      try{setLoading(true);await api('/api/admin/demo/prepare',{method:'POST',body:{}});state.loaded={dashboard:false,templates:false,reservations:false,customers:false,properties:false};state.limits={reservations:30,customers:30,properties:30};await loadDashboard();toast('営業前デモ準備が完了しました。');}
+      try{setLoading(true);await api('/api/admin/demo/prepare',{method:'POST',body:{}});if(await checkExtension()){await extensionClient().prepareDemo(state.adminCode);}state.loaded={dashboard:false,templates:false,reservations:false,customers:false,properties:false,staffs:false,persistentCases:false};state.persistentCases=[];state.limits={reservations:30,customers:30,properties:30};await loadDashboard();toast('営業前デモ準備が完了しました。');}
       catch(error){toast(error.message||'営業前デモ準備に失敗しました。','error');}finally{setLoading(false);}
     }
   </script>

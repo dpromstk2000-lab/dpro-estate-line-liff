@@ -1,0 +1,18 @@
+system: DPRO 不動産・賃貸内見 LINE
+step: ESTATE-NEXT-4
+status: DEPLOY-PENDING
+architecture: extension-worker
+reason: 既存Worker原本がリポジトリにないため、既存APIを変更せず新機能専用Workerを追加
+legacy_api: https://dpro-estate-line-api.dpromstk2000.workers.dev
+extension_api: https://dpro-estate-next4-api.dpromstk2000.workers.dev
+extension_worker_name: dpro-estate-next4-api
+legacy_worker_changed: false
+required_secrets:
+  - SUPABASE_URL
+  - SUPABASE_SERVICE_ROLE_KEY
+required_variables:
+  LEGACY_API_BASE: https://dpro-estate-line-api.dpromstk2000.workers.dev
+  ALLOWED_ORIGIN: https://dpromstk2000-lab.github.io
+sql_file: deploy/estate-next-4/sql/estate-next-4.sql
+worker_file: deploy/estate-next-4/worker.js
+verification: GitHub Actionsをmode=verifyで再実行

@@ -1,29 +1,30 @@
 system: DPRO 不動産・賃貸内見 LINE
 repository: dpromstk2000-lab/dpro-estate-line-liff
-previous_step: ESTATE-NEXT-2-COMPLETE
-current_step: ESTATE-NEXT-3-COMPLETE
-next_step: ESTATE-NEXT-4
+previous_step: ESTATE-NEXT-3-COMPLETE
+current_step: ESTATE-NEXT-4-DEPLOY-PENDING
+next_step: ESTATE-NEXT-4-VERIFY
 baseline_tag: dpro-estate-next-baseline-20260723
-step_backup_tag: dpro-estate-next-3-before-20260723
-completed_at_jst: "2026-07-23T22:52:38+09:00"
+step_backup_tag: dpro-estate-next-4-before-20260723
+prepared_at_jst: "2026-07-24T11:56:33+09:00"
 modified_files:
   - owner.html
   - config.js
-  - domain.js
-domain_units_integrated: true
-derived_application_case_view: true
-api_inspection_status: complete
-persistent_application_case_detected: false
-worker_change_required_next_step: true
-supabase_change_required_next_step: true
-raw_personal_data_committed: false
+  - extension.js
+deployment_files:
+  - deploy/estate-next-4/worker.js
+  - deploy/estate-next-4/sql/estate-next-4.sql
+extension_worker_name: dpro-estate-next4-api
+extension_worker_url: https://dpro-estate-next4-api.dpromstk2000.workers.dev
+legacy_worker_changed: false
+extension_worker_prepared: true
+supabase_migration_prepared: true
 worker_changed: false
 supabase_changed: false
 api_changed: false
 existing_features_preserved: true
 html_syntax_check: PASS
 javascript_syntax_check: PASS
-workflow_yml_syntax_check: PASS
 html_id_duplicate_check: PASS
-domain_fixture_check: PASS
-local_http_check: PASS
+worker_mock_test: PASS
+manual_sql_required: true
+manual_worker_deploy_required: true

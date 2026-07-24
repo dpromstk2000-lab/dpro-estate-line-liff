@@ -43,3 +43,10 @@ DPRO 不動産・賃貸内見 LINE / ESTATE-NEXT-1 危険箇所台帳
 - 注意: 永続化不足候補: assigned_staff、next_action、lost_reason、vacancy_history、required_documents
 - 注意: 現リポジトリにWorker原本がないため、NEXT-4で正式配置先を確認してからWorkerを変更する。
 - 変更記録: Workerなし / Supabaseなし / APIなし。
+
+[ESTATE-NEXT-4]
+- 既存Worker原本がGitHubにないため、既存Workerは変更せず新機能専用の拡張Workerを追加する。
+- SQLまたは拡張Workerの適用前でも、owner.htmlは既存データ統合表示へ自動フォールバックする。
+- 既存の予約・顧客・物件・追客APIは従来Workerを継続利用するため、日常操作の速度と安定性への影響を避ける。
+- 申込案件・担当・期限・見送り理由・空室確認履歴だけを拡張Workerへ保存する。
+- 必要書類チェックはESTATE-NEXT-5で追加する。

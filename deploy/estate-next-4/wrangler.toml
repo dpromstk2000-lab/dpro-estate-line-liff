@@ -1,0 +1,12 @@
+name = "dpro-estate-next4-api"
+main = "worker.js"
+compatibility_date = "2026-07-23"
+workers_dev = true
+
+[vars]
+LEGACY_API_BASE = "https://dpro-estate-line-api.dpromstk2000.workers.dev"
+ALLOWED_ORIGIN = "https://dpromstk2000-lab.github.io"
+
+# Cloudflare Workerの「Settings > Variables and Secrets」で次をSecret登録してください。
+# SUPABASE_URL
+# SUPABASE_SERVICE_ROLE_KEY
