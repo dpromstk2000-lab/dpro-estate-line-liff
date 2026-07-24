@@ -1,0 +1,8 @@
+step: ESTATE-NEXT-9-R5
+status: LIVE-VERIFY-RESUME
+fixes:
+  - legacy_phone_empty_compatibility_response_classification
+  - legacy_phone_actual_payload_only_ng
+worker_changed: false
+supabase_changed: false
+api_changed: false

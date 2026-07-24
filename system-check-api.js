@@ -170,11 +170,27 @@
     }
 
     const phoneProbe = await timedFetch(`${legacyBase}/api/public/member?phone=00000000000`, {}, 12000);
-    const piiKeys = phoneProbe.data && typeof phoneProbe.data === 'object' ? Object.keys(phoneProbe.data).filter((key) => /customer|member|reservation|phone|name/i.test(key)) : [];
-    if (phoneProbe.ok && piiKeys.length) {
-      checks.push(makeCheck('legacy-phone-endpoint', '旧電話番号だけ会員照会', 'セキュリティ', STATUS.NG, `匿名照会で情報キーを返しました: ${piiKeys.join(', ')}`));
+    const probeData = phoneProbe.data && typeof phoneProbe.data === 'object' ? phoneProbe.data : {};
+    const ignoredMetaKeys = new Set(['ok', 'found', 'count', 'total', 'message', 'error', 'version', 'status']);
+    const hasPayloadValue = (value) => {
+      if (value === null || value === undefined) return false;
+      if (Array.isArray(value)) return value.some((item) => hasPayloadValue(item));
+      if (typeof value === 'object') {
+        return Object.entries(value).some(([key, item]) => !ignoredMetaKeys.has(String(key).toLowerCase()) && hasPayloadValue(item));
+      }
+      if (typeof value === 'string') return value.trim() !== '';
+      if (typeof value === 'boolean') return value === true;
+      if (typeof value === 'number') return Number.isFinite(value);
+      return true;
+    };
+    const sensitiveFields = ['customer', 'member', 'reservations', 'reservation', 'profile', 'preference', 'phone', 'name', 'customer_name', 'line_display_name'];
+    const exposedFields = sensitiveFields.filter((key) => hasPayloadValue(probeData[key]));
+    if (probeData.found === true && !exposedFields.includes('found')) exposedFields.push('found');
+    if (phoneProbe.ok && exposedFields.length) {
+      checks.push(makeCheck('legacy-phone-endpoint', '旧電話番号だけ会員照会', 'セキュリティ', STATUS.NG, `匿名照会で実データ項目を返しました: ${exposedFields.join(', ')}`));
     } else {
-      checks.push(makeCheck('legacy-phone-endpoint', '旧電話番号だけ会員照会', 'セキュリティ', STATUS.ATTENTION, `公開画面からは削除済み。旧Worker原本がリポジトリにないため直接遮断は未確認（HTTP ${phoneProbe.status}）。`));
+      const responseKind = phoneProbe.ok ? '該当データなしの互換レスポンス' : `HTTP ${phoneProbe.status}`;
+      checks.push(makeCheck('legacy-phone-endpoint', '旧電話番号だけ会員照会', 'セキュリティ', STATUS.ATTENTION, `公開画面からは削除済み。${responseKind}を確認しました。旧Worker原本がないためエンドポイント自体の直接遮断は未確認です。`));
     }
 
     for (const page of PUBLIC_PAGES) {
