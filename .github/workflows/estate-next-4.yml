@@ -1,4 +1,4 @@
-name: DPRO ESTATE NEXT-4 Persistent Cases
+name: DPRO ESTATE NEXT-4 R2 Persistent Cases
 
 on:
   push:
@@ -72,14 +72,31 @@ jobs:
         shell: bash
         run: |
           set -Eeuo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           if git rev-parse "$STEP_BACKUP_TAG" >/dev/null 2>&1; then
             echo "Backup tag already exists: $STEP_BACKUP_TAG"
           else
-            changed="$(git diff-tree --no-commit-id --name-only -r HEAD)"
+            changed="$(git diff-tree --no-commit-id --name-only -r HEAD | sed '/^$/d')"
             test "$changed" = "$WORKFLOW_PATH" || { echo "ERROR: workflow upload commit contains unexpected files:" >&2; echo "$changed" >&2; exit 1; }
-            base_sha="$(git rev-parse HEAD^)"
+
+            # R1/R2のような連続したYML専用コミットを除外し、
+            # NEXT-4開始前の最後のアプリ正常版へタグを付ける。
+            base_sha="$(git rev-parse HEAD)"
+            while true; do
+              parent_sha="$(git rev-parse "${base_sha}^" 2>/dev/null || true)"
+              test -n "$parent_sha" || { echo "ERROR: baseline parent commit was not found." >&2; exit 1; }
+              changed_at_base="$(git diff-tree --no-commit-id --name-only -r "$base_sha" | sed '/^$/d')"
+              if [ "$changed_at_base" = "$WORKFLOW_PATH" ]; then
+                base_sha="$parent_sha"
+                continue
+              fi
+              break
+            done
+
             git tag -a "$STEP_BACKUP_TAG" "$base_sha" -m "DPRO ESTATE before NEXT-4 persistence extension"
             git push origin "$STEP_BACKUP_TAG"
+            echo "Backup tag created at application baseline: $base_sha"
           fi
 
       - name: Guard current application version
