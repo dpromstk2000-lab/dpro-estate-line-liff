@@ -1,0 +1,16 @@
+system: DPRO 不動産・賃貸内見 LINE
+status: COMPLETE
+completed_at_jst: "2026-07-25T00:33:48+09:00"
+customer_flow: PASS
+owner_pc: PASS
+owner_ipad: PASS
+secure_member: PASS
+application_operations: PASS
+followup_center: PASS
+property_candidate_matching: PASS
+system_check: PASS_WITH_ATTENTION
+service_binding: PASS
+supabase_tables: 9
+product_site: PASS
+operation_experience_sheet: PASS
+qr_final_pdf_exact_match: PASS
