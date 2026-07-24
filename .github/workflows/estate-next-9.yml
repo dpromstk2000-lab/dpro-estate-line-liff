@@ -1,4 +1,4 @@
-name: DPRO ESTATE NEXT-9 R4 Resume Security Performance Audit
+name: DPRO ESTATE NEXT-9 R5 Legacy Phone Probe Audit
 
 'on':
   push:
@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  estate-next-9-r4:
+  estate-next-9-r5:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
@@ -30,7 +30,7 @@ jobs:
       EXPECTED_SYSTEM_CHECK_BLOB: 92f02adacc5ac64fa8cff15104235837f3da3e08
       EXPECTED_SYSTEM_CHECK_API_BLOB: e1c70dd1dd31644f48681a8075a1211f8c1130b4
       EXPECTED_CONFIG_BLOB: 894f7defaa0deb9dadfe72f19745db08b309b900
-      EXPECTED_PROPERTY_BLOB: 9a182ef481cc99de082760f5f193211b5ac5200b
+      EXPECTED_PROPERTY_BLOB: d3e04b7a57d531bdf0a9272f27c42586d7b72d34
       EXPECTED_INDEX_BLOB: c9852f5b5865466f48e03b0d9fb8e960805e2904
       EXPECTED_MEMBER_BLOB: eae91cafc7da824d5718de20276b17238c52d34a
 
@@ -74,61 +74,61 @@ jobs:
           test "$(git hash-object index.html)" = "$EXPECTED_INDEX_BLOB" || { echo 'ERROR: index.html changed unexpectedly.' >&2; exit 1; }
           test "$(git hash-object member.html)" = "$EXPECTED_MEMBER_BLOB" || { echo 'ERROR: member.html changed unexpectedly.' >&2; exit 1; }
 
-      - name: Fix property reservation code handoff order
+      - name: Fix legacy phone-only probe classification
         shell: bash
         run: |
           set -Eeuo pipefail
           python3 - <<'PY_FIX'
           from pathlib import Path
 
-          path = Path('property.html')
+          path = Path('system-check-api.js')
           text = path.read_text()
-          old = '''    setPill("reservePill","ok","予約OK");
-              setMessage("reserveMessage","ok",reservationCode ? `内見予約を受け付けました。受付番号：${reservationCode}。マイページ確認に必要です。` : "内見予約を受け付けました。LINE文面をコピーして保存できます。");
-              setMessage("copyMessage","ok","予約完了文面をコピーできます。");
-              const reservationCode = String(
-                lastReservation.reservation_code ||
-                lastReservation.id ||
-                data.reservation_code ||
-                ""
-              ).replace(/[^a-zA-Z0-9]/g,"").slice(0,8).toUpperCase();
-              if(reservationCode){
-                sessionStorage.setItem("dpro_estate_last_reservation_code", reservationCode);
+          old = '''    const phoneProbe = await timedFetch(`${legacyBase}/api/public/member?phone=00000000000`, {}, 12000);
+              const piiKeys = phoneProbe.data && typeof phoneProbe.data === 'object' ? Object.keys(phoneProbe.data).filter((key) => /customer|member|reservation|phone|name/i.test(key)) : [];
+              if (phoneProbe.ok && piiKeys.length) {
+                checks.push(makeCheck('legacy-phone-endpoint', '旧電話番号だけ会員照会', 'セキュリティ', STATUS.NG, `匿名照会で情報キーを返しました: ${piiKeys.join(', ')}`));
+              } else {
+                checks.push(makeCheck('legacy-phone-endpoint', '旧電話番号だけ会員照会', 'セキュリティ', STATUS.ATTENTION, `公開画面からは削除済み。旧Worker原本がリポジトリにないため直接遮断は未確認（HTTP ${phoneProbe.status}）。`));
               }'''
-          new = '''    const reservationCode = String(
-                lastReservation.reservation_code ||
-                lastReservation.id ||
-                data.reservation_code ||
-                ""
-              ).replace(/[^a-zA-Z0-9]/g,"").slice(0,8).toUpperCase();
-              if(reservationCode){
-                sessionStorage.setItem("dpro_estate_last_reservation_code", reservationCode);
-              }
-              setPill("reservePill","ok","予約OK");
-              setMessage("reserveMessage","ok",reservationCode ? `内見予約を受け付けました。受付番号：${reservationCode}。マイページ確認に必要です。` : "内見予約を受け付けました。LINE文面をコピーして保存できます。");
-              setMessage("copyMessage","ok","予約完了文面をコピーできます。");'''
+          new = '''    const phoneProbe = await timedFetch(`${legacyBase}/api/public/member?phone=00000000000`, {}, 12000);
+              const probeData = phoneProbe.data && typeof phoneProbe.data === 'object' ? phoneProbe.data : {};
+              const ignoredMetaKeys = new Set(['ok', 'found', 'count', 'total', 'message', 'error', 'version', 'status']);
+              const hasPayloadValue = (value) => {
+                if (value === null || value === undefined) return false;
+                if (Array.isArray(value)) return value.some((item) => hasPayloadValue(item));
+                if (typeof value === 'object') {
+                  return Object.entries(value).some(([key, item]) => !ignoredMetaKeys.has(String(key).toLowerCase()) && hasPayloadValue(item));
+                }
+                if (typeof value === 'string') return value.trim() !== '';
+                if (typeof value === 'boolean') return value === true;
+                if (typeof value === 'number') return Number.isFinite(value);
+                return true;
+              };
+              const sensitiveFields = ['customer', 'member', 'reservations', 'reservation', 'profile', 'preference', 'phone', 'name', 'customer_name', 'line_display_name'];
+              const exposedFields = sensitiveFields.filter((key) => hasPayloadValue(probeData[key]));
+              if (probeData.found === true && !exposedFields.includes('found')) exposedFields.push('found');
+              if (phoneProbe.ok && exposedFields.length) {
+                checks.push(makeCheck('legacy-phone-endpoint', '旧電話番号だけ会員照会', 'セキュリティ', STATUS.NG, `匿名照会で実データ項目を返しました: ${exposedFields.join(', ')}`));
+              } else {
+                const responseKind = phoneProbe.ok ? '該当データなしの互換レスポンス' : `HTTP ${phoneProbe.status}`;
+                checks.push(makeCheck('legacy-phone-endpoint', '旧電話番号だけ会員照会', 'セキュリティ', STATUS.ATTENTION, `公開画面からは削除済み。${responseKind}を確認しました。旧Worker原本がないためエンドポイント自体の直接遮断は未確認です。`));
+              }'''
 
           if old not in text:
-              raise SystemExit('ERROR: expected reservation handoff block was not found.')
+              raise SystemExit('ERROR: expected legacy phone probe block was not found.')
           text = text.replace(old, new, 1)
           path.write_text(text)
 
-          declaration = text.index('const reservationCode = String(')
-          use = text.index('setMessage("reserveMessage","ok",reservationCode')
-          if declaration >= use:
-              raise SystemExit('ERROR: reservationCode is still used before declaration.')
-          if 'localStorage.setItem("estate_last_phone"' in text:
-              raise SystemExit('ERROR: phone localStorage persistence remains.')
-          if 'member.html?v=estate-next-9&phone=' in text or 'member.html?phone=' in text:
-              raise SystemExit('ERROR: phone query handoff remains.')
+          if 'const exposedFields = sensitiveFields.filter' not in text:
+              raise SystemExit('ERROR: content-based legacy probe classifier was not installed.')
 
-          Path('dpro-next/estate-next-9-r4-resume.yml').write_text(
+          Path('dpro-next/estate-next-9-r5-resume.yml').write_text(
               '\n'.join([
-                  'step: ESTATE-NEXT-9-R4',
+                  'step: ESTATE-NEXT-9-R5',
                   'status: LIVE-VERIFY-RESUME',
                   'fixes:',
-                  '  - property_reservation_code_declaration_order',
-                  '  - system_check_write_test_enabled',
+                  '  - legacy_phone_empty_compatibility_response_classification',
+                  '  - legacy_phone_actual_payload_only_ng',
                   'worker_changed: false',
                   'supabase_changed: false',
                   'api_changed: false',
@@ -137,7 +137,7 @@ jobs:
           )
           PY_FIX
 
-      - name: Validate R4 HTML JavaScript and security rules
+      - name: Validate R5 HTML JavaScript and probe rules
         shell: bash
         run: |
           set -Eeuo pipefail
@@ -169,9 +169,9 @@ jobs:
                       self.in_script = False
 
           for name in ['index.html','member.html','property.html','owner.html','owner-ipad.html','followup.html','owner-settings.html','system-check.html']:
-              text = Path(name).read_text()
+              source = Path(name).read_text()
               parser = Parser()
-              parser.feed(text)
+              parser.feed(source)
               duplicates = sorted({item for item in parser.ids if parser.ids.count(item) > 1})
               if duplicates:
                   raise SystemExit(f'ERROR: duplicate HTML ids in {name}: {duplicates}')
@@ -185,6 +185,16 @@ jobs:
                       raise SystemExit(f'ERROR: JavaScript syntax in {name} script {index}: {result.stderr}')
 
           subprocess.run(['node','--check','system-check-api.js'], check=True)
+          check_api = Path('system-check-api.js').read_text()
+          required_markers = [
+              "const sensitiveFields = ['customer', 'member', 'reservations'",
+              'const exposedFields = sensitiveFields.filter',
+              '該当データなしの互換レスポンス',
+          ]
+          for marker in required_markers:
+              if marker not in check_api:
+                  raise SystemExit(f'ERROR: R5 legacy probe marker is missing: {marker}')
+
           property_text = Path('property.html').read_text()
           declaration = property_text.index('const reservationCode = String(')
           use = property_text.index('setMessage("reserveMessage","ok",reservationCode')
@@ -199,18 +209,37 @@ jobs:
           hits = [pattern for pattern in forbidden if re.search(pattern, public, re.I)]
           if hits:
               raise SystemExit(f'ERROR: public security findings remain: {hits}')
-          print('R4 static validation PASS')
+
+          def has_value(value):
+              if value is None: return False
+              if isinstance(value, list): return any(has_value(item) for item in value)
+              if isinstance(value, dict):
+                  ignored = {'ok','found','count','total','message','error','version','status'}
+                  return any(key.lower() not in ignored and has_value(item) for key, item in value.items())
+              if isinstance(value, str): return bool(value.strip())
+              if isinstance(value, bool): return value
+              if isinstance(value, (int, float)): return True
+              return True
+
+          empty_compatibility = {'ok': True, 'found': False, 'customer': None, 'reservations': []}
+          actual_customer = {'ok': True, 'found': True, 'customer': {'customer_name': '検査'}}
+          actual_reservation = {'ok': True, 'found': False, 'reservations': [{'id': 'x'}]}
+          fields = ['customer','member','reservations','reservation','profile','preference','phone','name','customer_name','line_display_name']
+          assert not any(has_value(empty_compatibility.get(key)) for key in fields)
+          assert any(has_value(actual_customer.get(key)) for key in fields)
+          assert any(has_value(actual_reservation.get(key)) for key in fields)
+          print('R5 static and classifier validation PASS')
           PY_VALIDATE
 
-      - name: Commit R4 property fix
+      - name: Commit R5 legacy probe classifier
         shell: bash
         run: |
           set -Eeuo pipefail
-          git add property.html dpro-next/estate-next-9-r4-resume.yml
+          git add system-check-api.js dpro-next/estate-next-9-r5-resume.yml
           if git diff --cached --quiet; then
-            echo 'No R4 application change was required.'
+            echo 'No R5 application change was required.'
           else
-            git commit -m 'Fix DPRO ESTATE NEXT-9 R4 secure reservation handoff'
+            git commit -m 'Fix DPRO ESTATE NEXT-9 R5 legacy probe classification'
             git push origin "$TARGET_BRANCH"
           fi
 
@@ -256,7 +285,7 @@ jobs:
           test -n "$valid_code" || show_failure 'NEXT system-check authentication and self-tests' "$check_status" /tmp/system-check.json
 
           for attempt in $(seq 1 24); do
-            status="$(curl --silent --show-error -o /tmp/property-live.html -w '%{http_code}' "$PAGE_BASE/property.html?v=estate-next-9-r4-${GITHUB_RUN_ID}")"
+            status="$(curl --silent --show-error -o /tmp/property-live.html -w '%{http_code}' "$PAGE_BASE/property.html?v=estate-next-9-r5-${GITHUB_RUN_ID}")"
             if [ "$status" = '200' ] && python3 - <<'PY_PUBLISHED'
           from pathlib import Path
           text = Path('/tmp/property-live.html').read_text()
@@ -267,26 +296,32 @@ jobs:
             then
               break
             fi
-            if [ "$attempt" = '24' ]; then show_failure 'Published R4 property.html' "$status" /tmp/property-live.html; fi
+            if [ "$attempt" = '24' ]; then show_failure 'Published R5 property.html' "$status" /tmp/property-live.html; fi
             sleep 10
           done
 
           for attempt in $(seq 1 12); do
-            status="$(curl --silent --show-error -o /tmp/system-check-live.html -w '%{http_code}' "$PAGE_BASE/system-check.html?v=estate-next-9-r4-${GITHUB_RUN_ID}")"
+            status="$(curl --silent --show-error -o /tmp/system-check-live.html -w '%{http_code}' "$PAGE_BASE/system-check.html?v=estate-next-9-r5-${GITHUB_RUN_ID}")"
             if [ "$status" = '200' ] && grep -q 'ESTATE-NEXT-9' /tmp/system-check-live.html; then break; fi
             if [ "$attempt" = '12' ]; then show_failure 'Published NEXT-9 system-check.html' "$status" /tmp/system-check-live.html; fi
             sleep 10
           done
 
-          curl --fail --silent --show-error "$PAGE_BASE/config.js?v=estate-next-9-r4-${GITHUB_RUN_ID}" -o /tmp/config-live.js
+          curl --fail --silent --show-error "$PAGE_BASE/config.js?v=estate-next-9-r5-${GITHUB_RUN_ID}" -o /tmp/config-live.js
           grep -q "version: 'ESTATE-NEXT-9'" /tmp/config-live.js
-          curl --fail --silent --show-error "$PAGE_BASE/system-check-api.js?v=estate-next-9-r4-${GITHUB_RUN_ID}" -o /tmp/check-api-live.js
-          grep -q 'legacy-phone-endpoint' /tmp/check-api-live.js
+          for attempt in $(seq 1 24); do
+            status="$(curl --silent --show-error -o /tmp/check-api-live.js -w '%{http_code}' "$PAGE_BASE/system-check-api.js?v=estate-next-9-r5-${GITHUB_RUN_ID}")"
+            if [ "$status" = '200' ] && grep -q 'const exposedFields = sensitiveFields.filter' /tmp/check-api-live.js && grep -q '該当データなしの互換レスポンス' /tmp/check-api-live.js; then
+              break
+            fi
+            if [ "$attempt" = '24' ]; then show_failure 'Published R5 system-check-api.js' "$status" /tmp/check-api-live.js; fi
+            sleep 10
+          done
 
           page_files=(index.html member.html property.html owner.html owner-ipad.html followup.html owner-settings.html)
           > /tmp/page-times.tsv
           for page in "${page_files[@]}"; do
-            metrics="$(curl --silent --show-error --retry 3 --retry-delay 2 -o "/tmp/$page" -w '%{http_code} %{time_total}' "$PAGE_BASE/$page?v=estate-next-9-r4-${GITHUB_RUN_ID}")"
+            metrics="$(curl --silent --show-error --retry 3 --retry-delay 2 -o "/tmp/$page" -w '%{http_code} %{time_total}' "$PAGE_BASE/$page?v=estate-next-9-r5-${GITHUB_RUN_ID}")"
             status="${metrics%% *}"
             elapsed="${metrics##* }"
             echo -e "$page\t$status\t$elapsed" >> /tmp/page-times.tsv
@@ -335,9 +370,36 @@ jobs:
               probe = json.loads(probe_text) if probe_text else {}
           except Exception:
               probe = {}
-          pii_keys = [key for key in probe if any(word in key.lower() for word in ['customer','member','reservation','phone','name'])]
-          if 200 <= probe_status < 300 and pii_keys:
-              raise SystemExit(f'Legacy phone-only endpoint exposed data keys: {pii_keys}')
+          ignored_meta = {'ok', 'found', 'count', 'total', 'message', 'error', 'version', 'status'}
+          def has_payload_value(value):
+              if value is None:
+                  return False
+              if isinstance(value, list):
+                  return any(has_payload_value(item) for item in value)
+              if isinstance(value, dict):
+                  return any(str(key).lower() not in ignored_meta and has_payload_value(item) for key, item in value.items())
+              if isinstance(value, str):
+                  return bool(value.strip())
+              if isinstance(value, bool):
+                  return value is True
+              if isinstance(value, (int, float)):
+                  return True
+              return True
+
+          sensitive_fields = ['customer', 'member', 'reservations', 'reservation', 'profile', 'preference', 'phone', 'name', 'customer_name', 'line_display_name']
+          exposed_fields = [key for key in sensitive_fields if has_payload_value(probe.get(key))]
+          if probe.get('found') is True and 'found' not in exposed_fields:
+              exposed_fields.append('found')
+          if 200 <= probe_status < 300 and exposed_fields:
+              raise SystemExit(f'Legacy phone-only endpoint exposed populated fields: {exposed_fields}')
+
+          probe_keys = sorted(str(key) for key in probe.keys()) if isinstance(probe, dict) else []
+          print(json.dumps({
+              'legacy_phone_probe_http_status': probe_status,
+              'response_keys': probe_keys,
+              'populated_sensitive_fields': [],
+              'classification': 'EMPTY_COMPATIBILITY_RESPONSE_OR_NOT_FOUND'
+          }, ensure_ascii=False))
 
           page_times = []
           for line in Path('/tmp/page-times.tsv').read_text().splitlines():
@@ -347,7 +409,7 @@ jobs:
 
           result = {
               'step': 'ESTATE-NEXT-9',
-              'verification_revision': 'R4',
+              'verification_revision': 'R5',
               'status': 'PASS_WITH_ATTENTION',
               'generated_at': datetime.now(timezone(timedelta(hours=9))).isoformat(),
               'extension_health': {
@@ -365,7 +427,9 @@ jobs:
               'legacy_phone_only_probe': {
                   'http_status': probe_status,
                   'pii_exposed': False,
-                  'status': 'ATTENTION_SOURCE_UNAVAILABLE'
+                  'populated_sensitive_fields': [],
+                  'response_keys': probe_keys,
+                  'status': 'ATTENTION_EMPTY_COMPATIBILITY_RESPONSE_OR_SOURCE_UNAVAILABLE'
               },
               'property_reservation_code_order': 'PASS',
               'public_ui_phone_only_reference_removed': True,
@@ -391,7 +455,7 @@ jobs:
           baseline_tag: dpro-estate-next-baseline-20260723
           step_backup_tag: $STEP_BACKUP_TAG
           completed_at_jst: "$completed_at"
-          verification_revision: R4
+          verification_revision: R5
           modified_files:
             - system-check.html
             - system-check-api.js
@@ -411,7 +475,7 @@ jobs:
           property_phone_localstorage_removed: true
           property_member_phone_url_removed: true
           property_reservation_code_session_handoff: true
-          legacy_phone_only_endpoint_direct_block: ATTENTION_SOURCE_UNAVAILABLE
+          legacy_phone_only_endpoint_direct_block: ATTENTION_EMPTY_COMPATIBILITY_RESPONSE_OR_SOURCE_UNAVAILABLE
           performance_check: PASS_OR_ATTENTION_BY_LIVE_BUDGET
           worker_changed: false
           supabase_changed: false
@@ -423,7 +487,7 @@ jobs:
 
           estate_next_9:
             status: COMPLETE
-            verification_revision: R4
+            verification_revision: R5
             completed_at_jst: "$completed_at"
             added:
               - OK・注意・NGの営業前system-check
@@ -435,6 +499,7 @@ jobs:
               - 物件詳細からマイページへの電話番号URL引継ぎを廃止
               - 受付番号をsessionStorageで安全に引き継ぐ導線
               - 受付番号の宣言順序と実行時利用順序を修正
+              - 旧電話番号APIの空互換レスポンスと実データ露出を分離判定
             security_attention:
               - 旧Worker原本がないため電話番号だけの旧エンドポイント自体の直接削除は未実施
             change_record:
@@ -444,8 +509,8 @@ jobs:
           EOF_FEATURE
 
           rm -f dpro-next/estate-next-9-preparation.yml
-          git add dpro-next/estate-progress.yml dpro-next/estate-feature-ledger.yml dpro-next/estate-next-9-live-verification.json dpro-next/estate-next-9-security-register.yml dpro-next/estate-next-9-r4-resume.yml
-          git commit -m 'Complete DPRO ESTATE NEXT-9 R4 audit'
+          git add dpro-next/estate-progress.yml dpro-next/estate-feature-ledger.yml dpro-next/estate-next-9-live-verification.json dpro-next/estate-next-9-security-register.yml dpro-next/estate-next-9-r5-resume.yml
+          git commit -m 'Complete DPRO ESTATE NEXT-9 R5 audit'
           git push origin "$TARGET_BRANCH"
 
       - name: Delete workflow and commit verified completion
@@ -465,7 +530,7 @@ jobs:
 
           | 項目 | 結果 |
           |---|---|
-          | R4再開検証 | PASS |
+          | R5再開検証 | PASS |
           | system-check write self-test | PASS |
           | Supabase 9テーブル | PASS |
           | 会員セキュリティ | PASS |
@@ -474,7 +539,7 @@ jobs:
           | 物件予約受付番号引継ぎ | PASS |
           | 電話番号localStorage保存削除 | PASS |
           | 電話番号URL引継ぎ削除 | PASS |
-          | 旧Worker電話番号エンドポイント | 注意：原本未取得 |
+          | 旧Worker電話番号エンドポイント | 注意：空レスポンス確認・原本未取得 |
           | 次STEP | ESTATE-NEXT-10 |
 
           実行YML自身を削除し、完成台帳を保存しました。
