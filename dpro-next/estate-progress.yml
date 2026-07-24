@@ -1,42 +1,34 @@
 system: DPRO 不動産・賃貸内見 LINE
 repository: dpromstk2000-lab/dpro-estate-line-liff
-previous_step: ESTATE-NEXT-8-DEPLOY-PENDING
-current_step: ESTATE-NEXT-8-COMPLETE
-next_step: ESTATE-NEXT-9
+previous_step: ESTATE-NEXT-8-COMPLETE
+current_step: ESTATE-NEXT-9-COMPLETE
+next_step: ESTATE-NEXT-10
 baseline_tag: dpro-estate-next-baseline-20260723
-step_backup_tag: dpro-estate-next-8-before-20260724
-completed_at_jst: "2026-07-24T21:54:13+09:00"
-verification_revision: R3
+step_backup_tag: dpro-estate-next-9-before-20260724
+completed_at_jst: "2026-07-24T23:34:53+09:00"
+verification_revision: R5
 modified_files:
-  - owner.html
+  - system-check.html
+  - system-check-api.js
   - config.js
-  - followup.html
-  - followup-api.js
-  - deploy/estate-next-8/worker.js
-extension_worker_name: dpro-estate-next4-api
-extension_worker_url: https://dpro-estate-next4-api.dpromstk2000.workers.dev
-extension_worker_version: ESTATE-NEXT-8-R3-EXTENSION-20260724
-legacy_fetch_limit: 200
-legacy_service_binding: LEGACY_ESTATE_API
-legacy_transport: service_binding
-cloudflare_1042_resolved: true
-worker_changed: true
-supabase_changed: true
-api_changed: true
-followup_center: true
-revisit_workflow: true
-post_viewing_followup: true
-property_candidate_matching: true
-proposal_history: true
-customer_exclusions: true
-proposal_duplicate_guard: true
-task_duplicate_guard: true
-individual_line_copy_only: true
-bulk_line_auto_send_added: false
+  - property.html
+system_check_status: ATTENTION
+static_security_check: PASS
+live_api_check: PASS
+write_self_test: PASS
+service_binding_check: PASS
+supabase_nine_tables_check: PASS
+duplicate_html_id_check: PASS
+javascript_syntax_check: PASS
+property_runtime_order_check: PASS
+public_internal_exposure_check: PASS
+public_ui_phone_only_removed: true
+property_phone_localstorage_removed: true
+property_member_phone_url_removed: true
+property_reservation_code_session_handoff: true
+legacy_phone_only_endpoint_direct_block: ATTENTION_EMPTY_COMPATIBILITY_RESPONSE_OR_SOURCE_UNAVAILABLE
+performance_check: PASS_OR_ATTENTION_BY_LIVE_BUDGET
+worker_changed: false
+supabase_changed: false
+api_changed: false
 existing_features_preserved: true
-live_health_check: PASS
-live_schema_check: PASS
-live_followup_test: PASS
-live_endpoint_diagnostics: PASS
-published_followup_check: PASS
-published_owner_link_check: PASS

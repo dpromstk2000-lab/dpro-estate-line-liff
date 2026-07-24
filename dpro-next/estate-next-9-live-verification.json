@@ -1,0 +1,85 @@
+{
+  "step": "ESTATE-NEXT-9",
+  "verification_revision": "R5",
+  "status": "PASS_WITH_ATTENTION",
+  "generated_at": "2026-07-24T23:34:53.745507+09:00",
+  "extension_health": {
+    "ok": true,
+    "version": "ESTATE-NEXT-8-R3-EXTENSION-20260724",
+    "service_binding": "service_binding"
+  },
+  "legacy_health": {
+    "ok": true,
+    "version": "estate-3-worker-api-20260710"
+  },
+  "supabase_tables": {
+    "ok": true,
+    "count": 9
+  },
+  "write_self_test": {
+    "ok": true
+  },
+  "member_security": {
+    "ok": true,
+    "token_hash_only": true
+  },
+  "followup_guards": {
+    "ok": true
+  },
+  "public_pages": [
+    {
+      "page": "index.html",
+      "http_status": 200,
+      "seconds": 0.186721
+    },
+    {
+      "page": "member.html",
+      "http_status": 200,
+      "seconds": 0.176756
+    },
+    {
+      "page": "property.html",
+      "http_status": 200,
+      "seconds": 0.154592
+    },
+    {
+      "page": "owner.html",
+      "http_status": 200,
+      "seconds": 0.157351
+    },
+    {
+      "page": "owner-ipad.html",
+      "http_status": 200,
+      "seconds": 0.118104
+    },
+    {
+      "page": "followup.html",
+      "http_status": 200,
+      "seconds": 0.200118
+    },
+    {
+      "page": "owner-settings.html",
+      "http_status": 200,
+      "seconds": 0.125756
+    }
+  ],
+  "performance_status": "PASS",
+  "legacy_phone_only_probe": {
+    "http_status": 200,
+    "pii_exposed": false,
+    "populated_sensitive_fields": [],
+    "response_keys": [
+      "customer",
+      "followups",
+      "found",
+      "ok",
+      "preference",
+      "reservations",
+      "step"
+    ],
+    "status": "ATTENTION_EMPTY_COMPATIBILITY_RESPONSE_OR_SOURCE_UNAVAILABLE"
+  },
+  "property_reservation_code_order": "PASS",
+  "public_ui_phone_only_reference_removed": true,
+  "system_check_header_auth_only": true
+}

@@ -148,3 +148,25 @@ estate_next_8:
     - proposal_history
     - customer_exclusions
     - individual_line_copy
+
+estate_next_9:
+  status: COMPLETE
+  verification_revision: R5
+  completed_at_jst: "2026-07-24T23:34:53+09:00"
+  added:
+    - OK・注意・NGの営業前system-check
+    - API・Supabase・Service Binding・公開画面の一括検査
+    - 公開情報・管理コードURL・重複ID・JavaScript構文の検査
+    - API・画面の応答時間計測
+    - 安全な結果コピー
+    - 物件詳細予約の電話番号localStorage保存を廃止
+    - 物件詳細からマイページへの電話番号URL引継ぎを廃止
+    - 受付番号をsessionStorageで安全に引き継ぐ導線
+    - 受付番号の宣言順序と実行時利用順序を修正
+    - 旧電話番号APIの空互換レスポンスと実データ露出を分離判定
+  security_attention:
+    - 旧Worker原本がないため電話番号だけの旧エンドポイント自体の直接削除は未実施
+  change_record:
+    worker: unchanged
+    supabase: unchanged
+    api: unchanged
