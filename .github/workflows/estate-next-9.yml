@@ -1,4 +1,4 @@
-name: DPRO ESTATE NEXT-9 Security Performance Audit
+name: DPRO ESTATE NEXT-9 R2 Security Performance Audit
 
 'on':
   push:
@@ -31,6 +31,7 @@ jobs:
       EXPECTED_CONFIG_BLOB: 20517f6e6709b61b303934c85e9c4659fb11beac
       EXPECTED_INDEX_BLOB: c9852f5b5865466f48e03b0d9fb8e960805e2904
       EXPECTED_MEMBER_BLOB: eae91cafc7da824d5718de20276b17238c52d34a
+      EXPECTED_PROPERTY_BLOB: 7126b5108a2097912b228b821b87228c0cb2cfaa
 
     steps:
       - name: Checkout repository with full history
@@ -51,8 +52,14 @@ jobs:
           test "$current_step" = 'ESTATE-NEXT-8-COMPLETE' || { echo "ERROR: expected ESTATE-NEXT-8-COMPLETE, got $current_step" >&2; exit 1; }
           test "$next_step" = 'ESTATE-NEXT-9' || { echo "ERROR: expected ESTATE-NEXT-9, got $next_step" >&2; exit 1; }
           tag_commit="$(git rev-parse HEAD)"
-          changed="$(git diff-tree --no-commit-id --name-only -r HEAD | sed '/^$/d')"
-          if [ "$changed" = "$WORKFLOW_PATH" ]; then tag_commit="$(git rev-parse HEAD^)"; fi
+          while true; do
+            changed="$(git diff-tree --no-commit-id --name-only -r "$tag_commit" | sed '/^$/d')"
+            if [ "$changed" = "$WORKFLOW_PATH" ]; then
+              tag_commit="$(git rev-parse "$tag_commit^")"
+            else
+              break
+            fi
+          done
           if git rev-parse "$STEP_BACKUP_TAG" >/dev/null 2>&1; then
             test "$(git rev-parse "$STEP_BACKUP_TAG")" = "$tag_commit" || { echo 'ERROR: backup tag points to a different commit.' >&2; exit 1; }
           else
@@ -68,6 +75,7 @@ jobs:
           test "$(git hash-object config.js)" = "$EXPECTED_CONFIG_BLOB" || { echo 'ERROR: config.js changed after NEXT-8.' >&2; exit 1; }
           test "$(git hash-object index.html)" = "$EXPECTED_INDEX_BLOB" || { echo 'ERROR: index.html changed after NEXT-8.' >&2; exit 1; }
           test "$(git hash-object member.html)" = "$EXPECTED_MEMBER_BLOB" || { echo 'ERROR: member.html changed after NEXT-8.' >&2; exit 1; }
+          test "$(git hash-object property.html)" = "$EXPECTED_PROPERTY_BLOB" || { echo 'ERROR: property.html changed after NEXT-8.' >&2; exit 1; }
 
       - name: Install NEXT-9 system-check and audit records
         shell: bash
@@ -83,6 +91,95 @@ jobs:
           }
           for name, encoded in payloads.items():
               Path(name).write_bytes(base64.b64decode(encoded))
+
+          # NEXT-9 R2: property.html に残っていた電話番号の永続保存とURL引継ぎを除去します。
+          property_path = Path('property.html')
+          property_text = property_path.read_text()
+          required_fragments = [
+              'localStorage.setItem("estate_last_phone", phone);',
+              'location.href = `member.html?v=estate-12&phone=${encodeURIComponent(phone)}`;',
+              '<title>STEP ESTATE-12｜物件詳細｜DPRO 不動産・賃貸内見 LINE</title>',
+              '<span class="badge">STEP ESTATE-12</span>',
+              'DPRO 不動産・賃貸内見 LINE ｜ STEP ESTATE-12 ｜ API: https://dpro-estate-line-api.dpromstk2000.workers.dev',
+          ]
+          missing = [fragment for fragment in required_fragments if fragment not in property_text]
+          if missing:
+              raise SystemExit(f'property.html secure handoff patch target missing: {missing}')
+
+          property_text = property_text.replace(
+              '<title>STEP ESTATE-12｜物件詳細｜DPRO 不動産・賃貸内見 LINE</title>',
+              '<title>物件詳細｜DPRO 不動産・賃貸内見 LINE</title>',
+          )
+          property_text = property_text.replace('<span class="badge">STEP ESTATE-12</span>', '<span class="badge">物件詳細</span>')
+          property_text = property_text.replace('<span class="badge">全体導線ブラッシュアップ</span>', '<span class="badge">公開物件</span>')
+          property_text = property_text.replace('<span class="badge">物件詳細 property.html</span>', '<span class="badge">内見予約</span>')
+          property_text = property_text.replace('<h2>物件QRで見せる流れ</h2>', '<h2>物件ページのご利用方法</h2>')
+          property_text = property_text.replace(
+              '営業デモでは「物件ごとにQRを作って、チラシや店頭POPから直接内見予約に誘導できます」と説明できます。',
+              '物件情報を確認し、そのままご希望の内見日時を選択できます。',
+          )
+          property_text = property_text.replace('<span class="pill ok">営業向け</span>', '<span class="pill ok">ご利用方法</span>')
+          property_text = property_text.replace('APIから公開物件を取得しています。', '公開中の物件情報を取得しています。')
+          property_text = property_text.replace(
+              '物件写真はデモ表示です。実運用では外観・室内写真に差し替えできます。',
+              '外観・室内写真の詳細は店舗からご案内します。',
+          )
+          property_text = property_text.replace(' のデモ物件`;', ' の物件`;')
+          property_text = property_text.replace('?v=estate-12', '?v=estate-next-9')
+          property_text = property_text.replace(
+              'DPRO 不動産・賃貸内見 LINE ｜ STEP ESTATE-12 ｜ API: https://dpro-estate-line-api.dpromstk2000.workers.dev',
+              'DPRO 不動産・賃貸内見 LINE ｜ 物件詳細・内見予約',
+          )
+          reservation_block = '\n'.join([
+              '    const reservationCode = String(',
+              '      lastReservation.reservation_code ||',
+              '      lastReservation.id ||',
+              '      data.reservation_code ||',
+              '      ""',
+              '    ).replace(/[^a-zA-Z0-9]/g,"").slice(0,8).toUpperCase();',
+              '    if(reservationCode){',
+              '      sessionStorage.setItem("dpro_estate_last_reservation_code", reservationCode);',
+              '    }',
+          ])
+          property_text = property_text.replace(
+              '    localStorage.setItem("estate_last_phone", phone);',
+              reservation_block,
+          )
+          property_text = property_text.replace(
+              '    setMessage("reserveMessage","ok","内見予約を受け付けました。LINE文面をコピーして保存できます。");',
+              '    setMessage("reserveMessage","ok",reservationCode ? `内見予約を受け付けました。受付番号：${reservationCode}。マイページ確認に必要です。` : "内見予約を受け付けました。LINE文面をコピーして保存できます。");',
+          )
+          old_go_member = '\n'.join([
+              'function goMember(){',
+              '  const phone = normalizePhone($("phone").value);',
+              '  if(phone){',
+              '    location.href = `member.html?v=estate-next-9&phone=${encodeURIComponent(phone)}`;',
+              '  }else{',
+              '    location.href = "member.html?v=estate-next-9";',
+              '  }',
+              '}',
+          ])
+          new_go_member = '\n'.join([
+              'function goMember(){',
+              '  location.href = "member.html?v=estate-next-9";',
+              '}',
+          ])
+          if old_go_member not in property_text:
+              raise SystemExit('property.html goMember secure handoff target missing after version update')
+          property_text = property_text.replace(old_go_member, new_go_member)
+
+          forbidden = [
+              'localStorage.setItem("estate_last_phone"',
+              'member.html?v=estate-next-9&phone=',
+              'STEP ESTATE-12',
+              '物件詳細 property.html',
+              '営業デモでは',
+          ]
+          remaining = [marker for marker in forbidden if marker in property_text]
+          if remaining:
+              raise SystemExit(f'property.html secure handoff markers remain: {remaining}')
+          property_path.write_text(property_text)
+
           Path('dpro-next').mkdir(exist_ok=True)
           performance = {
             'step': 'ESTATE-NEXT-9',
@@ -92,9 +189,12 @@ jobs:
           }
           Path('dpro-next/estate-performance-budget.json').write_text(json.dumps(performance, ensure_ascii=False, indent=2) + '\n')
           security = '\n'.join([
-              'step: ESTATE-NEXT-9',
+              'step: ESTATE-NEXT-9-R2',
               'status: ATTENTION',
               'public_ui_phone_only_reference_removed: true',
+              'property_phone_localstorage_removed: true',
+              'property_member_phone_url_removed: true',
+              'property_reservation_code_session_handoff: true',
               'admin_code_query_parameter_removed: true',
               'system_check_header_auth_only: true',
               'service_binding_required: true',
@@ -159,11 +259,19 @@ jobs:
               (re.compile(r'/api/public/member\?phone=',re.I),'legacy phone-only endpoint reference'),
               (re.compile(r'admin_code=',re.I),'admin code query parameter'),
               (re.compile(r'localStorage\.setItem\([^)]*(phone|name)',re.I),'PII localStorage persistence'),
+              (re.compile(r"member\.html[^\n\"'`]*[?&]phone=",re.I),'phone number in member page URL'),
           ]
           for path in public_files:
               text=path.read_text(errors='replace')
               for pattern,label in patterns:
                   if pattern.search(text): critical.append({'file':str(path),'finding':label})
+              if path.name == 'property.html':
+                  for marker,label in [
+                      ('STEP ESTATE-12','legacy STEP marker in public UI'),
+                      ('物件詳細 property.html','internal filename in public UI'),
+                      ('営業デモでは','internal sales copy in public UI'),
+                  ]:
+                      if marker in text: critical.append({'file':str(path),'finding':label})
           system=Path('system-check.html').read_text()
           if re.search(r'value=["\']1234["\']',system,re.I): critical.append({'file':'system-check.html','finding':'fixed demo code in normal UI'})
           if re.search(r'admin_code=',system,re.I): critical.append({'file':'system-check.html','finding':'admin code in URL'})
@@ -175,7 +283,7 @@ jobs:
               raise SystemExit(f'NEXT-9 file size budget exceeded: {sizes}')
           report={
             'step':'ESTATE-NEXT-9','html_files_checked':len(html_files),'inline_scripts_checked':script_count,
-            'duplicate_ids':'PASS','javascript_syntax':'PASS','public_security_scan':'PASS',
+            'duplicate_ids':'PASS','javascript_syntax':'PASS','public_security_scan':'PASS','property_secure_handoff':'PASS',
             'legacy_worker_source_present':Path('worker.js').exists(), 'sizes_bytes':sizes,
             'status':'PASS_WITH_ATTENTION',
             'attention':['Legacy Worker source is unavailable; the old phone-only endpoint cannot be directly removed in this STEP.']
@@ -190,11 +298,12 @@ jobs:
           set -Eeuo pipefail
           test "$(git hash-object index.html)" = "$EXPECTED_INDEX_BLOB"
           test "$(git hash-object member.html)" = "$EXPECTED_MEMBER_BLOB"
+          test "$(git hash-object property.html)" != "$EXPECTED_PROPERTY_BLOB"
           grep -q 'followup.html' owner.html
           grep -q 'secure_session' dpro-next/estate-next-8-live-verification.json
           grep -q 'property_candidate_endpoint' dpro-next/estate-next-8-live-verification.json
           changed="$(git status --short | awk '{print $2}' | sort)"
-          allowed="$(printf '%s\n' config.js system-check-api.js system-check.html dpro-next/estate-next-9-security-register.yml dpro-next/estate-next-9-static-audit.json dpro-next/estate-performance-budget.json | sort)"
+          allowed="$(printf '%s\n' config.js property.html system-check-api.js system-check.html dpro-next/estate-next-9-security-register.yml dpro-next/estate-next-9-static-audit.json dpro-next/estate-performance-budget.json | sort)"
           test "$changed" = "$allowed" || { echo 'ERROR: unexpected change scope.' >&2; diff -u <(echo "$allowed") <(echo "$changed") || true; exit 1; }
 
       - name: Commit NEXT-9 application files
@@ -209,14 +318,18 @@ jobs:
             - system-check.html
             - system-check-api.js
             - config.js
+            - property.html
           worker_changed: false
           supabase_changed: false
           api_changed: false
           public_ui_phone_only_removed: true
+          property_phone_localstorage_removed: true
+          property_member_phone_url_removed: true
+          property_reservation_code_session_handoff: true
           legacy_phone_only_direct_block: attention_source_unavailable
           EOF_PREP
-          git add config.js system-check.html system-check-api.js dpro-next/estate-performance-budget.json dpro-next/estate-next-9-security-register.yml dpro-next/estate-next-9-static-audit.json dpro-next/estate-next-9-preparation.yml
-          git commit -m 'DPRO ESTATE NEXT-9 security performance system check'
+          git add config.js property.html system-check.html system-check-api.js dpro-next/estate-performance-budget.json dpro-next/estate-next-9-security-register.yml dpro-next/estate-next-9-static-audit.json dpro-next/estate-next-9-preparation.yml
+          git commit -m 'DPRO ESTATE NEXT-9 R2 secure property handoff and audit'
           git push origin "$TARGET_BRANCH"
 
       - name: Verify live APIs security performance and published pages
@@ -344,6 +457,7 @@ jobs:
             - system-check.html
             - system-check-api.js
             - config.js
+            - property.html
           system_check_status: ATTENTION
           static_security_check: PASS
           live_api_check: PASS
@@ -353,6 +467,9 @@ jobs:
           javascript_syntax_check: PASS
           public_internal_exposure_check: PASS
           public_ui_phone_only_removed: true
+          property_phone_localstorage_removed: true
+          property_member_phone_url_removed: true
+          property_reservation_code_session_handoff: true
           legacy_phone_only_endpoint_direct_block: ATTENTION_SOURCE_UNAVAILABLE
           performance_check: PASS_OR_ATTENTION_BY_LIVE_BUDGET
           worker_changed: false
@@ -371,6 +488,9 @@ jobs:
               - 公開情報・管理コードURL・重複ID・JavaScript構文の検査
               - API・画面の応答時間計測
               - 安全な結果コピー
+              - 物件詳細予約の電話番号localStorage保存を廃止
+              - 物件詳細からマイページへの電話番号URL引継ぎを廃止
+              - 受付番号をsessionStorageで安全に引き継ぐ導線
             security_attention:
               - 旧Worker原本がないため電話番号だけの旧エンドポイント自体の直接削除は未実施
             change_record:
