@@ -35,3 +35,10 @@ post_complete_ui_hotfix: ESTATE-NEXT-10-HOTFIX-OWNER-LAYOUT-R1
 owner_layout: PASS
 owner_action_buttons: PASS
 owner_visual_verification: DESKTOP_TABLET_MOBILE
+post_complete_access_hotfix: ESTATE-NEXT-10-CONTRACT-OWNER-SEPARATION-R3
+contract_owner_demo_menu: HIDDEN
+contract_owner_demo_prepare: BLOCKED_CLIENT_SIDE
+contract_owner_demo_api_requests: 0
+contract_owner_security_panel: PASS
+demo_access_condition: DEMO_QUERY_AND_DEMO_SHOP_AND_DEMO_MODE
+demo_server_guard: ATTENTION_LEGACY_SOURCE_UNAVAILABLE

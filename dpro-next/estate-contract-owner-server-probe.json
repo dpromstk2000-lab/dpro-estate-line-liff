@@ -1,0 +1,7 @@
+{
+  "http_status": 404,
+  "unknown_contract_shop_accepted": false,
+  "server_probe_status": "PASS_NOT_ACCEPTED",
+  "legacy_worker_source_in_repository": false,
+  "valid_contract_shop_server_guard": "ATTENTION_SOURCE_UNAVAILABLE"
+}

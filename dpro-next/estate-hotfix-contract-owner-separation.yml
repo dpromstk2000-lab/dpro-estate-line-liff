@@ -1,0 +1,35 @@
+system: DPRO 不動産・賃貸内見 LINE
+hotfix: ESTATE-NEXT-10-CONTRACT-OWNER-SEPARATION-R3
+status: COMPLETE_WITH_SERVER_ATTENTION
+completed_at_jst: "2026-07-25T10:03:31+09:00"
+application_files_changed_in_r3: false
+r1_failure:
+  application_defect: false
+  verification_defect: WINDOW_STATE_REFERENCE
+r2_failure:
+  application_defect: false
+  verification_defect: FRAGILE_PUNCTUATION_STRING
+r3_verification:
+  literal_source_checks: PASS
+  function_guard_checks: PASS
+  browser_behavior_checks: PASS
+demo_visibility_condition:
+  query_demo_equals_1: PASS
+  demo_shop_code_match: PASS
+  deployment_mode_demo: PASS
+  all_conditions_required: PASS
+contract_owner_demo_menu_hidden: PASS
+contract_owner_demo_panel_hidden: PASS
+contract_owner_direct_panel_open_blocked: PASS
+contract_owner_prepare_demo_client_blocked: PASS
+contract_owner_demo_api_request_count: 0
+contract_owner_security_panel_visible: PASS
+demo_environment_controls_visible: PASS
+desktop_visual_check: PASS
+mobile_visual_check: PASS
+legacy_worker_source_in_repository: false
+valid_contract_shop_server_guard: ATTENTION_SOURCE_UNAVAILABLE
+worker_changed: false
+supabase_changed: false
+api_changed: false
+existing_features_preserved: true

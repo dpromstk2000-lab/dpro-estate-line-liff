@@ -1,0 +1,31 @@
+{
+  "demoDesktop": {
+    "mode": "demo",
+    "demoNavHidden": false,
+    "demoPanelHidden": false,
+    "securityButtonExists": true,
+    "activePanel": "demo"
+  },
+  "contractDesktop": {
+    "mode": "contract",
+    "demoNavHidden": true,
+    "demoPanelHidden": true,
+    "securityButtonExists": true,
+    "activeAfterDirectOpen": "security",
+    "demoPrepareRequests": 0,
+    "blockedMessage": "契約店舗ではデモ準備を実行できません。",
+    "securityVisible": true,
+    "horizontalOverflow": 0
+  },
+  "contractMobile": {
+    "mode": "contract",
+    "demoNavHidden": true,
+    "demoPanelHidden": true,
+    "securityButtonExists": true,
+    "activeAfterDirectOpen": "security",
+    "demoPrepareRequests": 0,
+    "blockedMessage": "契約店舗ではデモ準備を実行できません。",
+    "securityVisible": true,
+    "horizontalOverflow": 0
+  }
+}
