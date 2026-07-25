@@ -1,3 +1,4 @@
+/* ESTATE-NEXT-10-SYSTEM-CHECK-FALSE-NG-R1 */
 (function () {
   'use strict';
 
@@ -151,10 +152,32 @@
         const missing = requiredTables.filter((name) => tables.get(name) !== true);
         checks.push(makeCheck('supabase-tables', 'Supabase 9テーブル', 'データ', missing.length ? STATUS.NG : STATUS.OK, missing.length ? `未確認: ${missing.join(', ')}` : '9テーブルすべてOK'));
         const followup = system.data.followup_test || {};
-        const followupOk = ['task_duplicate_guard','proposal_duplicate_guard','exclusion_duplicate_guard','revisit_duplicate_guard','candidate_match_logic'].every((key) => followup[key] === true);
-        checks.push(makeCheck('duplicate-guards', '追客・提案の二重操作防止', 'データ', followupOk ? STATUS.OK : STATUS.NG, followupOk ? '全ガードOK' : detail(followup)));
+        const followupKeys = ['task_duplicate_guard','proposal_duplicate_guard','exclusion_duplicate_guard','revisit_duplicate_guard','candidate_match_logic'];
+        const followupExecuted = followupKeys.some((key) => Object.prototype.hasOwnProperty.call(followup, key));
+        const followupOk = followupExecuted && followupKeys.every((key) => followup[key] === true);
+        checks.push(makeCheck(
+          'duplicate-guards',
+          '追客・提案の二重操作防止',
+          'データ',
+          followupExecuted ? (followupOk ? STATUS.OK : STATUS.NG) : STATUS.ATTENTION,
+          followupExecuted
+            ? (followupOk ? '全ガードOK' : detail(followup))
+            : '読取専用チェック（write_test=0）のため、書込みを伴う二重操作テストは未実施です。'
+        ));
+
         const member = system.data.member_security_test || {};
-        checks.push(makeCheck('member-security', '会員セッション保護', 'セキュリティ', member.ok === true && member.token_hash_only === true ? STATUS.OK : STATUS.NG, member.ok === true ? 'トークンハッシュ・期限・再相談ガードOK' : detail(member)));
+        const memberExecuted = ['ok','token_hash_only','expiry_guard','revisit_guard']
+          .some((key) => Object.prototype.hasOwnProperty.call(member, key));
+        const memberOk = memberExecuted && member.ok === true && member.token_hash_only === true;
+        checks.push(makeCheck(
+          'member-security',
+          '会員セッション保護',
+          'セキュリティ',
+          memberExecuted ? (memberOk ? STATUS.OK : STATUS.NG) : STATUS.ATTENTION,
+          memberExecuted
+            ? (memberOk ? 'トークンハッシュ・期限・再相談ガードOK' : detail(member))
+            : '読取専用チェック（write_test=0）のため、セッション生成を伴う保護テストは未実施です。'
+        ));
       }
     }
 
