@@ -1,0 +1,19 @@
+system: DPRO 不動産・賃貸内見 LINE
+hotfix: ESTATE-NEXT-10-SYSTEM-CHECK-FALSE-NG-R1
+status: COMPLETE
+completed_at_jst: "2026-07-25T10:48:11+09:00"
+cause:
+  api_mode: write_test_0
+  omitted_followup_test_object: true
+  omitted_member_security_test_object: true
+  old_ui_treated_empty_object_as_ng: true
+correction:
+  unexecuted_followup_write_test: ATTENTION
+  unexecuted_member_session_write_test: ATTENTION
+  executed_pass_test: OK
+  executed_fail_test: NG
+application_data_changed: false
+worker_changed: false
+supabase_changed: false
+api_changed: false
+existing_features_preserved: true

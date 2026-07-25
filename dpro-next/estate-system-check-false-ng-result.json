@@ -1,0 +1,16 @@
+{
+  "overall": "注意",
+  "ok": "16",
+  "attention": "3",
+  "ng": "0",
+  "duplicateGuard": {
+    "label": "追客・提案の二重操作防止",
+    "message": "データ｜読取専用チェック（write_test=0）のため、書込みを伴う二重操作テストは未実施です。",
+    "status": "注意"
+  },
+  "memberSecurity": {
+    "label": "会員セッション保護",
+    "message": "セキュリティ｜読取専用チェック（write_test=0）のため、セッション生成を伴う保護テストは未実施です。",
+    "status": "注意"
+  }
+}

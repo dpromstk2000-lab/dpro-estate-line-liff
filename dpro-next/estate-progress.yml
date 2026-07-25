@@ -42,3 +42,6 @@ contract_owner_demo_api_requests: 0
 contract_owner_security_panel: PASS
 demo_access_condition: DEMO_QUERY_AND_DEMO_SHOP_AND_DEMO_MODE
 demo_server_guard: ATTENTION_LEGACY_SOURCE_UNAVAILABLE
+post_complete_system_check_hotfix: ESTATE-NEXT-10-SYSTEM-CHECK-FALSE-NG-R1
+system_check_false_ng: CORRECTED
+read_only_write_tests: ATTENTION_NOT_NG
