@@ -68,7 +68,7 @@
   </style>
 </head>
 <body>
-  <!-- DPRO ESTATE NEXT-2 / owner-settings.html -->
+  <!-- ESTATE-NEXT-10-CONTRACT-OWNER-SEPARATION-R1 / owner-settings.html -->
   <aside class="sidebar" id="sidebar">
     <div class="brand">
       <small>DPRO 不動産・賃貸内見 LINE</small>
@@ -81,7 +81,8 @@
       <button class="nav-btn" data-settings-button="booking" onclick="openSettingsPanel('booking')">予約・営業時間</button>
       <button class="nav-btn" data-settings-button="areas" onclick="openSettingsPanel('areas')">対応エリア</button>
       <button class="nav-btn" data-settings-button="templates" onclick="openSettingsPanel('templates')">LINE文面</button>
-      <button class="nav-btn" data-settings-button="system" onclick="openSettingsPanel('system')">デモ・システム</button>
+      <button class="nav-btn" data-settings-button="security" onclick="openSettingsPanel('security')">管理・セキュリティ</button>
+      <button class="nav-btn hidden" id="demoSystemNav" data-demo-only data-settings-button="demo" onclick="openSettingsPanel('demo')">デモ・保守</button>
     </div>
     <div class="nav-group">
       <div class="nav-label">関連画面</div>
@@ -213,71 +214,95 @@
         </section>
       </section>
 
-      <section class="settings-panel" data-settings-panel="system">
+      <section class="settings-panel" data-settings-panel="security">
         <section class="card">
-          <div class="card-head"><div><h2 class="card-title">デモ・システム</h2><p class="card-sub">日常設定と分けた管理者向け操作です。</p></div><span class="pill warn">慎重操作</span></div>
-          <div class="card-body">
-            <div class="demo-grid">
-              <div class="demo-card">
-                <h3>営業前デモ準備</h3><p>デモ予約・顧客・追客を初期状態へ戻します。本番店舗では使用しません。</p>
-                <div class="actions"><button class="btn warn" id="demoPrepareBtn" onclick="prepareDemo()">営業前デモ準備</button></div>
-              </div>
-              <div class="demo-card">
-                <h3>管理コード変更</h3><p>本番導入時だけ変更してください。保存後、この端末の保存値も更新されます。</p>
-                <div class="field" style="margin-top:10px"><label for="newAdminCode">新しい管理コード</label><input id="newAdminCode" type="password" autocomplete="new-password" placeholder="変更しない場合は空欄"></div>
-                <div class="actions"><button class="btn" onclick="saveBasic()">管理コードを変更</button><button class="btn light" onclick="clearSavedAdminCode()">この端末から保存値を削除</button></div>
-              </div>
-            </div>
-            <div class="demo-grid" style="margin-top:14px">
-              <div class="demo-card"><h3>システム確認</h3><p>APIの管理コードをURLへ付けず、system-check画面から確認します。</p><div class="actions"><a class="btn secondary" id="systemCheckLink" href="system-check.html" target="_blank" rel="noopener">system-checkを開く</a></div></div>
-              <div class="demo-card"><h3>画面URL</h3><p>営業確認に必要な画面だけを表示します。</p><div class="url-list">
-                <div class="url-row"><strong>お客様画面</strong><code id="urlIndex"></code><button class="btn light" onclick="copyElementText('urlIndex')">コピー</button></div>
-                <div class="url-row"><strong>PC管理画面</strong><code id="urlOwner"></code><button class="btn light" onclick="copyElementText('urlOwner')">コピー</button></div>
-                <div class="url-row"><strong>店舗設定</strong><code id="urlSettings"></code><button class="btn light" onclick="copyElementText('urlSettings')">コピー</button></div>
-              </div></div>
-            </div>
-          </div>
+<div class="card-head"><div><h2 class="card-title">管理・セキュリティ</h2><p class="card-sub">契約オーナーが利用する管理コードと端末保存の設定です。</p></div><span class="pill">店舗管理</span></div>
+<div class="card-body">
+  <div class="demo-card">
+    <h3>管理コード変更</h3><p>本番導入時に変更してください。保存後、この端末の保存値も更新されます。</p>
+    <div class="field" style="margin-top:10px"><label for="newAdminCode">新しい管理コード</label><input id="newAdminCode" type="password" autocomplete="new-password" placeholder="変更しない場合は空欄"></div>
+    <div class="actions"><button class="btn" onclick="saveBasic()">管理コードを変更</button><button class="btn light" onclick="clearSavedAdminCode()">この端末から保存値を削除</button></div>
+  </div>
+  <div class="notice" style="margin-top:14px">営業前デモ準備・system-check・画面URLなどのDPRO保守機能は、契約店舗では表示されません。</div>
+</div>
+        </section>
+      </section>
+
+      <section class="settings-panel hidden" data-demo-only data-settings-panel="demo">
+        <section class="card">
+<div class="card-head"><div><h2 class="card-title">デモ・保守</h2><p class="card-sub">DPROの営業デモ・保守確認専用です。契約店舗では使用できません。</p></div><span class="pill warn">DPRO専用</span></div>
+<div class="card-body">
+  <div class="notice warn">この画面は、demo=1・デモ店舗コード・デモ配置モードの3条件が一致した場合だけ表示されます。</div>
+  <div class="demo-grid">
+    <div class="demo-card">
+      <h3>営業前デモ準備</h3><p>デモ予約・顧客・追客を初期状態へ戻します。契約店舗では実行できません。</p>
+      <div class="actions"><button class="btn warn" id="demoPrepareBtn" onclick="prepareDemo()">営業前デモ準備</button></div>
+    </div>
+    <div class="demo-card"><h3>システム確認</h3><p>APIの管理コードをURLへ付けず、DPRO保守時に確認します。</p><div class="actions"><a class="btn secondary" id="systemCheckLink" href="system-check.html" target="_blank" rel="noopener">system-checkを開く</a></div></div>
+  </div>
+  <div class="demo-card" style="margin-top:14px"><h3>画面URL</h3><p>DPROの営業・保守確認に必要な画面だけを表示します。</p><div class="url-list">
+    <div class="url-row"><strong>お客様画面</strong><code id="urlIndex"></code><button class="btn light" onclick="copyElementText('urlIndex')">コピー</button></div>
+    <div class="url-row"><strong>PC管理画面</strong><code id="urlOwner"></code><button class="btn light" onclick="copyElementText('urlOwner')">コピー</button></div>
+    <div class="url-row"><strong>店舗設定</strong><code id="urlSettings"></code><button class="btn light" onclick="copyElementText('urlSettings')">コピー</button></div>
+  </div></div>
+</div>
         </section>
       </section>
     </main>
   </div>
 
   <div class="toast" id="toast"></div>
-  <script src="config.js?v=estate-next-2"></script>
+  <script src="config.js?v=estate-next-10-contract-owner-separation-r1"></script>
   <script>
     'use strict';
     const CONFIG=window.DPRO_ESTATE_CONFIG||{
       apiBase:'https://dpro-estate-line-api.dpromstk2000.workers.dev',pageBase:'https://dpromstk2000-lab.github.io/dpro-estate-line-liff',
-      shopCode:'dpro_estate_demo',storage:{adminCode:'dpro_estate_admin_code',settingsPanel:'dpro_estate_settings_panel'},demo:{queryKey:'demo',queryValue:'1',adminCode:'1234'}
+      deploymentMode:'demo',shopCode:'dpro_estate_demo',storage:{adminCode:'dpro_estate_admin_code',settingsPanel:'dpro_estate_settings_panel'},demo:{queryKey:'demo',queryValue:'1',shopCode:'dpro_estate_demo',adminCode:'1234'}
     };
     const DAYS=['月','火','水','木','金','土','日'];
-    const state={adminCode:'',authenticated:false,shop:null,areas:[],templates:[],selectedTemplateKey:'',loading:false};
+    const state={adminCode:'',authenticated:false,shop:null,areas:[],templates:[],selectedTemplateKey:'',loading:false,demoEnvironment:false};
     const PANEL_META={
       basic:['店舗基本情報','店舗名・電話番号・住所などを設定します。'],
       booking:['予約・営業時間','営業時間・定休日・内見枠を設定します。'],
       areas:['対応エリア','お客様画面に表示するエリアを管理します。'],
       templates:['LINE文面','送信前確認用の文面テンプレートを編集します。'],
-      system:['デモ・システム','デモ準備・管理コード・確認画面を管理します。']
+      security:['管理・セキュリティ','管理コードと端末保存を管理します。'],
+      demo:['デモ・保守','DPROの営業デモ・保守確認専用です。']
     };
     const $=id=>document.getElementById(id);
 
     document.addEventListener('DOMContentLoaded',async()=>{
+      state.demoEnvironment=isDemoEnvironment();applyAccessMode();
       setToday();setPageLinks();renderHolidayChecks([]);
-      const saved=localStorage.getItem(CONFIG.storage.adminCode)||'';const demo=new URLSearchParams(location.search).get(CONFIG.demo.queryKey)===CONFIG.demo.queryValue;
-      state.adminCode=saved||(demo?CONFIG.demo.adminCode:'');$('adminCodeInput').value=state.adminCode;
-      const panel=localStorage.getItem(CONFIG.storage.settingsPanel)||'basic';openSettingsPanel(PANEL_META[panel]?panel:'basic',false);
+      const saved=localStorage.getItem(CONFIG.storage.adminCode)||'';
+      state.adminCode=saved||(state.demoEnvironment?CONFIG.demo.adminCode:'');$('adminCodeInput').value=state.adminCode;
+      let panel=localStorage.getItem(CONFIG.storage.settingsPanel)||'basic';
+      if(panel==='demo'&&!state.demoEnvironment)panel='security';
+      openSettingsPanel(PANEL_META[panel]?panel:'basic',false);
       if(state.adminCode)await authenticate(true);
     });
 
+    function isDemoEnvironment(){
+      const params=new URLSearchParams(location.search);
+      const requestedDemo=params.get(CONFIG.demo.queryKey)===CONFIG.demo.queryValue;
+      const demoShopCode=CONFIG.demo.shopCode||'dpro_estate_demo';
+      const deploymentMode=String(CONFIG.deploymentMode||'demo').toLowerCase();
+      return requestedDemo&&CONFIG.shopCode===demoShopCode&&deploymentMode==='demo';
+    }
+    function applyAccessMode(){
+      document.querySelectorAll('[data-demo-only]').forEach(el=>el.classList.toggle('hidden',!state.demoEnvironment));
+      document.documentElement.dataset.deploymentMode=state.demoEnvironment?'demo':'contract';
+    }
     function setToday(){$('statusToday').textContent=new Intl.DateTimeFormat('ja-JP',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());}
-    function setPageLinks(){const v='estate-next-2';$('ownerLink').href=`${CONFIG.pageBase}/owner.html?v=${v}`;$('ipadLink').href=`${CONFIG.pageBase}/owner-ipad.html?v=${v}`;$('systemCheckLink').href=`${CONFIG.pageBase}/system-check.html?v=${v}`;$('urlIndex').textContent=`${CONFIG.pageBase}/index.html`;$('urlOwner').textContent=`${CONFIG.pageBase}/owner.html?v=${v}`;$('urlSettings').textContent=`${CONFIG.pageBase}/owner-settings.html?v=${v}`;}
+    function setPageLinks(){const v='estate-next-10-contract-owner-separation-r1';$('ownerLink').href=`${CONFIG.pageBase}/owner.html?v=${v}`;$('ipadLink').href=`${CONFIG.pageBase}/owner-ipad.html?v=${v}`;if($('systemCheckLink'))$('systemCheckLink').href=`${CONFIG.pageBase}/system-check.html?demo=1&v=${v}`;if($('urlIndex'))$('urlIndex').textContent=`${CONFIG.pageBase}/index.html`;if($('urlOwner'))$('urlOwner').textContent=`${CONFIG.pageBase}/owner.html?v=${v}`;if($('urlSettings'))$('urlSettings').textContent=`${CONFIG.pageBase}/owner-settings.html?demo=1&v=${v}`;}
     function toggleSidebar(){$('sidebar').classList.toggle('open');}function closeSidebar(){$('sidebar').classList.remove('open');}
-    function openSettingsPanel(name,render=true){document.querySelectorAll('[data-settings-panel]').forEach(el=>el.classList.toggle('active',el.dataset.settingsPanel===name));document.querySelectorAll('[data-settings-button]').forEach(el=>el.classList.toggle('active',el.dataset.settingsButton===name));$('currentTitle').textContent=PANEL_META[name][0];$('currentDescription').textContent=PANEL_META[name][1];localStorage.setItem(CONFIG.storage.settingsPanel,name);closeSidebar();if(render&&state.authenticated){if(name==='areas')renderAreas();if(name==='templates')renderTemplates();}}
+    function openSettingsPanel(name,render=true){if(name==='demo'&&!state.demoEnvironment){toast('この操作はDPROデモ環境専用です。',true);name='security';}const meta=PANEL_META[name]||PANEL_META.basic;document.querySelectorAll('[data-settings-panel]').forEach(el=>el.classList.toggle('active',el.dataset.settingsPanel===name));document.querySelectorAll('[data-settings-button]').forEach(el=>el.classList.toggle('active',el.dataset.settingsButton===name));$('currentTitle').textContent=meta[0];$('currentDescription').textContent=meta[1];localStorage.setItem(CONFIG.storage.settingsPanel,name);closeSidebar();if(render&&state.authenticated){if(name==='areas')renderAreas();if(name==='templates')renderTemplates();}}
     function escapeHtml(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}function escapeAttr(v){return escapeHtml(v).replace(/`/g,'&#96;');}
     function toInt(v,f){const n=Number.parseInt(v,10);return Number.isFinite(n)?n:f;}function toTime(v){return v?String(v).slice(0,5):'';}
     function toast(message,error=false){const el=$('toast');el.textContent=message;el.className=`toast ${error?'error ':''}show`;clearTimeout(window.__estateSettingsToast);window.__estateSettingsToast=setTimeout(()=>el.className='toast',error?4800:3000);}
     function setLoading(flag){state.loading=flag;$('statusState').textContent=flag?'処理中':state.authenticated?'接続OK':'未接続';document.querySelectorAll('button').forEach(btn=>{if(btn.id!=='clearAdminCodeBtn')btn.disabled=flag;});}
     async function api(path,options={}){
+      if(path==='/api/admin/demo/prepare'&&!state.demoEnvironment)throw new Error('契約店舗ではデモ準備を実行できません。');
       const method=options.method||'GET',url=new URL(CONFIG.apiBase+path);url.searchParams.set('shop_code',CONFIG.shopCode);if(method==='GET')url.searchParams.set('admin_code',state.adminCode);
       const headers={'Content-Type':'application/json','X-Admin-Code':state.adminCode,'X-DPRO-Admin-Code':state.adminCode};const init={method,headers};
       if(options.body)init.body=JSON.stringify({...options.body,shop_code:CONFIG.shopCode,admin_code:state.adminCode});
@@ -332,7 +357,7 @@
     async function saveTemplate(){const key=state.selectedTemplateKey;if(!key){toast('テンプレートを選択してください。',true);return;}const body={template_key:key,title:$('templateTitle').value.trim(),category:$('templateCategory').value.trim(),display_order:toInt($('templateOrder').value,100),body:$('templateBody').value,is_active:$('templateActive').checked};
       try{setLoading(true);await api('/api/admin/templates',{method:'PATCH',body});toast('LINE文面テンプレートを保存しました。');await loadAll(true);}catch(error){toast(error.message,true);}finally{setLoading(false);}}
     function renderSummary(){const s=state.shop||{},active=state.areas.filter(a=>a.is_active);$('summaryShop').textContent=s.shop_name||'-';$('summaryHours').textContent=`${toTime(s.business_start_time||'10:00')}〜${toTime(s.business_end_time||'18:00')}`;$('summaryHolidays').textContent=Array.isArray(s.regular_holidays)&&s.regular_holidays.length?s.regular_holidays.join('・'):'なし';$('summaryAreas').textContent=active.map(a=>a.area_name).join('・')||'-';$('summaryMax').textContent=`${s.max_viewings_per_day||0}件 / 1枠${s.max_reservations_per_slot||0}件`;$('summaryBooking').textContent=`${s.booking_days_ahead||0}日先まで`;}
-    async function prepareDemo(){if(!state.authenticated){toast('先に管理コードを確認してください。',true);return;}if(!confirm('営業前デモデータを再準備します。現在のデモ状態が初期化されます。実行しますか？'))return;try{setLoading(true);const data=await api('/api/admin/demo/prepare',{method:'POST',body:{}});toast(data.message||'営業前デモ準備が完了しました。');await loadAll(true);}catch(error){toast(error.message,true);}finally{setLoading(false);}}
+    async function prepareDemo(){if(!state.demoEnvironment){toast('契約店舗ではデモ準備を実行できません。',true);return;}if(!state.authenticated){toast('先に管理コードを確認してください。',true);return;}if(!confirm('営業前デモデータを再準備します。現在のデモ状態が初期化されます。実行しますか？'))return;try{setLoading(true);const data=await api('/api/admin/demo/prepare',{method:'POST',body:{demo_mode:true}});toast(data.message||'営業前デモ準備が完了しました。');await loadAll(true);}catch(error){toast(error.message,true);}finally{setLoading(false);}}
     async function copyElementText(id){const el=$(id);if(el)await copyText(el.textContent.trim());}
     async function copyText(text){try{await navigator.clipboard.writeText(text);}catch{const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();}toast('コピーしました。');}
   </script>

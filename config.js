@@ -7,7 +7,8 @@
     apiBase: 'https://dpro-estate-line-api.dpromstk2000.workers.dev',
     nextApiBase: 'https://dpro-estate-next4-api.dpromstk2000.workers.dev',
     pageBase: 'https://dpromstk2000-lab.github.io/dpro-estate-line-liff',
-    shopCode: 'dpro_estate_demo',
+    deploymentMode: window.DPRO_ESTATE_DEPLOYMENT_MODE || 'demo',
+    shopCode: window.DPRO_ESTATE_SHOP_CODE || 'dpro_estate_demo',
     liffId: window.DPRO_ESTATE_LIFF_ID || '',
     storage: {
       adminCode: 'dpro_estate_admin_code',
@@ -22,6 +23,7 @@
     demo: {
       queryKey: 'demo',
       queryValue: '1',
+      shopCode: 'dpro_estate_demo',
       adminCode: '1234'
     },
     performanceBudgetsMs: {

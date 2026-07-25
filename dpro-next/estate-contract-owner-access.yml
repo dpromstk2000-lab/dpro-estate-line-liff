@@ -1,0 +1,27 @@
+system: DPRO 不動産・賃貸内見 LINE
+policy: CONTRACT-OWNER-SEPARATION-R1
+demo_visibility_condition:
+  query_demo_equals_1: true
+  shop_code_equals_dpro_estate_demo: true
+  deployment_mode_equals_demo: true
+  all_conditions_required: true
+contract_owner_visible:
+  - 店舗基本情報
+  - 予約・営業時間
+  - 対応エリア
+  - LINE文面
+  - 管理・セキュリティ
+  - 管理コード変更
+  - 端末保存管理コード削除
+  - PC管理画面
+  - iPad・スタッフ画面
+contract_owner_hidden:
+  - 営業前デモ準備
+  - デモデータ初期化
+  - system-check
+  - 画面URL一覧
+  - DPRO保守操作
+client_direct_call_guard: true
+unknown_shop_server_probe_required: true
+legacy_worker_source_in_repository: false
+valid_contract_shop_server_guard: ATTENTION_SOURCE_UNAVAILABLE
