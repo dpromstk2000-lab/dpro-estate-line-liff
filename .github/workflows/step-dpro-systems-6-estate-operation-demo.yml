@@ -1,0 +1,294 @@
+name: STEP DPRO-SYSTEMS-6 Estate Operation Demo
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/step-dpro-systems-6-estate-operation-demo.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Clarify estate operation demo
+        shell: python
+        run: |
+          from pathlib import Path
+          import base64
+          import re
+
+          customer_banner = base64.b64decode("PHNlY3Rpb24gY2xhc3M9Im9wZXJhdGlvbi1kZW1vLWJhbm5lciIgYXJpYS1sYWJlbD0i5YWs6ZaL5pON5L2c44OH44Oi44Gu5qGI5YaFIj4KICA8ZGl2PgogICAgPHNtYWxsPk9QRVJBVElPTiBERU1PPC9zbWFsbD4KICAgIDxzdHJvbmc+44GT44KM44Gv5LiN5YuV55Sj44O76LOD6LK45YaF6KaL44K344K544OG44Og44Gu5YWs6ZaL5pON5L2c44OH44Oi44Gn44GZPC9zdHJvbmc+CiAgICA8c3Bhbj7lrp/pmpvjga7lhoXopovkuojntITnlLvpnaLjgpLoqabjgZvjgb7jgZnjgILooajnpLrlhoXlrrnjga/mnrbnqbrjg4fjg7zjgr/jgafjgZnjgILlrp/lnKjjgZnjgovmsI/lkI3jg7vpm7voqbHnlarlj7fjgarjganjga/lhaXlipvjgZfjgarjgYTjgafjgY/jgaDjgZXjgYTjgII8L3NwYW4+CiAgPC9kaXY+CiAgPGEgaHJlZj0iaHR0cHM6Ly9kcHJvLXNob3AuY29tL3N5c3RlbXMvZXN0YXRlIj7lhazlvI/jga7mqZ/og73oqqzmmI7jgpLopovjgos8L2E+Cjwvc2VjdGlvbj4=").decode("utf-8")
+          staff_banner = base64.b64decode("PHNlY3Rpb24gY2xhc3M9Im9wZXJhdGlvbi1kZW1vLWJhbm5lciBjb21wYWN0IiBhcmlhLWxhYmVsPSLlhazplovmk43kvZzjg4fjg6Ljga7moYjlhoUiPgogIDxkaXY+CiAgICA8c21hbGw+UFVCTElDIE9QRVJBVElPTiBERU1PPC9zbWFsbD4KICAgIDxzdHJvbmc+5p6256m644OH44O844K/44Gn5a6f6Zqb44Gu5qWt5YuZ55S76Z2i44KS5L2T6aiT44Gn44GN44G+44GZPC9zdHJvbmc+CiAgICA8c3Bhbj7mqZ/og73jg7vlsI7lhaXlirnmnpzjg7vmlpnph5HjgpLoqq3jgoDlhazlvI/oo73lk4HntLnku4vjg5rjg7zjgrjjgajjga/liKXjga7mk43kvZznlLvpnaLjgafjgZnjgII8L3NwYW4+CiAgPC9kaXY+CiAgPGEgaHJlZj0iaHR0cHM6Ly9kcHJvLXNob3AuY29tL3N5c3RlbXMvZXN0YXRlIj7lhazlvI/jga7mqZ/og73oqqzmmI7jgpLopovjgos8L2E+Cjwvc2VjdGlvbj4=").decode("utf-8")
+          common_css = base64.b64decode("Ci8qIERQUk8tU1lTVEVNUy02IEVTVEFURSBPUEVSQVRJT04gREVNTyAqLwoub3BlcmF0aW9uLWRlbW8tYmFubmVyewogIHdpZHRoOm1pbigxMTgwcHgsY2FsYygxMDAlIC0gMjhweCkpOwogIG1hcmdpbjoxNnB4IGF1dG8gMDsKICBwYWRkaW5nOjE2cHggMThweDsKICBkaXNwbGF5OmZsZXg7CiAgYWxpZ24taXRlbXM6Y2VudGVyOwogIGp1c3RpZnktY29udGVudDpzcGFjZS1iZXR3ZWVuOwogIGdhcDoyMHB4OwogIGJvcmRlcjoxcHggc29saWQgI2JlZGRkMzsKICBib3JkZXItcmFkaXVzOjE4cHg7CiAgYmFja2dyb3VuZDpsaW5lYXItZ3JhZGllbnQoMTM1ZGVnLCNmOGZjZmIsI2U5ZjZmMSk7CiAgYm94LXNoYWRvdzowIDEzcHggMzJweCByZ2JhKDE4LDc0LDU5LC4wOCk7Cn0KLm9wZXJhdGlvbi1kZW1vLWJhbm5lcj5kaXZ7ZGlzcGxheTpmbGV4O2ZsZXgtZGlyZWN0aW9uOmNvbHVtbn0KLm9wZXJhdGlvbi1kZW1vLWJhbm5lciBzbWFsbHsKICBjb2xvcjp2YXIoLS1tYWluLCMxZjZmNWIpOwogIGZvbnQtc2l6ZToxMHB4OwogIGZvbnQtd2VpZ2h0OjEwMDA7CiAgbGV0dGVyLXNwYWNpbmc6LjE0ZW07Cn0KLm9wZXJhdGlvbi1kZW1vLWJhbm5lciBzdHJvbmd7CiAgbWFyZ2luLXRvcDoycHg7CiAgZm9udC1zaXplOjE3cHg7CiAgbGluZS1oZWlnaHQ6MS40NTsKfQoub3BlcmF0aW9uLWRlbW8tYmFubmVyIHNwYW57CiAgbWFyZ2luLXRvcDozcHg7CiAgY29sb3I6dmFyKC0tbXV0ZWQsIzY0NzQ2ZSk7CiAgZm9udC1zaXplOjEycHg7CiAgZm9udC13ZWlnaHQ6NzUwOwp9Ci5vcGVyYXRpb24tZGVtby1iYW5uZXIgYSwKLm9mZmljaWFsLWRlbW8tbGlua3sKICBmbGV4OjAgMCBhdXRvOwogIG1pbi1oZWlnaHQ6NDJweDsKICBkaXNwbGF5OmlubGluZS1mbGV4OwogIGFsaWduLWl0ZW1zOmNlbnRlcjsKICBqdXN0aWZ5LWNvbnRlbnQ6Y2VudGVyOwogIHBhZGRpbmc6OHB4IDE0cHg7CiAgYm9yZGVyLXJhZGl1czo5OTlweDsKICBjb2xvcjojZmZmIWltcG9ydGFudDsKICBiYWNrZ3JvdW5kOnZhcigtLW1haW4sIzFmNmY1Yik7CiAgdGV4dC1kZWNvcmF0aW9uOm5vbmUhaW1wb3J0YW50OwogIGZvbnQtc2l6ZToxMnB4OwogIGZvbnQtd2VpZ2h0Ojk1MDsKICBib3gtc2hhZG93OjAgOXB4IDIycHggcmdiYSgzMSwxMTEsOTEsLjE4KTsKfQoub3BlcmF0aW9uLWRlbW8tYmFubmVyLmNvbXBhY3R7CiAgd2lkdGg6bWluKDEzMjBweCxjYWxjKDEwMCUgLSAyOHB4KSk7Cn0KLm9wZXJhdGlvbi1kZW1vLXBhZ2UgLmhlcm8tYWN0aW9uc3sKICBncmlkLXRlbXBsYXRlLWNvbHVtbnM6cmVwZWF0KDQsbWlubWF4KDAsMWZyKSk7Cn0KLm9wZXJhdGlvbi1kZW1vLXBhZ2UgLnNpZGViYXIgLm9mZmljaWFsLWRlbW8tbGlua3sKICB3aWR0aDoxMDAlOwogIGp1c3RpZnktY29udGVudDpmbGV4LXN0YXJ0OwogIGJvcmRlci1yYWRpdXM6MTNweDsKICBiYWNrZ3JvdW5kOnJnYmEoMjU1LDI1NSwyNTUsLjE1KTsKICBib3gtc2hhZG93Om5vbmU7Cn0KLm9wZXJhdGlvbi1kZW1vLXBhZ2UgLnRvcC1hY3Rpb25zIC5vZmZpY2lhbC1kZW1vLWxpbmssCi5vcGVyYXRpb24tZGVtby1wYWdlIC50b3Atc3RhdHVzIC5vZmZpY2lhbC1kZW1vLWxpbmssCi5vcGVyYXRpb24tZGVtby1wYWdlIC5zdGF0dXMgLm9mZmljaWFsLWRlbW8tbGlua3sKICBtaW4taGVpZ2h0OjM2cHg7CiAgcGFkZGluZzo2cHggMTBweDsKICBib3JkZXI6MXB4IHNvbGlkIHJnYmEoMjU1LDI1NSwyNTUsLjMpOwogIGJhY2tncm91bmQ6cmdiYSgyNTUsMjU1LDI1NSwuMTMpOwogIGJveC1zaGFkb3c6bm9uZTsKfQouZGVtby10b3AtbGlua3N7CiAgZGlzcGxheTpmbGV4OwogIGFsaWduLWl0ZW1zOmNlbnRlcjsKICBqdXN0aWZ5LWNvbnRlbnQ6ZmxleC1lbmQ7CiAgZ2FwOjhweDsKICBmbGV4LXdyYXA6d3JhcDsKfQouZGVtby10b3AtbGlua3MgLm9mZmljaWFsLWRlbW8tbGlua3sKICBib3JkZXI6MXB4IHNvbGlkIHJnYmEoMjU1LDI1NSwyNTUsLjMyKTsKICBiYWNrZ3JvdW5kOnJnYmEoMjU1LDI1NSwyNTUsLjEzKTsKICBib3gtc2hhZG93Om5vbmU7Cn0KQG1lZGlhKG1heC13aWR0aDo4NjBweCl7CiAgLm9wZXJhdGlvbi1kZW1vLXBhZ2UgLmhlcm8tYWN0aW9uc3tncmlkLXRlbXBsYXRlLWNvbHVtbnM6cmVwZWF0KDIsbWlubWF4KDAsMWZyKSl9Cn0KQG1lZGlhKG1heC13aWR0aDo2NDBweCl7CiAgLm9wZXJhdGlvbi1kZW1vLWJhbm5lcnsKICAgIGFsaWduLWl0ZW1zOmZsZXgtc3RhcnQ7CiAgICBmbGV4LWRpcmVjdGlvbjpjb2x1bW47CiAgfQogIC5vcGVyYXRpb24tZGVtby1iYW5uZXIgYXt3aWR0aDoxMDAlfQogIC5vcGVyYXRpb24tZGVtby1wYWdlIC5oZXJvLWFjdGlvbnN7Z3JpZC10ZW1wbGF0ZS1jb2x1bW5zOjFmcn0KICAuZGVtby10b3AtbGlua3N7anVzdGlmeS1jb250ZW50OmZsZXgtc3RhcnQ7bWFyZ2luLXRvcDoxMHB4fQp9Cg==").decode("utf-8")
+          marker = "/* DPRO-SYSTEMS-6 ESTATE OPERATION DEMO */"
+          official_url = "https://dpro-shop.com/systems/estate"
+
+          def read(name):
+              return Path(name).read_text(encoding="utf-8")
+
+          def write(name, value):
+              Path(name).write_text(value, encoding="utf-8")
+
+          def replace_once(text, old, new, label):
+              if old in text:
+                  return text.replace(old, new, 1)
+              if new in text:
+                  return text
+              raise SystemExit("ERROR: " + label + " target not found")
+
+          def regex_once(text, pattern, replacement, label, already=None):
+              if already and already in text:
+                  return text
+              updated, count = re.subn(pattern, replacement, text, count=1, flags=re.S)
+              if count == 0:
+                  raise SystemExit("ERROR: " + label + " target not found")
+              return updated
+
+          def add_style(text):
+              if marker in text:
+                  return text
+              if "</style>" not in text:
+                  raise SystemExit("ERROR: style closing tag not found")
+              return text.replace("</style>", "\n" + common_css.strip() + "\n</style>", 1)
+
+          def add_after_header(text, banner, label):
+              if banner in text:
+                  return text
+              return regex_once(
+                  text,
+                  r'(</header>)',
+                  r'\1\n' + banner,
+                  label
+              )
+
+          # 1. お客様用LINE内見予約
+          index = read("index.html")
+          index = replace_once(
+              index,
+              "<title>DPRO 不動産・賃貸内見 LINE｜内見予約</title>",
+              "<title>DPRO 不動産・賃貸内見 LINE｜公開操作デモ・内見予約</title>",
+              "customer title"
+          )
+          index = replace_once(
+              index,
+              "<body>",
+              '<body class="operation-demo-page">',
+              "customer body class"
+          )
+          index = replace_once(
+              index,
+              '<div class="version">STEP ESTATE-12 | お客様用 index.html | PC見やすさ改善</div>',
+              '<div class="version">DPRO ESTATE｜PUBLIC OPERATION DEMO</div>',
+              "customer internal version"
+          )
+          index = replace_once(
+              index,
+              "<h1>LINEでかんたん<br>賃貸内見予約</h1>",
+              "<h1>LINEでかんたん<br>賃貸内見予約 操作デモ</h1>",
+              "customer hero title"
+          )
+          index = replace_once(
+              index,
+              "希望エリア・家賃・間取りを入力して、気になる物件の内見や店舗相談を予約できます。デモでは志免・宇美・須恵エリアの物件を表示します。",
+              "希望条件や内見希望日時を入力し、実際の予約操作を体験できます。公開デモでは志免・宇美・須恵エリアの架空物件を表示します。",
+              "customer hero copy"
+          )
+          index = replace_once(
+              index,
+              '<a class="hero-action" href="#member">予約確認</a>',
+              '<a class="hero-action" href="#member">予約確認</a>\n          <a class="hero-action" href="https://dpro-shop.com/systems/estate">公式の機能説明</a>',
+              "customer official link"
+          )
+          index = add_after_header(index, customer_banner, "customer demo banner")
+          index = add_style(index)
+          write("index.html", index)
+
+          # 2. オーナーPC管理
+          owner = read("owner.html")
+          owner = replace_once(
+              owner,
+              "<title>DPRO 不動産・賃貸内見 LINE｜オーナー管理</title>",
+              "<title>DPRO 不動産・賃貸内見 LINE｜公開操作デモ・オーナー管理</title>",
+              "owner title"
+          )
+          owner = replace_once(
+              owner,
+              "<body>",
+              '<body class="operation-demo-page">',
+              "owner body class"
+          )
+          owner = replace_once(
+              owner,
+              "<small>DPRO 不動産・賃貸内見 LINE</small>",
+              "<small>DPRO 不動産・賃貸内見 LINE / OPERATION DEMO</small>",
+              "owner brand label"
+          )
+          owner = replace_once(
+              owner,
+              "<strong>オーナー管理</strong>",
+              "<strong>オーナー管理 操作デモ</strong>",
+              "owner brand title"
+          )
+          owner = replace_once(
+              owner,
+              '<a class="nav-link" id="checkLink" href="system-check.html">システム確認</a>',
+              '<a class="nav-link official-demo-link" href="https://dpro-shop.com/systems/estate">公式の機能説明</a>',
+              "owner remove internal check link"
+          )
+          owner, details_count = re.subn(
+              r'\s*<details>\s*<summary>デモ・管理</summary>.*?営業前デモ準備.*?</details>',
+              "",
+              owner,
+              count=1,
+              flags=re.S
+          )
+          if details_count == 0 and "営業前デモ準備" in owner:
+              raise SystemExit("ERROR: owner internal demo controls were not removed")
+          owner = add_after_header(owner, staff_banner, "owner demo banner")
+          owner = add_style(owner)
+          write("owner.html", owner)
+
+          # 3. iPad・現場スタッフ
+          ipad = read("owner-ipad.html")
+          ipad = replace_once(
+              ipad,
+              "<title>DPRO 不動産・賃貸内見 LINE｜現場スタッフ</title>",
+              "<title>DPRO 不動産・賃貸内見 LINE｜公開操作デモ・現場スタッフ</title>",
+              "ipad title"
+          )
+          ipad = replace_once(
+              ipad,
+              "<body>",
+              '<body class="operation-demo-page">',
+              "ipad body class"
+          )
+          ipad = replace_once(
+              ipad,
+              '<div class="brand"><small>現場スタッフ用</small><strong>DPRO 不動産・賃貸内見</strong></div>',
+              '<div class="brand"><small>PUBLIC OPERATION DEMO</small><strong>DPRO 不動産・賃貸内見｜現場スタッフ</strong></div>',
+              "ipad brand"
+          )
+          ipad = replace_once(
+              ipad,
+              '<div class="top-actions"><span class="status" id="todayLabel">-</span><span class="status" id="connectionLabel">未接続</span><button class="top-btn" id="refreshTopBtn">更新</button></div>',
+              '<div class="top-actions"><span class="status" id="todayLabel">-</span><span class="status" id="connectionLabel">未接続</span><a class="official-demo-link" href="https://dpro-shop.com/systems/estate">公式説明</a><button class="top-btn" id="refreshTopBtn">更新</button></div>',
+              "ipad official link"
+          )
+          ipad = replace_once(
+              ipad,
+              "管理コードを確認すると、今日の現場業務を表示します。",
+              "公開操作デモです。管理コードを確認すると、架空データの現場業務を表示します。",
+              "ipad demo notice"
+          )
+          ipad = add_after_header(ipad, staff_banner, "ipad demo banner")
+          ipad = add_style(ipad)
+          write("owner-ipad.html", ipad)
+
+          # 4. 追客・再相談
+          followup = read("followup.html")
+          followup = replace_once(
+              followup,
+              "<title>DPRO 不動産・賃貸内見｜追客・再相談</title>",
+              "<title>DPRO 不動産・賃貸内見｜公開操作デモ・追客・再相談</title>",
+              "followup title"
+          )
+          followup = replace_once(
+              followup,
+              "<body>",
+              '<body class="operation-demo-page">',
+              "followup body class"
+          )
+          followup = replace_once(
+              followup,
+              "<div><small>オーナー・スタッフ専用</small><h1>追客・再相談</h1><p>再相談、内見後フォロー、新着物件提案を一つの流れで管理します。</p></div>",
+              "<div><small>PUBLIC OPERATION DEMO</small><h1>追客・再相談 操作デモ</h1><p>架空データで、再相談、内見後フォロー、新着物件提案の流れを体験します。</p></div>",
+              "followup hero"
+          )
+          followup = replace_once(
+              followup,
+              '<a class="back" id="ownerBackLink" href="owner.html">オーナー管理へ戻る</a>',
+              '<div class="demo-top-links"><a class="back" id="ownerBackLink" href="owner.html">オーナー管理へ戻る</a><a class="official-demo-link" href="https://dpro-shop.com/systems/estate">公式の機能説明</a></div>',
+              "followup official link"
+          )
+          followup = add_after_header(followup, staff_banner, "followup demo banner")
+          followup = add_style(followup)
+          write("followup.html", followup)
+
+          # 5. 店舗設定
+          settings = read("owner-settings.html")
+          settings = replace_once(
+              settings,
+              "<title>DPRO 不動産・賃貸内見 LINE｜店舗設定</title>",
+              "<title>DPRO 不動産・賃貸内見 LINE｜公開操作デモ・店舗設定</title>",
+              "settings title"
+          )
+          settings = replace_once(
+              settings,
+              "<body>",
+              '<body class="operation-demo-page">',
+              "settings body class"
+          )
+          settings = replace_once(
+              settings,
+              "<small>DPRO 不動産・賃貸内見 LINE</small>",
+              "<small>DPRO 不動産・賃貸内見 LINE / OPERATION DEMO</small>",
+              "settings brand label"
+          )
+          settings = replace_once(
+              settings,
+              "<strong>店舗設定</strong>",
+              "<strong>店舗設定 操作デモ</strong>",
+              "settings brand title"
+          )
+          settings = replace_once(
+              settings,
+              '<a class="nav-link" id="ipadLink" href="owner-ipad.html">iPad・スタッフ画面</a>',
+              '<a class="nav-link" id="ipadLink" href="owner-ipad.html">iPad・スタッフ画面</a>\n      <a class="nav-link official-demo-link" href="https://dpro-shop.com/systems/estate">公式の機能説明</a>',
+              "settings official link"
+          )
+          settings = add_after_header(settings, staff_banner, "settings demo banner")
+          settings = add_style(settings)
+          write("owner-settings.html", settings)
+
+          # 自動検査
+          checks = {
+              "index.html": read("index.html"),
+              "owner.html": read("owner.html"),
+              "owner-ipad.html": read("owner-ipad.html"),
+              "followup.html": read("followup.html"),
+              "owner-settings.html": read("owner-settings.html")
+          }
+
+          for filename, content in checks.items():
+              assert "operation-demo-page" in content, filename
+              assert official_url in content, filename
+              assert marker in content, filename
+
+          assert "PUBLIC OPERATION DEMO" in checks["index.html"]
+          assert "STEP ESTATE-12" not in checks["index.html"]
+          assert "賃貸内見予約 操作デモ" in checks["index.html"]
+          assert "system-check.html" not in checks["owner.html"]
+          assert "システム確認" not in checks["owner.html"]
+          assert "営業前デモ準備" not in checks["owner.html"]
+          assert "現場スタッフ用" not in checks["owner-ipad.html"]
+          assert "PUBLIC OPERATION DEMO" in checks["owner-ipad.html"]
+          assert "追客・再相談 操作デモ" in checks["followup.html"]
+          assert "店舗設定 操作デモ" in checks["owner-settings.html"]
+
+      - name: Commit changes
+        shell: bash
+        run: |
+          git config user.name "dpro-systems-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html owner.html owner-ipad.html followup.html owner-settings.html
+          if git diff --cached --quiet; then
+            echo "No changes needed"
+            exit 0
+          fi
+          git commit -m "STEP DPRO-SYSTEMS-6 clarify estate operation demo"
+          git push
