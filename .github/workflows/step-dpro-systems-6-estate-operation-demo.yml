@@ -1,4 +1,4 @@
-name: STEP DPRO-SYSTEMS-6 Estate Operation Demo
+name: STEP DPRO-SYSTEMS-6 Estate Operation Demo R2
 
 on:
   workflow_dispatch:
@@ -91,6 +91,12 @@ jobs:
               "<h1>LINEでかんたん<br>賃貸内見予約</h1>",
               "<h1>LINEでかんたん<br>賃貸内見予約 操作デモ</h1>",
               "customer hero title"
+          )
+          index = replace_once(
+              index,
+              "DPRO 不動産・賃貸内見 LINE｜STEP ESTATE-12｜API: https://dpro-estate-line-api.dpromstk2000.workers.dev",
+              "DPRO 不動産・賃貸内見 LINE｜公開操作デモ",
+              "customer public footer"
           )
           index = replace_once(
               index,
@@ -270,7 +276,10 @@ jobs:
               assert marker in content, filename
 
           assert "PUBLIC OPERATION DEMO" in checks["index.html"]
-          assert "STEP ESTATE-12" not in checks["index.html"]
+          assert '<div class="version">STEP ESTATE-12' not in checks["index.html"]
+          assert "｜STEP ESTATE-12｜API:" not in checks["index.html"]
+          assert "DPRO 不動産・賃貸内見 LINE｜公開操作デモ" in checks["index.html"]
+          assert "const STEP_VERSION = 'STEP ESTATE-12';" in checks["index.html"]
           assert "賃貸内見予約 操作デモ" in checks["index.html"]
           assert "system-check.html" not in checks["owner.html"]
           assert "システム確認" not in checks["owner.html"]
@@ -290,5 +299,5 @@ jobs:
             echo "No changes needed"
             exit 0
           fi
-          git commit -m "STEP DPRO-SYSTEMS-6 clarify estate operation demo"
+          git commit -m "STEP DPRO-SYSTEMS-6-R2 clarify estate operation demo"
           git push
