@@ -1,4 +1,4 @@
-name: STEP DPRO-SYSTEMS-6 Estate Operation Demo R3
+name: STEP DPRO-SYSTEMS-6 Estate Operation Demo R4
 
 on:
   workflow_dispatch:
@@ -173,6 +173,15 @@ jobs:
           )
           if details_count == 0 and "営業前デモ準備" in owner:
               raise SystemExit("ERROR: owner internal demo controls were not removed")
+          owner, prepare_demo_count = re.subn(
+              r'\s*async function prepareDemo\(\)\{.*?\n\s*\}',
+              "",
+              owner,
+              count=1,
+              flags=re.S
+          )
+          if prepare_demo_count == 0 and "prepareDemo" in owner:
+              raise SystemExit("ERROR: owner prepareDemo function was not removed")
           owner = add_after_header(owner, staff_banner, "owner demo banner")
           owner = add_style(owner)
           write("owner.html", owner)
@@ -304,6 +313,8 @@ jobs:
           assert "システム情報を表示" not in checks["owner.html"]
           assert "システム確認" not in checks["owner.html"]
           assert "営業前デモ準備" not in checks["owner.html"]
+          assert "prepareDemo" not in checks["owner.html"]
+          assert "/api/admin/demo/prepare" not in checks["owner.html"]
           assert "現場スタッフ用" not in checks["owner-ipad.html"]
           assert "PUBLIC OPERATION DEMO" in checks["owner-ipad.html"]
           assert "追客・再相談 操作デモ" in checks["followup.html"]
@@ -319,5 +330,5 @@ jobs:
             echo "No changes needed"
             exit 0
           fi
-          git commit -m "STEP DPRO-SYSTEMS-6-R3 clarify estate operation demo"
+          git commit -m "STEP DPRO-SYSTEMS-6-R4 clarify estate operation demo"
           git push
