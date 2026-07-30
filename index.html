@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>DPRO 不動産・賃貸内見 LINE｜内見予約</title>
+  <title>DPRO 不動産・賃貸内見 LINE｜公開操作デモ・内見予約</title>
   <meta name="description" content="志免・宇美・須恵エリアの賃貸内見予約デモ画面です。" />
   <style>
     :root {
@@ -691,22 +691,126 @@
         grid-template-columns: 92px 1fr;
       }
     }
-  </style>
+  
+/* DPRO-SYSTEMS-6 ESTATE OPERATION DEMO */
+.operation-demo-banner{
+  width:min(1180px,calc(100% - 28px));
+  margin:16px auto 0;
+  padding:16px 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  border:1px solid #beddd3;
+  border-radius:18px;
+  background:linear-gradient(135deg,#f8fcfb,#e9f6f1);
+  box-shadow:0 13px 32px rgba(18,74,59,.08);
+}
+.operation-demo-banner>div{display:flex;flex-direction:column}
+.operation-demo-banner small{
+  color:var(--main,#1f6f5b);
+  font-size:10px;
+  font-weight:1000;
+  letter-spacing:.14em;
+}
+.operation-demo-banner strong{
+  margin-top:2px;
+  font-size:17px;
+  line-height:1.45;
+}
+.operation-demo-banner span{
+  margin-top:3px;
+  color:var(--muted,#64746e);
+  font-size:12px;
+  font-weight:750;
+}
+.operation-demo-banner a,
+.official-demo-link{
+  flex:0 0 auto;
+  min-height:42px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:8px 14px;
+  border-radius:999px;
+  color:#fff!important;
+  background:var(--main,#1f6f5b);
+  text-decoration:none!important;
+  font-size:12px;
+  font-weight:950;
+  box-shadow:0 9px 22px rgba(31,111,91,.18);
+}
+.operation-demo-banner.compact{
+  width:min(1320px,calc(100% - 28px));
+}
+.operation-demo-page .hero-actions{
+  grid-template-columns:repeat(4,minmax(0,1fr));
+}
+.operation-demo-page .sidebar .official-demo-link{
+  width:100%;
+  justify-content:flex-start;
+  border-radius:13px;
+  background:rgba(255,255,255,.15);
+  box-shadow:none;
+}
+.operation-demo-page .top-actions .official-demo-link,
+.operation-demo-page .top-status .official-demo-link,
+.operation-demo-page .status .official-demo-link{
+  min-height:36px;
+  padding:6px 10px;
+  border:1px solid rgba(255,255,255,.3);
+  background:rgba(255,255,255,.13);
+  box-shadow:none;
+}
+.demo-top-links{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.demo-top-links .official-demo-link{
+  border:1px solid rgba(255,255,255,.32);
+  background:rgba(255,255,255,.13);
+  box-shadow:none;
+}
+@media(max-width:860px){
+  .operation-demo-page .hero-actions{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:640px){
+  .operation-demo-banner{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+  .operation-demo-banner a{width:100%}
+  .operation-demo-page .hero-actions{grid-template-columns:1fr}
+  .demo-top-links{justify-content:flex-start;margin-top:10px}
+}
+</style>
 </head>
-<body>
+<body class="operation-demo-page">
   <div class="page">
     <header class="hero">
       <div class="hero-inner">
-        <div class="version">STEP ESTATE-12 | お客様用 index.html | PC見やすさ改善</div>
-        <h1>LINEでかんたん<br>賃貸内見予約</h1>
-        <p>希望エリア・家賃・間取りを入力して、気になる物件の内見や店舗相談を予約できます。デモでは志免・宇美・須恵エリアの物件を表示します。</p>
+        <div class="version">DPRO ESTATE｜PUBLIC OPERATION DEMO</div>
+        <h1>LINEでかんたん<br>賃貸内見予約 操作デモ</h1>
+        <p>希望条件や内見希望日時を入力し、実際の予約操作を体験できます。公開デモでは志免・宇美・須恵エリアの架空物件を表示します。</p>
         <div class="hero-actions">
           <a class="hero-action" href="#reserve">内見予約する</a>
           <a class="hero-action" href="#properties">物件を見る</a>
           <a class="hero-action" href="#member">予約確認</a>
+          <a class="hero-action" href="https://dpro-shop.com/systems/estate">公式の機能説明</a>
         </div>
       </div>
     </header>
+<section class="operation-demo-banner" aria-label="公開操作デモの案内">
+  <div>
+    <small>OPERATION DEMO</small>
+    <strong>これは不動産・賃貸内見システムの公開操作デモです</strong>
+    <span>実際の内見予約画面を試せます。表示内容は架空データです。実在する氏名・電話番号などは入力しないでください。</span>
+  </div>
+  <a href="https://dpro-shop.com/systems/estate">公式の機能説明を見る</a>
+</section>
 
     <div class="status-bar">
       <div class="status-card">
@@ -960,7 +1064,7 @@
     </main>
 
     <div class="footer-note">
-      DPRO 不動産・賃貸内見 LINE｜STEP ESTATE-12｜API: https://dpro-estate-line-api.dpromstk2000.workers.dev
+      DPRO 不動産・賃貸内見 LINE｜公開操作デモ
     </div>
   </div>
 

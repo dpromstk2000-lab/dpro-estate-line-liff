@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="description" content="DPRO 不動産・賃貸内見 LINEの追客・再相談管理画面です。">
-  <title>DPRO 不動産・賃貸内見｜追客・再相談</title>
+  <title>DPRO 不動産・賃貸内見｜公開操作デモ・追客・再相談</title>
   <style>
     :root{--bg:#eef5f2;--card:#fff;--text:#17312b;--muted:#657771;--line:#d8e6e0;--main:#0b6b57;--main2:#064f42;--soft:#e8f7f0;--blue:#245dbf;--blue-soft:#eef4ff;--warn:#a56800;--warn-soft:#fff5dd;--danger:#b52b24;--danger-soft:#fff0ef;--shadow:0 14px 38px rgba(13,65,50,.10);--radius:20px}
     *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;background:linear-gradient(180deg,#f8fbfa,var(--bg));color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Yu Gothic",Meiryo,sans-serif;font-size:16px;line-height:1.65}button,input,select,textarea{font:inherit}button{cursor:pointer}button:disabled{opacity:.5;cursor:not-allowed}.hidden{display:none!important}
@@ -17,15 +17,118 @@
     .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.empty{border:1px dashed #bfd3cb;border-radius:14px;padding:20px;text-align:center;color:var(--muted);font-weight:850;background:#fbfdfc}.notice{border:1px solid #cbe7dc;background:var(--soft);color:var(--main2);border-radius:13px;padding:10px 12px;font-size:13px;font-weight:800;margin-top:9px}.notice.warn{background:var(--warn-soft);color:#784b00;border-color:#f1d99e}.toast{position:fixed;right:17px;bottom:17px;z-index:50;max-width:min(480px,calc(100vw - 34px));background:#064e3b;color:#fff;border-radius:13px;padding:12px 14px;box-shadow:0 18px 42px rgba(0,0,0,.22);opacity:0;transform:translateY(15px);pointer-events:none;transition:.18s;font-weight:850}.toast.show{opacity:1;transform:none}.toast.error{background:#7f1d1d}
     dialog{width:min(720px,calc(100% - 24px));border:0;border-radius:20px;padding:0;box-shadow:0 28px 80px rgba(0,0,0,.28);color:var(--text)}dialog::backdrop{background:rgba(5,30,24,.55);backdrop-filter:blur(3px)}.dialog-head{display:flex;justify-content:space-between;gap:10px;padding:17px;border-bottom:1px solid var(--line)}.dialog-body{padding:17px}
     @media(max-width:980px){.candidate-grid{grid-template-columns:1fr 1fr}.grid2{grid-template-columns:1fr}.kpi{grid-template-columns:1fr 1fr}}@media(max-width:660px){.top-row{display:block}.back{margin-top:10px}.auth-grid,.toolbar,.form-grid,.candidate-grid{grid-template-columns:1fr}.btn{width:100%}.actions .btn,.actions .small{width:auto;flex:1}.tabs{overflow:auto;flex-wrap:nowrap}.tab{white-space:nowrap}}
-  </style>
+  
+/* DPRO-SYSTEMS-6 ESTATE OPERATION DEMO */
+.operation-demo-banner{
+  width:min(1180px,calc(100% - 28px));
+  margin:16px auto 0;
+  padding:16px 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  border:1px solid #beddd3;
+  border-radius:18px;
+  background:linear-gradient(135deg,#f8fcfb,#e9f6f1);
+  box-shadow:0 13px 32px rgba(18,74,59,.08);
+}
+.operation-demo-banner>div{display:flex;flex-direction:column}
+.operation-demo-banner small{
+  color:var(--main,#1f6f5b);
+  font-size:10px;
+  font-weight:1000;
+  letter-spacing:.14em;
+}
+.operation-demo-banner strong{
+  margin-top:2px;
+  font-size:17px;
+  line-height:1.45;
+}
+.operation-demo-banner span{
+  margin-top:3px;
+  color:var(--muted,#64746e);
+  font-size:12px;
+  font-weight:750;
+}
+.operation-demo-banner a,
+.official-demo-link{
+  flex:0 0 auto;
+  min-height:42px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:8px 14px;
+  border-radius:999px;
+  color:#fff!important;
+  background:var(--main,#1f6f5b);
+  text-decoration:none!important;
+  font-size:12px;
+  font-weight:950;
+  box-shadow:0 9px 22px rgba(31,111,91,.18);
+}
+.operation-demo-banner.compact{
+  width:min(1320px,calc(100% - 28px));
+}
+.operation-demo-page .hero-actions{
+  grid-template-columns:repeat(4,minmax(0,1fr));
+}
+.operation-demo-page .sidebar .official-demo-link{
+  width:100%;
+  justify-content:flex-start;
+  border-radius:13px;
+  background:rgba(255,255,255,.15);
+  box-shadow:none;
+}
+.operation-demo-page .top-actions .official-demo-link,
+.operation-demo-page .top-status .official-demo-link,
+.operation-demo-page .status .official-demo-link{
+  min-height:36px;
+  padding:6px 10px;
+  border:1px solid rgba(255,255,255,.3);
+  background:rgba(255,255,255,.13);
+  box-shadow:none;
+}
+.demo-top-links{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.demo-top-links .official-demo-link{
+  border:1px solid rgba(255,255,255,.32);
+  background:rgba(255,255,255,.13);
+  box-shadow:none;
+}
+@media(max-width:860px){
+  .operation-demo-page .hero-actions{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:640px){
+  .operation-demo-banner{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+  .operation-demo-banner a{width:100%}
+  .operation-demo-page .hero-actions{grid-template-columns:1fr}
+  .demo-top-links{justify-content:flex-start;margin-top:10px}
+}
+</style>
 </head>
-<body>\n  <!-- ESTATE-NEXT-10-HOTFIX-FOLLOWUP-AUTH-R2 / 20260725 -->
+<body class="operation-demo-page">\n  <!-- ESTATE-NEXT-10-HOTFIX-FOLLOWUP-AUTH-R2 / 20260725 -->
   <header class="top">
     <div class="wrap top-row">
-      <div><small>オーナー・スタッフ専用</small><h1>追客・再相談</h1><p>再相談、内見後フォロー、新着物件提案を一つの流れで管理します。</p></div>
-      <a class="back" id="ownerBackLink" href="owner.html">オーナー管理へ戻る</a>
+      <div><small>PUBLIC OPERATION DEMO</small><h1>追客・再相談 操作デモ</h1><p>架空データで、再相談、内見後フォロー、新着物件提案の流れを体験します。</p></div>
+      <div class="demo-top-links"><a class="back" id="ownerBackLink" href="owner.html">オーナー管理へ戻る</a><a class="official-demo-link" href="https://dpro-shop.com/systems/estate">公式の機能説明</a></div>
     </div>
   </header>
+<section class="operation-demo-banner compact" aria-label="公開操作デモの案内">
+  <div>
+    <small>PUBLIC OPERATION DEMO</small>
+    <strong>架空データで実際の業務画面を体験できます</strong>
+    <span>機能・導入効果・料金を読む公式製品紹介ページとは別の操作画面です。</span>
+  </div>
+  <a href="https://dpro-shop.com/systems/estate">公式の機能説明を見る</a>
+</section>
 
   <main class="wrap">
     <section class="card" id="authCard">

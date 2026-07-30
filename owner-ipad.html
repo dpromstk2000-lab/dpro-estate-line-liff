@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="description" content="DPRO 不動産・賃貸内見 LINEのiPad・現場スタッフ画面です。">
-  <title>DPRO 不動産・賃貸内見 LINE｜現場スタッフ</title>
+  <title>DPRO 不動産・賃貸内見 LINE｜公開操作デモ・現場スタッフ</title>
   <style>
     :root{--bg:#edf5f2;--card:#fff;--text:#14231e;--muted:#66756f;--line:#d7e5df;--main:#0d6b55;--main2:#07503f;--soft:#e8f7f1;--blue:#255ec7;--blue-soft:#eef4ff;--warn:#b96605;--warn-soft:#fff5df;--danger:#b3261e;--danger-soft:#fff0ef;--shadow:0 14px 34px rgba(15,60,46,.10);--radius:20px}
     *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:linear-gradient(180deg,#f8fbfa 0%,var(--bg) 100%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Yu Gothic",Meiryo,sans-serif;font-size:17px;line-height:1.62;min-height:100vh;padding-bottom:84px}button,input,select,textarea{font:inherit}button{cursor:pointer}button:disabled{opacity:.52;cursor:not-allowed}.hidden{display:none!important}
@@ -21,15 +21,118 @@
     dialog{width:min(820px,calc(100vw - 24px));max-height:92vh;border:0;border-radius:22px;padding:0;box-shadow:0 28px 80px rgba(0,0,0,.30)}dialog::backdrop{background:rgba(8,28,22,.48)}.dialog-head{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;background:#fff;border-bottom:1px solid var(--line);padding:15px 16px}.dialog-head h2{margin:0;font-size:21px}.dialog-body{padding:15px 16px 20px;overflow:auto}.dialog-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.subsection{border:1px solid var(--line);border-radius:16px;padding:12px;margin-top:12px}.subsection h3{margin:0 0 9px;font-size:17px}.doc-row{display:grid;grid-template-columns:minmax(150px,1fr) 150px;gap:8px;align-items:center;padding:7px 0;border-bottom:1px solid #edf2ef}.doc-row:last-child{border-bottom:0}.dialog-actions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:14px}.history{display:grid;gap:7px;margin-top:10px}.history-item{border:1px solid var(--line);border-radius:12px;background:#fafcfb;padding:9px;font-size:12px}.toast{position:fixed;right:16px;bottom:88px;z-index:80;max-width:min(460px,calc(100vw - 32px));background:#064e3b;color:#fff;border-radius:14px;padding:12px 14px;box-shadow:0 18px 44px rgba(0,0,0,.24);opacity:0;transform:translateY(16px);pointer-events:none;transition:.18s;font-weight:850}.toast.show{opacity:1;transform:none}.toast.error{background:#7f1d1d}
     @media(max-width:900px){body{font-size:16px}.top-inner{padding:10px 12px}.brand strong{font-size:19px}.wrap{padding:14px 10px 34px}.nav{top:61px;gap:5px}.nav button{font-size:13px;padding:8px 4px}.kpi{grid-template-columns:repeat(2,1fr)}.message-grid,.case-grid{grid-template-columns:1fr}.auth-grid{grid-template-columns:1fr 1fr}.auth-grid .field{grid-column:1/-1}.dialog-grid{grid-template-columns:1fr 1fr}}
     @media(max-width:560px){.top-actions .status{display:none}.nav{position:fixed;top:auto;bottom:0;left:0;right:0;z-index:50;background:#fff;border-top:1px solid var(--line);padding:6px;box-shadow:0 -8px 24px rgba(15,60,46,.10);margin:0}.nav button{border:0;background:transparent;min-height:58px;font-size:12px;padding:5px 2px}.nav button.active{border-radius:12px}.section-head,.section-body{padding-left:12px;padding-right:12px}.info-grid,.dialog-grid{grid-template-columns:1fr}.auth-grid{grid-template-columns:1fr}.btn{width:100%}.btn.small{width:auto}.doc-row{grid-template-columns:1fr}.actions .btn.small{flex:1}.time{min-width:72px}.person h3{font-size:17px}}
-  </style>
+  
+/* DPRO-SYSTEMS-6 ESTATE OPERATION DEMO */
+.operation-demo-banner{
+  width:min(1180px,calc(100% - 28px));
+  margin:16px auto 0;
+  padding:16px 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  border:1px solid #beddd3;
+  border-radius:18px;
+  background:linear-gradient(135deg,#f8fcfb,#e9f6f1);
+  box-shadow:0 13px 32px rgba(18,74,59,.08);
+}
+.operation-demo-banner>div{display:flex;flex-direction:column}
+.operation-demo-banner small{
+  color:var(--main,#1f6f5b);
+  font-size:10px;
+  font-weight:1000;
+  letter-spacing:.14em;
+}
+.operation-demo-banner strong{
+  margin-top:2px;
+  font-size:17px;
+  line-height:1.45;
+}
+.operation-demo-banner span{
+  margin-top:3px;
+  color:var(--muted,#64746e);
+  font-size:12px;
+  font-weight:750;
+}
+.operation-demo-banner a,
+.official-demo-link{
+  flex:0 0 auto;
+  min-height:42px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:8px 14px;
+  border-radius:999px;
+  color:#fff!important;
+  background:var(--main,#1f6f5b);
+  text-decoration:none!important;
+  font-size:12px;
+  font-weight:950;
+  box-shadow:0 9px 22px rgba(31,111,91,.18);
+}
+.operation-demo-banner.compact{
+  width:min(1320px,calc(100% - 28px));
+}
+.operation-demo-page .hero-actions{
+  grid-template-columns:repeat(4,minmax(0,1fr));
+}
+.operation-demo-page .sidebar .official-demo-link{
+  width:100%;
+  justify-content:flex-start;
+  border-radius:13px;
+  background:rgba(255,255,255,.15);
+  box-shadow:none;
+}
+.operation-demo-page .top-actions .official-demo-link,
+.operation-demo-page .top-status .official-demo-link,
+.operation-demo-page .status .official-demo-link{
+  min-height:36px;
+  padding:6px 10px;
+  border:1px solid rgba(255,255,255,.3);
+  background:rgba(255,255,255,.13);
+  box-shadow:none;
+}
+.demo-top-links{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.demo-top-links .official-demo-link{
+  border:1px solid rgba(255,255,255,.32);
+  background:rgba(255,255,255,.13);
+  box-shadow:none;
+}
+@media(max-width:860px){
+  .operation-demo-page .hero-actions{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:640px){
+  .operation-demo-banner{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+  .operation-demo-banner a{width:100%}
+  .operation-demo-page .hero-actions{grid-template-columns:1fr}
+  .demo-top-links{justify-content:flex-start;margin-top:10px}
+}
+</style>
 </head>
-<body>
+<body class="operation-demo-page">
   <header class="topbar">
     <div class="top-inner">
-      <div class="brand"><small>現場スタッフ用</small><strong>DPRO 不動産・賃貸内見</strong></div>
-      <div class="top-actions"><span class="status" id="todayLabel">-</span><span class="status" id="connectionLabel">未接続</span><button class="top-btn" id="refreshTopBtn">更新</button></div>
+      <div class="brand"><small>PUBLIC OPERATION DEMO</small><strong>DPRO 不動産・賃貸内見｜現場スタッフ</strong></div>
+      <div class="top-actions"><span class="status" id="todayLabel">-</span><span class="status" id="connectionLabel">未接続</span><a class="official-demo-link" href="https://dpro-shop.com/systems/estate">公式説明</a><button class="top-btn" id="refreshTopBtn">更新</button></div>
     </div>
   </header>
+<section class="operation-demo-banner compact" aria-label="公開操作デモの案内">
+  <div>
+    <small>PUBLIC OPERATION DEMO</small>
+    <strong>架空データで実際の業務画面を体験できます</strong>
+    <span>機能・導入効果・料金を読む公式製品紹介ページとは別の操作画面です。</span>
+  </div>
+  <a href="https://dpro-shop.com/systems/estate">公式の機能説明を見る</a>
+</section>
 
   <main class="wrap">
     <section class="auth" id="authCard">
@@ -38,7 +141,7 @@
         <button class="btn" id="loginBtn">スタッフ画面を開く</button>
         <button class="btn light" id="clearCodeBtn">この端末から削除</button>
       </div>
-      <div class="notice" id="notice">管理コードを確認すると、今日の現場業務を表示します。</div>
+      <div class="notice" id="notice">公開操作デモです。管理コードを確認すると、架空データの現場業務を表示します。</div>
     </section>
 
     <nav class="nav" aria-label="スタッフ画面メニュー">

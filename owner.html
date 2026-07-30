@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="description" content="DPRO 不動産・賃貸内見 LINEのオーナー管理画面です。">
-  <title>DPRO 不動産・賃貸内見 LINE｜オーナー管理</title>
+  <title>DPRO 不動産・賃貸内見 LINE｜公開操作デモ・オーナー管理</title>
   <style>
     :root{
       --bg:#eef5f2;--surface:#fff;--surface2:#f8fbfa;--text:#14231e;--muted:#64746e;
@@ -206,15 +206,110 @@
       }
     }
 
-  </style>
+  
+/* DPRO-SYSTEMS-6 ESTATE OPERATION DEMO */
+.operation-demo-banner{
+  width:min(1180px,calc(100% - 28px));
+  margin:16px auto 0;
+  padding:16px 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  border:1px solid #beddd3;
+  border-radius:18px;
+  background:linear-gradient(135deg,#f8fcfb,#e9f6f1);
+  box-shadow:0 13px 32px rgba(18,74,59,.08);
+}
+.operation-demo-banner>div{display:flex;flex-direction:column}
+.operation-demo-banner small{
+  color:var(--main,#1f6f5b);
+  font-size:10px;
+  font-weight:1000;
+  letter-spacing:.14em;
+}
+.operation-demo-banner strong{
+  margin-top:2px;
+  font-size:17px;
+  line-height:1.45;
+}
+.operation-demo-banner span{
+  margin-top:3px;
+  color:var(--muted,#64746e);
+  font-size:12px;
+  font-weight:750;
+}
+.operation-demo-banner a,
+.official-demo-link{
+  flex:0 0 auto;
+  min-height:42px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:8px 14px;
+  border-radius:999px;
+  color:#fff!important;
+  background:var(--main,#1f6f5b);
+  text-decoration:none!important;
+  font-size:12px;
+  font-weight:950;
+  box-shadow:0 9px 22px rgba(31,111,91,.18);
+}
+.operation-demo-banner.compact{
+  width:min(1320px,calc(100% - 28px));
+}
+.operation-demo-page .hero-actions{
+  grid-template-columns:repeat(4,minmax(0,1fr));
+}
+.operation-demo-page .sidebar .official-demo-link{
+  width:100%;
+  justify-content:flex-start;
+  border-radius:13px;
+  background:rgba(255,255,255,.15);
+  box-shadow:none;
+}
+.operation-demo-page .top-actions .official-demo-link,
+.operation-demo-page .top-status .official-demo-link,
+.operation-demo-page .status .official-demo-link{
+  min-height:36px;
+  padding:6px 10px;
+  border:1px solid rgba(255,255,255,.3);
+  background:rgba(255,255,255,.13);
+  box-shadow:none;
+}
+.demo-top-links{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.demo-top-links .official-demo-link{
+  border:1px solid rgba(255,255,255,.32);
+  background:rgba(255,255,255,.13);
+  box-shadow:none;
+}
+@media(max-width:860px){
+  .operation-demo-page .hero-actions{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:640px){
+  .operation-demo-banner{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+  .operation-demo-banner a{width:100%}
+  .operation-demo-page .hero-actions{grid-template-columns:1fr}
+  .demo-top-links{justify-content:flex-start;margin-top:10px}
+}
+</style>
 </head>
-<body>
+<body class="operation-demo-page">
   <!-- DPRO ESTATE NEXT-10 / owner.html -->
   <div class="app">
     <aside class="sidebar" id="sidebar">
       <div class="brand">
-        <small>DPRO 不動産・賃貸内見 LINE</small>
-        <strong>オーナー管理</strong>
+        <small>DPRO 不動産・賃貸内見 LINE / OPERATION DEMO</small>
+        <strong>オーナー管理 操作デモ</strong>
         <div class="shop-mini" id="sideShopName">管理コード確認前</div>
       </div>
 
@@ -233,17 +328,8 @@
         <div class="nav-label">関連画面</div>
         <a class="nav-link" id="settingsLink" href="owner-settings.html">店舗設定</a>
         <a class="nav-link" id="ipadLink" href="owner-ipad.html">iPad・スタッフ画面</a>
-        <a class="nav-link" id="checkLink" href="system-check.html">システム確認</a>
+        <a class="nav-link official-demo-link" href="https://dpro-shop.com/systems/estate">公式の機能説明</a>
       </div>
-
-      <details>
-        <summary>デモ・管理</summary>
-        <div class="demo-box">
-          <p>日常操作と分けています。デモ初期化は営業前だけ使用してください。</p>
-          <button class="side-danger" onclick="prepareDemo()">営業前デモ準備</button>
-          <button class="side-danger" style="margin-top:8px" onclick="clearSavedAdminCode()">この端末の管理コードを削除</button>
-        </div>
-      </details>
     </aside>
 
     <div class="main">
@@ -260,6 +346,14 @@
           </div>
         </div>
       </header>
+<section class="operation-demo-banner compact" aria-label="公開操作デモの案内">
+  <div>
+    <small>PUBLIC OPERATION DEMO</small>
+    <strong>架空データで実際の業務画面を体験できます</strong>
+    <span>機能・導入効果・料金を読む公式製品紹介ページとは別の操作画面です。</span>
+  </div>
+  <a href="https://dpro-shop.com/systems/estate">公式の機能説明を見る</a>
+</section>
 
       <main class="content">
         <section class="card auth-card" id="authCard">
@@ -401,11 +495,6 @@
             </div>
           </section>
         </section>
-
-        <details class="system-info">
-          <summary>システム情報を表示</summary>
-          <div class="inside">日常運用では使用しません。接続先やバージョン情報はconfig.jsとsystem-checkで管理しています。</div>
-        </details>
       </main>
     </div>
   </div>
@@ -551,7 +640,6 @@
       const version = 'estate-next-10-owner-layout-r1';
       $('settingsLink').href = `${CONFIG.pageBase}/owner-settings.html?v=${version}`;
       $('ipadLink').href = `${CONFIG.pageBase}/owner-ipad.html?v=${version}`;
-      $('checkLink').href = `${CONFIG.pageBase}/system-check.html?v=${version}`;
     }
     function toggleSidebar(){ $('sidebar').classList.toggle('open'); }
     function closeSidebar(){ $('sidebar').classList.remove('open'); }
@@ -912,12 +1000,6 @@
       if(status==='成約済み'&&!confirm('成約済みにするとお客様画面から非公開になります。変更しますか？'))return;
       await runAction(()=>api('/api/admin/properties',{method:'PATCH',body:{property_id:id,property_status:status,viewing_available:viewing,is_public:status!=='成約済み'&&status!=='非公開'}}),`物件を「${status}」に更新しました。`);
       if(state.loaded.properties)await loadProperties(false);
-    }
-    async function prepareDemo(){
-      if(!isAuthenticated())return;
-      if(!confirm('営業前デモデータを再準備します。現在のデモ予約・顧客・追客が初期状態に戻ります。実行しますか？'))return;
-      try{setLoading(true);await api('/api/admin/demo/prepare',{method:'POST',body:{}});if(await checkExtension()){await extensionClient().prepareDemo(state.adminCode);}state.loaded={dashboard:false,templates:false,reservations:false,customers:false,properties:false,staffs:false,persistentCases:false};state.persistentCases=[];state.pendingActions.clear();state.limits={reservations:30,customers:30,properties:30};await loadDashboard();toast('営業前デモ準備が完了しました。');}
-      catch(error){toast(error.message||'営業前デモ準備に失敗しました。','error');}finally{setLoading(false);}
     }
   </script>
 </body>
