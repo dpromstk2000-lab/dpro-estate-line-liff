@@ -1,4 +1,4 @@
-name: STEP DPRO-SYSTEMS-6 Estate Operation Demo R2
+name: STEP DPRO-SYSTEMS-6 Estate Operation Demo R3
 
 on:
   workflow_dispatch:
@@ -146,6 +146,24 @@ jobs:
               '<a class="nav-link official-demo-link" href="https://dpro-shop.com/systems/estate">公式の機能説明</a>',
               "owner remove internal check link"
           )
+          owner, dynamic_check_count = re.subn(
+              r"\s*\$\('checkLink'\)\.href\s*=\s*`\$\{CONFIG\.pageBase\}/system-check\.html\?v=\$\{version\}`;",
+              "",
+              owner,
+              count=1
+          )
+          if dynamic_check_count == 0 and "system-check.html" in owner:
+              raise SystemExit("ERROR: owner dynamic system-check link was not removed")
+
+          owner, system_info_count = re.subn(
+              r'\s*<details class="system-info">.*?</details>',
+              "",
+              owner,
+              count=1,
+              flags=re.S
+          )
+          if system_info_count == 0 and "system-check" in owner:
+              raise SystemExit("ERROR: owner system information block was not removed")
           owner, details_count = re.subn(
               r'\s*<details>\s*<summary>デモ・管理</summary>.*?営業前デモ準備.*?</details>',
               "",
@@ -281,7 +299,9 @@ jobs:
           assert "DPRO 不動産・賃貸内見 LINE｜公開操作デモ" in checks["index.html"]
           assert "const STEP_VERSION = 'STEP ESTATE-12';" in checks["index.html"]
           assert "賃貸内見予約 操作デモ" in checks["index.html"]
-          assert "system-check.html" not in checks["owner.html"]
+          assert "system-check" not in checks["owner.html"]
+          assert "checkLink" not in checks["owner.html"]
+          assert "システム情報を表示" not in checks["owner.html"]
           assert "システム確認" not in checks["owner.html"]
           assert "営業前デモ準備" not in checks["owner.html"]
           assert "現場スタッフ用" not in checks["owner-ipad.html"]
@@ -299,5 +319,5 @@ jobs:
             echo "No changes needed"
             exit 0
           fi
-          git commit -m "STEP DPRO-SYSTEMS-6-R2 clarify estate operation demo"
+          git commit -m "STEP DPRO-SYSTEMS-6-R3 clarify estate operation demo"
           git push
