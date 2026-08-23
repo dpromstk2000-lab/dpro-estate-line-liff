@@ -1,0 +1,21 @@
+{
+  "systemCode": "ESTATE",
+  "remediation": "PRODUCT_READY_R2",
+  "baselineSha": "44995e1c4bf15797abd4704e8b51ff417841d26a",
+  "frontendVersion": "ESTATE-NEXT-10",
+  "adapterVersion": "DPRO-CONTROL-ADAPTER-1.0-ESTATE-R2-20260823",
+  "databaseVersion": "ESTATE-DB-PR-R2-20260823",
+  "extensionWorkerVersion": "ESTATE-NEXT-8-R3-EXTENSION-20260724",
+  "legacyWorkerVersion": "estate-3-worker-api-20260710",
+  "gateway": "https://cbknucemarcpbscirzyv.supabase.co/functions/v1/dpro-estate-product-ready-r2-gateway",
+  "legacySourceRecovered": false,
+  "legacyIdentityPreserved": true,
+  "integrationStatus": "deferred_until_contract",
+  "standardChanged": false,
+  "qa": {
+    "runtime": "qa/estate-product-ready-r2/runtime.json",
+    "browser": "qa/estate-product-ready-r2/browser.json",
+    "a4Qr": "qa/estate-product-ready-r2/a4-qr.json"
+  },
+  "generatedAt": "2026-08-23T03:15:37.798586+00:00"
+}

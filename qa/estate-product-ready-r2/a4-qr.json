@@ -1,0 +1,10 @@
+{
+  "ok": true,
+  "source": "assets/estate-next-10/operation-sheet-verification.json",
+  "pdf_page_count": 1,
+  "a4_portrait": true,
+  "render_verified": true,
+  "qr_expected_count": 5,
+  "qr_decoded_count": 5,
+  "qr_exact_match": true
+}

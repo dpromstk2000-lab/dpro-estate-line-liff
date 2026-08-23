@@ -1,0 +1,17 @@
+{
+  "systemCode": "ESTATE",
+  "standard": "DPRO-CONTROL-ADAPTER-1.0",
+  "adapterVersion": "DPRO-CONTROL-ADAPTER-1.0-ESTATE-R2-20260823",
+  "adapterUrl": "https://cbknucemarcpbscirzyv.supabase.co/functions/v1/dpro-estate-product-ready-r2-gateway",
+  "legacyWorkerVersion": "estate-3-worker-api-20260710",
+  "extensionWorkerVersion": "ESTATE-NEXT-8-R3-EXTENSION-20260724",
+  "databaseVersion": "ESTATE-DB-PR-R2-20260823",
+  "frontendVersion": "ESTATE-NEXT-10",
+  "lineIdentity": "server_verified_id_token_capability",
+  "lineTenantBinding": "deferred_until_contract",
+  "staffBoundary": "server_scoped_signed_session",
+  "staffOwnerMutationAuthority": false,
+  "centralPolicy": "PRECONTRACT_CAPABILITY_CUSTOMER_BINDING_DEFERRED",
+  "legacySourceRecovered": false,
+  "legacyCompatibilityGateway": true
+}

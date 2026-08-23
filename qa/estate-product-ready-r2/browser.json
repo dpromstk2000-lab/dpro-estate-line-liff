@@ -1,0 +1,103 @@
+{
+  "ok": true,
+  "results": [
+    {
+      "key": "pc-owner",
+      "file": "owner.html",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "ok": true,
+      "scrollWidth": 1440,
+      "bodyScrollWidth": 1440,
+      "clipped": [],
+      "panelMetrics": [],
+      "jsErrors": []
+    },
+    {
+      "key": "customer-390",
+      "file": "index.html",
+      "viewport": [
+        390,
+        844
+      ],
+      "ok": true,
+      "scrollWidth": 390,
+      "bodyScrollWidth": 390,
+      "clipped": [],
+      "panelMetrics": [],
+      "jsErrors": []
+    },
+    {
+      "key": "customer-320",
+      "file": "index.html",
+      "viewport": [
+        320,
+        720
+      ],
+      "ok": true,
+      "scrollWidth": 320,
+      "bodyScrollWidth": 320,
+      "clipped": [],
+      "panelMetrics": [],
+      "jsErrors": []
+    },
+    {
+      "key": "owner-320",
+      "file": "owner.html",
+      "viewport": [
+        320,
+        844
+      ],
+      "ok": true,
+      "scrollWidth": 320,
+      "bodyScrollWidth": 320,
+      "clipped": [],
+      "panelMetrics": [],
+      "jsErrors": []
+    },
+    {
+      "key": "followup-320",
+      "file": "followup.html",
+      "viewport": [
+        320,
+        844
+      ],
+      "ok": true,
+      "scrollWidth": 320,
+      "bodyScrollWidth": 320,
+      "clipped": [],
+      "panelMetrics": [],
+      "jsErrors": []
+    },
+    {
+      "key": "system-check-320",
+      "file": "system-check.html",
+      "viewport": [
+        320,
+        844
+      ],
+      "ok": true,
+      "scrollWidth": 320,
+      "bodyScrollWidth": 320,
+      "clipped": [],
+      "panelMetrics": [],
+      "jsErrors": []
+    },
+    {
+      "key": "ipad",
+      "file": "owner-ipad.html",
+      "viewport": [
+        1024,
+        768
+      ],
+      "ok": true,
+      "scrollWidth": 1024,
+      "bodyScrollWidth": 1024,
+      "clipped": [],
+      "panelMetrics": [],
+      "jsErrors": []
+    }
+  ]
+}

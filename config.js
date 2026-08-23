@@ -4,7 +4,10 @@
   const CONFIG = {
     systemName: 'DPRO 不動産・賃貸内見 LINE',
     version: 'ESTATE-NEXT-10',
-    apiBase: 'https://dpro-estate-line-api.dpromstk2000.workers.dev',
+    apiBase: 'https://cbknucemarcpbscirzyv.supabase.co/functions/v1/dpro-estate-product-ready-r2-gateway',
+    legacyApiBase: 'https://dpro-estate-line-api.dpromstk2000.workers.dev',
+    productReadyCheck: 'https://cbknucemarcpbscirzyv.supabase.co/functions/v1/dpro-estate-product-ready-r2-gateway/api/product-ready/check',
+    productReadyRevision: 'R2-20260823',
     nextApiBase: 'https://dpro-estate-next4-api.dpromstk2000.workers.dev',
     pageBase: 'https://dpromstk2000-lab.github.io/dpro-estate-line-liff',
     deploymentMode: window.DPRO_ESTATE_DEPLOYMENT_MODE || 'demo',

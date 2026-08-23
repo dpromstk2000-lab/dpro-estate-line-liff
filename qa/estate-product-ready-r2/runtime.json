@@ -1,0 +1,61 @@
+{
+  "ok": true,
+  "productReadyCheck": {
+    "ok": true,
+    "systemCode": "ESTATE",
+    "adapterVersion": "DPRO-CONTROL-ADAPTER-1.0-ESTATE-R2-20260823",
+    "versions": {
+      "expected": {
+        "extension_worker": "ESTATE-NEXT-8-R3-EXTENSION-20260724",
+        "legacy_worker": "estate-3-worker-api-20260710",
+        "database": "ESTATE-DB-PR-R2-20260823",
+        "frontend": "ESTATE-NEXT-10",
+        "adapter": "DPRO-CONTROL-ADAPTER-1.0-ESTATE-R2-20260823"
+      },
+      "observed": {
+        "extension_worker": "ESTATE-NEXT-8-R3-EXTENSION-20260724",
+        "legacy_worker": "estate-3-worker-api-20260710",
+        "database": "ESTATE-DB-PR-R2-20260823",
+        "frontend": "ESTATE-NEXT-10",
+        "adapter": "DPRO-CONTROL-ADAPTER-1.0-ESTATE-R2-20260823"
+      },
+      "versionsAligned": true
+    },
+    "compatibility": {
+      "legacySourceRecovered": false,
+      "legacyIdentityPreserved": true,
+      "phoneNormalization": true,
+      "serverPastDateGuard": true
+    },
+    "calendar": {
+      "exceptionModel": true,
+      "temporaryClosed": true,
+      "specialOpen": true,
+      "exceptionOverridesRegularHoliday": true,
+      "serverReservationGuard": true
+    },
+    "staff": {
+      "signedSession": true,
+      "expiry": true,
+      "revoke": true,
+      "assignedCaseScope": true,
+      "ownerMutationAuthority": false,
+      "auditTable": true
+    },
+    "line": {
+      "ok": true,
+      "serverVerifiedLineIdentityCapability": true,
+      "phoneOnlyProduction": false,
+      "lineChannelConfigured": false,
+      "tenantProductionBinding": "deferred_until_contract",
+      "clientSuppliedIdentityAccepted": false
+    },
+    "time": "2026-08-23T03:14:59.534Z",
+    "extensionHealthStatus": 200
+  },
+  "legacyHealth": {
+    "status": 200,
+    "version": "estate-3-worker-api-20260710",
+    "db_ok": true
+  }
+}
