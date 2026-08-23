@@ -250,10 +250,11 @@ jobs:
               await page.waitForTimeout(900);
               const metrics=await page.evaluate(()=>{
                 const visible=e=>{const r=e.getBoundingClientRect(),s=getComputedStyle(e);return r.width>0&&r.height>0&&s.visibility!=='hidden'&&s.display!=='none'&&r.right>0&&r.left<window.innerWidth};
-                const interactive=[...document.querySelectorAll('button,a,input,select,textarea')].filter(visible).map(e=>{const r=e.getBoundingClientRect();return {tag:e.tagName,text:(e.textContent||e.getAttribute('aria-label')||e.getAttribute('placeholder')||'').trim().slice(0,50),left:r.left,right:r.right,width:r.width,height:r.height}});
+                const horizontalScroller=e=>{let p=e.parentElement;while(p&&p!==document.body){const s=getComputedStyle(p),ox=s.overflowX;if((ox==='auto'||ox==='scroll')&&p.scrollWidth>p.clientWidth+1)return p;p=p.parentElement}return null};
+                const interactive=[...document.querySelectorAll('button,a,input,select,textarea')].filter(visible).map(e=>{const r=e.getBoundingClientRect(),sc=horizontalScroller(e);return {tag:e.tagName,text:(e.textContent||e.getAttribute('aria-label')||e.getAttribute('placeholder')||'').trim().slice(0,50),left:r.left,right:r.right,width:r.width,height:r.height,horizontalScrollable:!!sc}});
                 return {innerWidth:window.innerWidth,scrollWidth:document.documentElement.scrollWidth,bodyScrollWidth:document.body.scrollWidth,interactive};
               });
-              const clipped=metrics.interactive.filter(x=>x.left<-1||x.right>width+1||x.width<1||x.height<1);
+              const clipped=metrics.interactive.filter(x=>(x.left<-1||x.right>width+1||x.width<1||x.height<1)&&!x.horizontalScrollable);
               const panelMetrics=[];
               if(file==='owner.html'){
                 const count=await page.locator('.nav-btn[data-panel]').count();
