@@ -1,0 +1,296 @@
+/* DPRO TUTORIAL STANDARD V1.1 / ESTATE R3 */
+:root {
+  --dpro-tutorial-green: #075f4b;
+  --dpro-tutorial-deep: #063f34;
+  --dpro-tutorial-gold: #c58b2a;
+  --dpro-tutorial-ink: #17241f;
+  --dpro-tutorial-muted: #5d6d66;
+  --dpro-tutorial-line: #cfe0da;
+  --dpro-tutorial-surface: #ffffff;
+  --dpro-tutorial-focus: #ffb703;
+}
+
+#dproTutorialRoot,
+#dproTutorialRoot * {
+  box-sizing: border-box;
+}
+
+#dproTutorialRoot {
+  position: relative;
+  z-index: 2147483000;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", "Yu Gothic UI", Meiryo, sans-serif;
+  color: var(--dpro-tutorial-ink);
+}
+
+#dproTutorialLauncher {
+  position: fixed;
+  right: max(12px, env(safe-area-inset-right));
+  bottom: max(12px, env(safe-area-inset-bottom));
+  z-index: 2147483003;
+  min-height: 48px;
+  max-width: calc(100vw - 24px);
+  padding: 10px 17px;
+  border: 0;
+  border-radius: 999px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--dpro-tutorial-deep), var(--dpro-tutorial-green));
+  box-shadow: 0 15px 34px rgba(6, 63, 52, .28);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 950;
+  cursor: pointer;
+}
+
+#dproTutorialLauncher[hidden],
+#dproTutorialCard[hidden],
+#dproTutorialHighlight[hidden] {
+  display: none !important;
+}
+
+#dproTutorialHighlight {
+  position: fixed;
+  z-index: 2147483001;
+  pointer-events: none;
+  border: 4px solid var(--dpro-tutorial-gold);
+  border-radius: 16px;
+  background: rgba(255, 247, 218, .08);
+  box-shadow: 0 0 0 9999px rgba(4, 28, 23, .22), 0 0 0 7px rgba(197, 139, 42, .24);
+  transition: left .16s ease, top .16s ease, width .16s ease, height .16s ease;
+}
+
+#dproTutorialCard {
+  position: fixed;
+  left: max(12px, env(safe-area-inset-left));
+  top: max(12px, env(safe-area-inset-top));
+  z-index: 2147483002;
+  width: min(390px, calc(100vw - 24px));
+  max-height: calc(100dvh - 24px);
+  overflow: auto;
+  overscroll-behavior: contain;
+  border: 1px solid var(--dpro-tutorial-line);
+  border-radius: 20px;
+  background: var(--dpro-tutorial-surface);
+  box-shadow: 0 25px 70px rgba(8, 45, 37, .30);
+}
+
+.dpro-tutorial-header {
+  width: 100%;
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 12px;
+  border: 0;
+  border-radius: 19px 19px 0 0;
+  color: #fff;
+  background: linear-gradient(135deg, var(--dpro-tutorial-deep), var(--dpro-tutorial-green));
+  font: inherit;
+  font-size: 12px;
+  font-weight: 950;
+}
+
+.dpro-tutorial-handle {
+  flex: 1;
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.dpro-tutorial-handle:active {
+  cursor: grabbing;
+}
+
+.dpro-tutorial-handle-mark {
+  letter-spacing: .08em;
+}
+
+.dpro-tutorial-close {
+  min-width: 38px;
+  min-height: 34px;
+  padding: 5px 9px;
+  border: 1px solid rgba(255,255,255,.42);
+  border-radius: 999px;
+  color: #fff;
+  background: rgba(255,255,255,.13);
+  font: inherit;
+  font-weight: 950;
+  cursor: pointer;
+}
+
+.dpro-tutorial-body {
+  padding: 16px;
+}
+
+.dpro-tutorial-progress-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--dpro-tutorial-muted);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.dpro-tutorial-progress-bar {
+  flex: 1;
+  height: 7px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e9f1ee;
+}
+
+.dpro-tutorial-progress-bar > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--dpro-tutorial-green), var(--dpro-tutorial-gold));
+}
+
+#dproTutorialTitle {
+  margin: 13px 0 0;
+  color: var(--dpro-tutorial-deep);
+  font-size: 20px;
+  line-height: 1.42;
+  letter-spacing: -.02em;
+}
+
+#dproTutorialDescription {
+  margin: 8px 0 0;
+  color: #34453e;
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+#dproTutorialFacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+#dproTutorialFacts li {
+  padding: 5px 8px;
+  border: 1px solid #d6e7e1;
+  border-radius: 999px;
+  color: var(--dpro-tutorial-green);
+  background: #f1f8f5;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+#dproTutorialTargetStatus {
+  min-height: 18px;
+  margin-top: 9px;
+  color: var(--dpro-tutorial-muted);
+  font-size: 11px;
+}
+
+.dpro-tutorial-actions {
+  display: grid;
+  grid-template-columns: auto 1fr 1fr;
+  gap: 8px;
+  margin-top: 15px;
+}
+
+.dpro-tutorial-secondary-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 9px;
+}
+
+.dpro-tutorial-button {
+  min-height: 43px;
+  padding: 8px 12px;
+  border: 1px solid var(--dpro-tutorial-line);
+  border-radius: 12px;
+  color: var(--dpro-tutorial-deep);
+  background: #f5faf8;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 950;
+  cursor: pointer;
+}
+
+.dpro-tutorial-button.primary {
+  color: #fff;
+  border-color: var(--dpro-tutorial-green);
+  background: var(--dpro-tutorial-green);
+}
+
+.dpro-tutorial-button.quiet {
+  min-height: 36px;
+  padding: 6px 9px;
+  color: var(--dpro-tutorial-muted);
+  background: #fff;
+  font-size: 11px;
+}
+
+.dpro-tutorial-button:disabled {
+  opacity: .42;
+  cursor: not-allowed;
+}
+
+#dproTutorialRoot button:focus-visible,
+#dproTutorialRoot a:focus-visible,
+#dproTutorialRoot [tabindex]:focus-visible {
+  outline: 4px solid var(--dpro-tutorial-focus) !important;
+  outline-offset: 3px !important;
+}
+
+body.dpro-tutorial-active #dproTutorialLauncher {
+  display: none !important;
+}
+
+@media (max-width: 390px) {
+  #dproTutorialCard {
+    width: calc(100vw - 16px);
+    max-height: calc(100dvh - 16px);
+    border-radius: 17px;
+  }
+
+  .dpro-tutorial-body {
+    padding: 13px;
+  }
+
+  #dproTutorialTitle {
+    font-size: 18px;
+  }
+
+  #dproTutorialDescription {
+    font-size: 13px;
+  }
+
+  .dpro-tutorial-actions {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  #dproTutorialBack {
+    grid-column: 1 / -1;
+  }
+
+  .dpro-tutorial-secondary-actions {
+    align-items: stretch;
+  }
+
+  .dpro-tutorial-secondary-actions .dpro-tutorial-button {
+    flex: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #dproTutorialHighlight,
+  #dproTutorialCard,
+  #dproTutorialLauncher {
+    scroll-behavior: auto !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}

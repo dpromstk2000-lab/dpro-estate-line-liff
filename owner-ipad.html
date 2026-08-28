@@ -117,6 +117,7 @@
   .demo-top-links{justify-content:flex-start;margin-top:10px}
 }
 </style>
+  <link rel="stylesheet" href="tutorial.css?v=estate-tutorial-r3">
 </head>
 <body class="operation-demo-page">
   <header class="topbar">
@@ -281,5 +282,6 @@
     window.updateReservation=updateReservation;window.createFollow=createFollow;window.updateFollowup=updateFollowup;window.openCase=openCase;window.openCaseForReservation=openCaseForReservation;window.openVacancy=openVacancy;window.selectReservationMessage=selectReservationMessage;window.selectCaseMessage=selectCaseMessage;
     document.addEventListener('DOMContentLoaded',async()=>{$('todayLabel').textContent=formatDate(todayYmd());const saved=localStorage.getItem(STORAGE_KEY)||'';const demo=new URLSearchParams(location.search).get(CONFIG.demo?.queryKey||'demo')===(CONFIG.demo?.queryValue||'1');state.adminCode=saved||(demo?CONFIG.demo?.adminCode||'1234':'');$('adminCodeInput').value=state.adminCode;const remembered=localStorage.getItem(PANEL_KEY)||'today';openPanel(['today','followups','cases','vacancy','messages'].includes(remembered)?remembered:'today');if(state.adminCode)await authenticate()});
   </script>
+  <script src="tutorial.js?v=estate-tutorial-r3"></script>
 </body>
 </html>

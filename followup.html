@@ -113,6 +113,7 @@
   .demo-top-links{justify-content:flex-start;margin-top:10px}
 }
 </style>
+  <link rel="stylesheet" href="tutorial.css?v=estate-tutorial-r3">
 </head>
 <body class="operation-demo-page">\n  <!-- ESTATE-NEXT-10-HOTFIX-FOLLOWUP-AUTH-R2 / 20260725 -->
   <header class="top">
@@ -277,5 +278,6 @@
     function clearExclusionForm(){$('excludedPropertyIds').value='';$('excludedAreas').value='';$('excludedKeywords').value='';$('maxRentOverride').value='';$('exclusionMemo').value='';$('exclusionNotice').textContent='入力をクリアしました。保存するまでは反映されません。'}
     async function excludeProperty(propertyId){const customerId=$('proposalCustomerSelect').value;if(!customerId)return;try{const data=await API.getExclusions(state.adminCode,customerId);const row=data.exclusions||{};const ids=[...new Set([...(row.excluded_property_ids||[]),propertyId])];await API.saveExclusions(state.adminCode,{customer_id:customerId,excluded_property_ids:ids,excluded_areas:row.excluded_areas||[],excluded_keywords:row.excluded_keywords||[],max_rent_override:row.max_rent_override??null,memo:row.memo||'',operation_id:API.newOperationId('exclude-property')});toast('この物件を除外条件へ追加しました。');await loadCandidates()}catch(error){toast(error.message,'error')}}
   </script>
+  <script src="tutorial.js?v=estate-tutorial-r3"></script>
 </body>
 </html>
