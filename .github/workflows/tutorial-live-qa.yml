@@ -1,0 +1,59 @@
+name: Estate Tutorial R3 Live QA
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: Live site base URL
+        required: false
+        default: https://dpromstk2000-lab.github.io/dpro-estate-line-liff/
+  push:
+    branches: [main]
+    paths:
+      - 'tutorial.js'
+      - 'tutorial.css'
+      - 'index.html'
+      - 'member.html'
+      - 'followup.html'
+      - 'owner-ipad.html'
+      - 'owner.html'
+      - 'qa/tutorial-live-qa.mjs'
+      - '.github/workflows/tutorial-live-qa.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  live-qa:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser runtime
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Wait for live deployment
+        env:
+          TUTORIAL_BASE_URL: ${{ inputs.base_url || 'https://dpromstk2000-lab.github.io/dpro-estate-line-liff/' }}
+        run: |
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent "${TUTORIAL_BASE_URL%/}/tutorial.js" | grep -q 'ESTATE R3'; then
+              exit 0
+            fi
+            sleep 10
+          done
+          exit 1
+      - name: Run First10 live QA
+        env:
+          TUTORIAL_BASE_URL: ${{ inputs.base_url || 'https://dpromstk2000-lab.github.io/dpro-estate-line-liff/' }}
+        run: node qa/tutorial-live-qa.mjs
+      - name: Upload QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: estate-tutorial-r3-live-qa
+          path: qa-results/tutorial-r3
+          if-no-files-found: warn
