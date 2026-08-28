@@ -1,0 +1,217 @@
+name: Estate Tutorial R4 Guide Center QA
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "guide-center.html"
+      - "tutorial.js"
+      - ".github/workflows/tutorial-r4-guide-center-qa.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  guide-center-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      TUTORIAL_BASE_URL: https://dpromstk2000-lab.github.io/dpro-estate-line-liff/
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install browser runtime
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Wait for Guide Center live deployment
+        shell: bash
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent "${TUTORIAL_BASE_URL%/}/guide-center.html" | grep -q 'ESTATE R4 GUIDE CENTER'; then
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "Guide Center deployment was not observed."
+          exit 1
+
+      - name: Run R4 Guide Center live QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p qa-results/tutorial-r4
+          cat > /tmp/estate-r4-guide-qa.mjs <<'NODE'
+          import { chromium } from 'playwright';
+          import fs from 'node:fs';
+
+          const base = process.env.TUTORIAL_BASE_URL;
+          const widths = [1440, 1024, 390, 320];
+          const unsafeMethods = new Set(['POST','PUT','PATCH','DELETE']);
+          const result = {
+            schema: 'DPRO_TUTORIAL_ESTATE_R4_GUIDE_CENTER_QA_V1_0',
+            base,
+            startedAt: new Date().toISOString(),
+            pass: true,
+            failures: [],
+            unsafeWrites: [],
+            businessMutations: [],
+            viewports: [],
+            checks: {}
+          };
+
+          const browser = await chromium.launch({ headless: true });
+          try {
+            for (const width of widths) {
+              const context = await browser.newContext({ viewport: { width, height: width <= 390 ? 844 : 900 } });
+              const page = await context.newPage();
+              const pageErrors = [];
+              const consoleErrors = [];
+              const writes = [];
+              page.on('pageerror', e => pageErrors.push(String(e)));
+              page.on('console', m => { if (m.type() === 'error') consoleErrors.push(m.text()); });
+              page.on('request', req => {
+                if (unsafeMethods.has(req.method())) writes.push({ method:req.method(), url:req.url() });
+              });
+
+              await page.goto(base + 'guide-center.html?demo=1', { waitUntil:'networkidle' });
+              await page.waitForFunction(() => window.DPRO_ESTATE_TUTORIAL && window.DPRO_ESTATE_TUTORIAL.stepCount === 10);
+
+              const metrics = await page.evaluate(() => ({
+                innerWidth: window.innerWidth,
+                documentElementScrollWidth: document.documentElement.scrollWidth,
+                bodyScrollWidth: document.body.scrollWidth,
+                renderedCount: document.querySelectorAll('.first10-item').length,
+                apiCount: window.DPRO_ESTATE_TUTORIAL.stepCount,
+                apiSteps: window.DPRO_ESTATE_TUTORIAL.steps.map(s => ({ number:s.number, route:s.route, title:s.title })),
+                renderedSteps: [...document.querySelectorAll('.first10-item')].map(el => ({
+                  number:Number(el.dataset.step), route:el.dataset.route, title:el.querySelector('h3')?.textContent || ''
+                })),
+                supplementaryCount: document.querySelectorAll('#supplementaryGuides .guide').length,
+                focusId: document.activeElement?.id || ''
+              }));
+
+              const canonicalAligned = JSON.stringify(metrics.apiSteps) === JSON.stringify(metrics.renderedSteps);
+              const overflow0 = metrics.innerWidth === width && metrics.documentElementScrollWidth <= width && metrics.bodyScrollWidth <= width;
+              const exact10 = metrics.apiCount === 10 && metrics.renderedCount === 10;
+
+              await page.screenshot({ path:`qa-results/tutorial-r4/guide-center-${width}.png`, fullPage:true });
+
+              result.viewports.push({ width, metrics, canonicalAligned, overflow0, exact10, pageErrors, consoleErrors, writes });
+              if (!canonicalAligned) result.failures.push(`canonical mismatch at ${width}`);
+              if (!overflow0) result.failures.push(`overflow at ${width}`);
+              if (!exact10) result.failures.push(`First10 count mismatch at ${width}`);
+              if (pageErrors.length) result.failures.push(`pageerror at ${width}: ${pageErrors.join(' | ')}`);
+              if (consoleErrors.length) result.failures.push(`console error at ${width}: ${consoleErrors.join(' | ')}`);
+              result.unsafeWrites.push(...writes);
+              await context.close();
+            }
+
+            const context = await browser.newContext({ viewport:{ width:390, height:844 } });
+            const page = await context.newPage();
+            const writes = [];
+            page.on('request', req => { if (unsafeMethods.has(req.method())) writes.push({ method:req.method(), url:req.url() }); });
+
+            const guideUrl = base + 'guide-center.html?demo=1';
+            await page.goto(guideUrl, { waitUntil:'networkidle' });
+            await page.evaluate(() => localStorage.removeItem('dpro_tutorial_estate_first10_v1_1'));
+            await page.reload({ waitUntil:'networkidle' });
+            await page.locator('#startButton').focus();
+            const startFocused = await page.locator('#startButton').evaluate(el => document.activeElement === el);
+            const startVisible = await page.locator('#startButton').isVisible();
+            await Promise.all([
+              page.waitForURL(/index\.html\?demo=1/),
+              page.locator('#startButton').click()
+            ]);
+            const startState = await page.evaluate(() => JSON.parse(localStorage.getItem('dpro_tutorial_estate_first10_v1_1')));
+
+            await page.goto(guideUrl, { waitUntil:'networkidle' });
+            await page.evaluate(() => {
+              const s = JSON.parse(localStorage.getItem('dpro_tutorial_estate_first10_v1_1'));
+              s.status='paused'; s.currentStep=3; s.completedSteps=[1,2];
+              localStorage.setItem('dpro_tutorial_estate_first10_v1_1', JSON.stringify(s));
+            });
+            await page.reload({ waitUntil:'networkidle' });
+            await page.locator('#resumeButton').focus();
+            const resumeFocused = await page.locator('#resumeButton').evaluate(el => document.activeElement === el);
+            const resumeVisible = await page.locator('#resumeButton').isVisible();
+            await Promise.all([
+              page.waitForURL(/index\.html\?demo=1/),
+              page.locator('#resumeButton').click()
+            ]);
+            const resumeState = await page.evaluate(() => JSON.parse(localStorage.getItem('dpro_tutorial_estate_first10_v1_1')));
+
+            await page.goto(guideUrl, { waitUntil:'networkidle' });
+            await page.evaluate(() => {
+              const s = JSON.parse(localStorage.getItem('dpro_tutorial_estate_first10_v1_1'));
+              s.status='completed'; s.currentStep=10; s.completedSteps=[1,2,3,4,5,6,7,8,9,10]; s.completedAt=new Date().toISOString();
+              localStorage.setItem('dpro_tutorial_estate_first10_v1_1', JSON.stringify(s));
+            });
+            await page.reload({ waitUntil:'networkidle' });
+            await page.locator('#replayButton').focus();
+            const replayFocused = await page.locator('#replayButton').evaluate(el => document.activeElement === el);
+            const replayVisible = await page.locator('#replayButton').isVisible();
+            await Promise.all([
+              page.waitForURL(/index\.html\?demo=1/),
+              page.locator('#replayButton').click()
+            ]);
+            const replayState = await page.evaluate(() => JSON.parse(localStorage.getItem('dpro_tutorial_estate_first10_v1_1')));
+
+            await page.goto(guideUrl, { waitUntil:'networkidle' });
+            const links = await page.locator('#supplementaryGuides a').evaluateAll(as => as.map(a => a.getAttribute('href')));
+            const linkResults = [];
+            for (const href of links) {
+              const response = await page.request.get(new URL(href, guideUrl).href);
+              linkResults.push({ href, status: response.status(), ok: response.ok() });
+            }
+
+            result.checks = {
+              first10Exactly10: result.viewports.every(v => v.exact10),
+              canonicalAlignment: result.viewports.every(v => v.canonicalAligned),
+              exactWidths: result.viewports.every(v => v.metrics.innerWidth === v.width),
+              overflow0: result.viewports.every(v => v.overflow0),
+              startVisible, startFocused,
+              startState: startState?.status === 'in_progress' && startState?.currentStep === 1,
+              resumeVisible, resumeFocused,
+              resumeState: resumeState?.status === 'in_progress' && resumeState?.currentStep === 3,
+              replayVisible, replayFocused,
+              replayState: replayState?.status === 'in_progress' && replayState?.currentStep === 1 && replayState?.completedSteps?.length === 0,
+              guideLinksRoutes: linkResults.every(x => x.ok),
+              linkResults,
+              businessMutation0: writes.length === 0 && result.unsafeWrites.length === 0
+            };
+            result.unsafeWrites.push(...writes);
+
+            for (const [key,value] of Object.entries(result.checks)) {
+              if (typeof value === 'boolean' && !value) result.failures.push(`check failed: ${key}`);
+            }
+            if (result.unsafeWrites.length) result.failures.push(`unsafe write attempts: ${result.unsafeWrites.length}`);
+            result.pass = result.failures.length === 0;
+            result.finishedAt = new Date().toISOString();
+            fs.writeFileSync('qa-results/tutorial-r4/r4-live-qa.json', JSON.stringify(result,null,2));
+            console.log(JSON.stringify({ pass:result.pass, failures:result.failures.length, unsafeWrites:result.unsafeWrites.length }, null, 2));
+            if (!result.pass) process.exitCode = 1;
+            await context.close();
+          } finally {
+            await browser.close();
+          }
+          NODE
+          node /tmp/estate-r4-guide-qa.mjs
+
+      - name: Upload R4 QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: estate-tutorial-r4-guide-center-qa
+          path: qa-results/tutorial-r4
+          if-no-files-found: warn
+          retention-days: 30
