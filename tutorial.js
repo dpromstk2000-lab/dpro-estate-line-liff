@@ -306,7 +306,8 @@
     try {
       return [...document.querySelectorAll(selector)].find(el => {
         const style = getComputedStyle(el);
-        return style.display !== 'none' && style.visibility !== 'hidden' && el.getClientRects().length > 0;
+        const rect = el.getBoundingClientRect();
+        return style.display !== 'none' && style.visibility !== 'hidden' && el.getClientRects().length > 0 && rect.width > 1 && rect.height > 1;
       }) || null;
     } catch (_) { return null; }
   }
@@ -446,7 +447,7 @@
     if (event.target.closest('button') && event.target.id !== 'dproTutorialHandle') return;
     const rect = card.getBoundingClientRect();
     dragging = { pointerId:event.pointerId, dx:event.clientX - rect.left, dy:event.clientY - rect.top };
-    event.currentTarget.setPointerCapture?.(event.pointerId);
+    try { event.currentTarget.setPointerCapture?.(event.pointerId); } catch (_) {}
     event.preventDefault();
     log('drag-start', { pointerType:event.pointerType || 'unknown' });
   }
@@ -461,7 +462,7 @@
     if (!dragging || dragging.pointerId !== event.pointerId) return;
     const rect = card.getBoundingClientRect();
     clampCard(rect.left, rect.top, true);
-    event.currentTarget.releasePointerCapture?.(event.pointerId);
+    try { event.currentTarget.releasePointerCapture?.(event.pointerId); } catch (_) {}
     log('drag-end', { pointerType:event.pointerType || 'unknown', left:Math.round(rect.left), top:Math.round(rect.top) });
     dragging = null;
   }
