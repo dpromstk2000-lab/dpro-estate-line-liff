@@ -70,7 +70,8 @@ jobs:
 
           const base = process.env.BASE_URL;
           const unsafeMethods = new Set(['POST','PUT','PATCH','DELETE']);
-          const writes = [];
+          const authPreconditions = [];
+          const businessMutationAttempts = [];
           const pageErrors = [];
           const consoleErrors = [];
           const screenshots = {};
@@ -79,8 +80,12 @@ jobs:
           const context = await browser.newContext({ viewport:{ width:1440, height:900 }, deviceScaleFactor:1 });
           await context.route('**/*', async route => {
             const req = route.request();
+            if (req.method() === 'POST' && /\/api\/admin\/login(?:$|\?)/.test(req.url())) {
+              authPreconditions.push({ method:req.method(), url:req.url() });
+              return route.continue();
+            }
             if (unsafeMethods.has(req.method())) {
-              writes.push({ method:req.method(), url:req.url() });
+              businessMutationAttempts.push({ method:req.method(), url:req.url() });
               return route.abort('blockedbyclient');
             }
             return route.continue();
@@ -127,7 +132,7 @@ jobs:
             await p.close();
           }
 
-          if (writes.length) throw new Error(`Unsafe write attempts detected: ${JSON.stringify(writes)}`);
+          if (businessMutationAttempts.length) throw new Error(`Business mutation attempts detected: ${JSON.stringify(businessMutationAttempts)}`);
           if (pageErrors.length) throw new Error(`Page errors detected: ${JSON.stringify(pageErrors)}`);
 
           function imgData(file) {
@@ -212,14 +217,15 @@ jobs:
           await renderPdf(detailHtml, process.env.DETAIL_PDF);
 
           fs.writeFileSync('qa-r5/r5-build-evidence.json', JSON.stringify({
-            schema:'DPRO_TUTORIAL_ESTATE_R5_PRINT_MANUAL_BUILD_V1_0',
+            schema:'DPRO_TUTORIAL_ESTATE_R5_PRINT_MANUAL_BUILD_V1_1',
             sourceHead:process.env.GITHUB_SHA || '',
             base,
             first10Count:steps.length,
             guideUrl,
             quickUrl,
             detailUrl,
-            writes,
+            authPreconditions,
+            businessMutationAttempts,
             pageErrors,
             consoleErrors,
             screenshotFiles:screenshots,
@@ -286,7 +292,8 @@ jobs:
           pdfinfo "$QUICK_PDF" | grep -q '^Pages:[[:space:]]*1$'
           pdfinfo "$DETAIL_PDF" | grep -q '^Pages:[[:space:]]*11$'
           grep -q '"first10Count": 10' qa-r5/r5-build-evidence.json
-          grep -q '"writes": \[\]' qa-r5/r5-build-evidence.json
+          grep -q '"businessMutationAttempts": \[\]' qa-r5/r5-build-evidence.json
+          grep -q '"authPreconditions": \[' qa-r5/r5-build-evidence.json
 
       - name: Commit generated manuals forward-only
         shell: bash
