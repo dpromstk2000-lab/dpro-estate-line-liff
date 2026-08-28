@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from 'node:fs/promises';
+import { appendFile, mkdir, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 
@@ -157,4 +157,26 @@ await writeFile(path.join(outputDir, 'R3_QA_EVIDENCE.txt'), [
   '次のアクション: PASSの場合のみR4 Guide Centerへ進む。'
 ].join('\n'));
 console.log(JSON.stringify({ pass:results.pass, failures:results.failures.length, unsafeWrites:results.unsafeWrites.length }, null, 2));
+const publicIssues = [
+  ...results.failures.map(item => `CHECK: ${item.message} | ${JSON.stringify(item)}`),
+  ...results.unsafeWrites.map(item => `UNSAFE WRITE: ${JSON.stringify(item)}`),
+  ...results.viewports.flatMap(viewport => viewport.pageErrors.map(message => `PAGE ERROR ${viewport.name}: ${message}`)),
+  ...results.viewports.flatMap(viewport => viewport.consoleErrors.map(message => `CONSOLE ERROR ${viewport.name}: ${message}`))
+];
+for (const issue of publicIssues.slice(0, 40)) {
+  console.error(`::error title=Estate R3 QA::${issue.replace(/[\r\n]/g, ' ')}`);
+}
+if (process.env.GITHUB_STEP_SUMMARY) {
+  await appendFile(process.env.GITHUB_STEP_SUMMARY, [
+    `## Estate Tutorial R3 Live QA: ${results.pass ? 'PASS' : 'FAIL'}`,
+    '',
+    `- Failures: ${results.failures.length}`,
+    `- Unsafe writes: ${results.unsafeWrites.length}`,
+    `- Page errors: ${results.viewports.reduce((n,v) => n + v.pageErrors.length, 0)}`,
+    `- Console errors: ${results.viewports.reduce((n,v) => n + v.consoleErrors.length, 0)}`,
+    '',
+    ...publicIssues.slice(0, 40).map(issue => `- ${issue}`),
+    ''
+  ].join('\n'));
+}
 if (!results.pass) process.exitCode = 1;
