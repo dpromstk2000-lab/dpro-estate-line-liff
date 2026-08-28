@@ -1,0 +1,333 @@
+name: Estate Tutorial R5 Print Manuals
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/estate-r5-print-manuals.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: estate-r5-print-manuals
+  cancel-in-progress: false
+
+jobs:
+  build-r5-manuals:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      BASE_URL: https://dpromstk2000-lab.github.io/dpro-estate-line-liff/
+      QUICK_PDF: DPRO_TUTORIAL_ESTATE_QUICK_START_V1.0.pdf
+      QUICK_PNG: DPRO_TUTORIAL_ESTATE_QUICK_START_V1.0.png
+      DETAIL_PDF: DPRO_TUTORIAL_ESTATE_DETAILED_MANUAL_V1.0.pdf
+      DETAIL_PNG: DPRO_TUTORIAL_ESTATE_DETAILED_MANUAL_V1.0.png
+    steps:
+      - name: Checkout newest main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install browser and PDF QA tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm install --no-save playwright@1.55.0 qrcode@1.5.4
+          npx playwright install --with-deps chromium
+          sudo apt-get update -y
+          sudo apt-get install -y poppler-utils zbar-tools
+
+      - name: Wait for current LIVE pages
+        shell: bash
+        run: |
+          set -euo pipefail
+          for path in guide-center.html index.html member.html followup.html owner-ipad.html owner.html; do
+            ok=0
+            for attempt in $(seq 1 30); do
+              if curl --fail --silent "${BASE_URL}${path}?demo=1" >/dev/null; then ok=1; break; fi
+              sleep 10
+            done
+            test "$ok" = 1 || { echo "LIVE page unavailable: $path"; exit 1; }
+          done
+
+      - name: Capture LIVE screens and build manuals
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p qa-r5/live-screens qa-r5/quick-pages qa-r5/detail-pages qa-r5/qr
+          cat > estate-r5-build.mjs <<'NODE'
+          import { chromium } from 'playwright';
+          import QRCode from 'qrcode';
+          import fs from 'node:fs';
+          import path from 'node:path';
+
+          const base = process.env.BASE_URL;
+          const unsafeMethods = new Set(['POST','PUT','PATCH','DELETE']);
+          const writes = [];
+          const pageErrors = [];
+          const consoleErrors = [];
+          const screenshots = {};
+
+          const browser = await chromium.launch({ headless:true });
+          const context = await browser.newContext({ viewport:{ width:1440, height:900 }, deviceScaleFactor:1 });
+          await context.route('**/*', async route => {
+            const req = route.request();
+            if (unsafeMethods.has(req.method())) {
+              writes.push({ method:req.method(), url:req.url() });
+              return route.abort('blockedbyclient');
+            }
+            return route.continue();
+          });
+
+          async function livePage(route, setup) {
+            const page = await context.newPage();
+            page.on('pageerror', e => pageErrors.push({ route, error:String(e) }));
+            page.on('console', m => { if (m.type()==='error') consoleErrors.push({ route, error:m.text() }); });
+            await page.goto(base + route + (route.includes('?') ? '&' : '?') + 'r5manual=1', { waitUntil:'networkidle' });
+            await page.addStyleTag({ content:'#dproTutorialRoot,#dproTutorialLauncher{display:none!important} html{scroll-behavior:auto!important}' });
+            if (setup) await setup(page);
+            await page.waitForTimeout(400);
+            return page;
+          }
+
+          const guide = await livePage('guide-center.html?demo=1');
+          await guide.waitForFunction(() => window.DPRO_ESTATE_TUTORIAL?.stepCount === 10);
+          const steps = await guide.evaluate(() => window.DPRO_ESTATE_TUTORIAL.steps.map(s => ({
+            number:s.number, route:s.route, title:s.title, body:s.body, facts:s.facts
+          })));
+          if (steps.length !== 10) throw new Error(`First10 expected 10, got ${steps.length}`);
+          const guideShot = 'qa-r5/live-screens/guide-center.png';
+          await guide.screenshot({ path:guideShot, fullPage:false });
+          screenshots.guide = guideShot;
+          await guide.close();
+
+          const routeSetups = {
+            'index.html': null,
+            'member.html': null,
+            'followup.html': async p => {
+              const tab = p.locator(".tab[data-panel='proposal']");
+              if (await tab.count()) await tab.first().click().catch(()=>{});
+            },
+            'owner-ipad.html': null,
+            'owner.html': null
+          };
+
+          for (const route of Object.keys(routeSetups)) {
+            const p = await livePage(`${route}?demo=1`, routeSetups[route]);
+            const out = `qa-r5/live-screens/${route.replace('.html','')}.png`;
+            await p.screenshot({ path:out, fullPage:false });
+            screenshots[route] = out;
+            await p.close();
+          }
+
+          if (writes.length) throw new Error(`Unsafe write attempts detected: ${JSON.stringify(writes)}`);
+          if (pageErrors.length) throw new Error(`Page errors detected: ${JSON.stringify(pageErrors)}`);
+
+          function imgData(file) {
+            const ext = path.extname(file).slice(1);
+            return `data:image/${ext};base64,${fs.readFileSync(file).toString('base64')}`;
+          }
+          function esc(v='') { return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+          function routeUrl(step) { return new URL(`${step.route}?demo=1`, base).href; }
+
+          const guideUrl = new URL('guide-center.html?demo=1', base).href;
+          const quickUrl = new URL(process.env.QUICK_PDF, base).href;
+          const detailUrl = new URL(process.env.DETAIL_PDF, base).href;
+          await QRCode.toFile('qa-r5/qr/quick-guide.png', guideUrl, { width:440, margin:2, errorCorrectionLevel:'M' });
+          await QRCode.toFile('qa-r5/qr/detail-guide.png', guideUrl, { width:440, margin:2, errorCorrectionLevel:'M' });
+          for (const step of steps) {
+            await QRCode.toFile(`qa-r5/qr/step-${String(step.number).padStart(2,'0')}.png`, routeUrl(step), { width:440, margin:2, errorCorrectionLevel:'M' });
+          }
+
+          const common = `
+          <style>
+          @page{size:A4 portrait;margin:0}
+          *{box-sizing:border-box}html,body{margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans JP","Yu Gothic UI",Meiryo,sans-serif;color:#17302a;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+          .page{width:210mm;height:297mm;overflow:hidden;page-break-after:always;padding:13mm 14mm 12mm;background:#fff;position:relative}
+          .page:last-child{page-break-after:auto}.brand{color:#075f4b}.muted{color:#66766f}.tiny{font-size:7.8pt}.small{font-size:9pt}.body{font-size:10pt;line-height:1.65}.title{font-size:25pt;line-height:1.2;margin:0}.sub{font-size:12pt;font-weight:800}.rule{height:1px;background:#d9e7e1;margin:4mm 0}.badge{display:inline-block;padding:1.4mm 2.4mm;border-radius:99mm;background:#e8f4ef;color:#075f4b;font-size:7.8pt;font-weight:800;margin:0 1.2mm 1.2mm 0}.warn{padding:3mm;border-radius:3mm;background:#fff4de;color:#6f5117;font-size:8.5pt;font-weight:700}.screen{width:100%;max-height:112mm;object-fit:contain;border:1px solid #dce8e3;border-radius:4mm;background:#f6faf8}.screen.quick{max-height:78mm}.qr{width:25mm;height:25mm}.footer{position:absolute;left:14mm;right:14mm;bottom:7mm;border-top:1px solid #dce8e3;padding-top:2.5mm;font-size:7.2pt;color:#73837d;display:flex;justify-content:space-between}.grid{display:grid;grid-template-columns:1fr 31mm;gap:5mm;align-items:start}.stepbox{border:1px solid #dce8e3;border-radius:3mm;padding:2.5mm 3mm;margin-bottom:2mm}.stepbox b{font-size:8.6pt}.stepbox p{margin:1mm 0 0;font-size:7.6pt;line-height:1.35;color:#53655e}.two{display:grid;grid-template-columns:1fr 1fr;gap:3mm}.url{overflow-wrap:anywhere;font-size:7.4pt;color:#31584e}
+          </style>`;
+
+          const quickSteps = steps.map(s => `<div class="stepbox"><b><span class="brand">${String(s.number).padStart(2,'0')}</span> ${esc(s.title)}</b><p>${esc(s.body)}</p></div>`).join('');
+          const quickHtml = `<!doctype html><html lang="ja"><head><meta charset="utf-8">${common}</head><body>
+          <section class="page">
+            <div class="brand tiny" style="font-weight:900;letter-spacing:.12em">DPRO TUTORIAL STANDARD V1.1 / ESTATE / R5</div>
+            <h1 class="title" style="margin-top:3mm">Quick Start</h1>
+            <div class="sub" style="margin-top:2mm">不動産・賃貸 First10 - まずこの1枚</div>
+            <p class="body muted" style="margin:2.5mm 0 3mm">公開デモの範囲を安全に確認する10ステップです。予約送信・顧客更新・追客更新など、業務データを書き換える操作は行いません。</p>
+            <img class="screen quick" src="${imgData(screenshots.guide)}" alt="LIVE Guide Center">
+            <div class="two" style="margin-top:3mm">${quickSteps}</div>
+            <div class="grid" style="position:absolute;left:14mm;right:14mm;bottom:16mm;align-items:end">
+              <div><div class="warn">公開デモでは実在する氏名・電話番号・メールアドレス・住所を入力しないでください。</div><div class="url" style="margin-top:2mm">Guide Center: ${esc(guideUrl)}</div></div>
+              <div style="text-align:center"><img class="qr" src="${imgData('qa-r5/qr/quick-guide.png')}"><div class="tiny">Guide Center</div></div>
+            </div>
+            <div class="footer"><span>DPRO ESTATE / Quick Start V1.0</span><span>2026-08-28</span></div>
+          </section></body></html>`;
+
+          const cover = `<section class="page">
+            <div class="brand tiny" style="font-weight:900;letter-spacing:.12em">DPRO TUTORIAL STANDARD V1.1 / ESTATE / R5</div>
+            <h1 class="title" style="margin-top:13mm">Detailed Manual</h1>
+            <div class="sub" style="margin-top:3mm">不動産・賃貸 First10 操作マニュアル</div>
+            <p class="body muted" style="margin:4mm 0 6mm">R4 Guide Centerと同じFirst10 exactly 10を正本として、現在LIVEの公開操作デモ画面で確認します。チュートリアルは読み取り中心で、業務データの作成・更新を行いません。</p>
+            <img class="screen" src="${imgData(screenshots.guide)}" alt="LIVE Guide Center">
+            <div class="grid" style="margin-top:7mm"><div><div class="warn">安全境界: 内見予約送信、本人セッション作成、再相談・追客・提案・除外・案件・空室などの書込みはマニュアル操作対象外です。</div><p class="small muted">Quick Start: ${esc(quickUrl)}<br>Detailed Manual: ${esc(detailUrl)}</p></div><div style="text-align:center"><img class="qr" src="${imgData('qa-r5/qr/detail-guide.png')}"><div class="tiny">Guide Center</div></div></div>
+            <div class="footer"><span>DPRO ESTATE / Detailed Manual V1.0</span><span>Cover</span></div>
+          </section>`;
+
+          const detailPages = steps.map(step => {
+            const route = step.route;
+            const shot = screenshots[route] || screenshots.guide;
+            const facts = (step.facts||[]).map(f=>`<span class="badge">${esc(f)}</span>`).join('');
+            return `<section class="page">
+              <div class="brand tiny" style="font-weight:900;letter-spacing:.12em">FIRST10 / STEP ${String(step.number).padStart(2,'0')}</div>
+              <h2 style="font-size:20pt;line-height:1.28;margin:3mm 0 0">${esc(step.title)}</h2>
+              <div class="url" style="margin-top:2mm">${esc(routeUrl(step))}</div>
+              <div class="rule"></div>
+              <img class="screen" src="${imgData(shot)}" alt="LIVE ${esc(route)}">
+              <p class="body" style="margin:4mm 0 2.5mm">${esc(step.body)}</p>
+              <div>${facts}</div>
+              <div class="grid" style="margin-top:5mm"><div><div class="warn">この手順では画面構成と導線を確認します。保存・送信・更新など業務データを書き換える操作は行いません。</div></div><div style="text-align:center"><img class="qr" src="${imgData(`qa-r5/qr/step-${String(step.number).padStart(2,'0')}.png`)}"><div class="tiny">STEP ${String(step.number).padStart(2,'0')}</div></div></div>
+              <div class="footer"><span>DPRO ESTATE / Detailed Manual V1.0</span><span>${String(step.number).padStart(2,'0')} / 10</span></div>
+            </section>`;
+          }).join('');
+          const detailHtml = `<!doctype html><html lang="ja"><head><meta charset="utf-8">${common}</head><body>${cover}${detailPages}</body></html>`;
+
+          async function renderPdf(html, pdfPath) {
+            const p = await browser.newPage({ viewport:{ width:1200, height:1600 } });
+            await p.setContent(html, { waitUntil:'load' });
+            await p.emulateMedia({ media:'print' });
+            const broken = await p.evaluate(() => [...document.images].filter(i => !i.complete || i.naturalWidth===0).length);
+            if (broken) throw new Error(`Broken images in manual: ${broken}`);
+            await p.pdf({ path:pdfPath, format:'A4', printBackground:true, preferCSSPageSize:true, margin:{top:'0',right:'0',bottom:'0',left:'0'} });
+            await p.close();
+          }
+
+          await renderPdf(quickHtml, process.env.QUICK_PDF);
+          await renderPdf(detailHtml, process.env.DETAIL_PDF);
+
+          fs.writeFileSync('qa-r5/r5-build-evidence.json', JSON.stringify({
+            schema:'DPRO_TUTORIAL_ESTATE_R5_PRINT_MANUAL_BUILD_V1_0',
+            sourceHead:process.env.GITHUB_SHA || '',
+            base,
+            first10Count:steps.length,
+            guideUrl,
+            quickUrl,
+            detailUrl,
+            writes,
+            pageErrors,
+            consoleErrors,
+            screenshotFiles:screenshots,
+            generatedAt:new Date().toISOString()
+          }, null, 2));
+          await context.close();
+          await browser.close();
+          NODE
+          node estate-r5-build.mjs
+          rm -f estate-r5-build.mjs
+
+      - name: Render every PDF page to PNG
+        shell: bash
+        run: |
+          set -euo pipefail
+          pdftoppm -png -r 150 "$QUICK_PDF" qa-r5/quick-pages/page >/dev/null 2>&1
+          pdftoppm -png -r 150 "$DETAIL_PDF" qa-r5/detail-pages/page >/dev/null 2>&1
+          cp qa-r5/quick-pages/page-1.png "$QUICK_PNG"
+          cp qa-r5/detail-pages/page-1.png "$DETAIL_PNG"
+          quick_count=$(find qa-r5/quick-pages -name 'page-*.png' | wc -l)
+          detail_count=$(find qa-r5/detail-pages -name 'page-*.png' | wc -l)
+          test "$quick_count" -eq 1
+          test "$detail_count" -eq 11
+          printf '{"quickPages":%s,"detailPages":%s}\n' "$quick_count" "$detail_count" > qa-r5/page-counts.json
+
+      - name: Decode final QR codes from rendered PDF pages
+        shell: bash
+        run: |
+          set -euo pipefail
+          guide_url="${BASE_URL}guide-center.html?demo=1"
+          actual=$(zbarimg --quiet --raw qa-r5/quick-pages/page-1.png | head -n1)
+          test "$actual" = "$guide_url"
+          detail_cover=$(zbarimg --quiet --raw qa-r5/detail-pages/page-1.png | head -n1)
+          test "$detail_cover" = "$guide_url"
+          expected=(
+            "${BASE_URL}index.html?demo=1"
+            "${BASE_URL}index.html?demo=1"
+            "${BASE_URL}index.html?demo=1"
+            "${BASE_URL}index.html?demo=1"
+            "${BASE_URL}index.html?demo=1"
+            "${BASE_URL}member.html?demo=1"
+            "${BASE_URL}followup.html?demo=1"
+            "${BASE_URL}followup.html?demo=1"
+            "${BASE_URL}owner-ipad.html?demo=1"
+            "${BASE_URL}owner.html?demo=1"
+          )
+          : > qa-r5/qr-decode.txt
+          for i in $(seq 1 10); do
+            page=$((i+1))
+            png=$(printf 'qa-r5/detail-pages/page-%d.png' "$page")
+            actual=$(zbarimg --quiet --raw "$png" | head -n1)
+            exp="${expected[$((i-1))]}"
+            printf 'STEP %02d\t%s\n' "$i" "$actual" >> qa-r5/qr-decode.txt
+            test "$actual" = "$exp"
+          done
+
+      - name: Static PDF and image QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          for f in "$QUICK_PDF" "$DETAIL_PDF" "$QUICK_PNG" "$DETAIL_PNG"; do
+            test -s "$f"
+          done
+          pdfinfo "$QUICK_PDF" | grep -q '^Pages:[[:space:]]*1$'
+          pdfinfo "$DETAIL_PDF" | grep -q '^Pages:[[:space:]]*11$'
+          grep -q '"first10Count": 10' qa-r5/r5-build-evidence.json
+          grep -q '"writes": \[\]' qa-r5/r5-build-evidence.json
+
+      - name: Commit generated manuals forward-only
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$QUICK_PDF" "$QUICK_PNG" "$DETAIL_PDF" "$DETAIL_PNG"
+          if git diff --cached --quiet; then
+            echo "Manual outputs already current."
+          else
+            git commit -m "Add Estate R5 print manuals [skip ci]"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+          git rev-parse HEAD > qa-r5/published-head.txt
+
+      - name: Verify public manual URLs
+        shell: bash
+        run: |
+          set -euo pipefail
+          for file in "$QUICK_PDF" "$QUICK_PNG" "$DETAIL_PDF" "$DETAIL_PNG"; do
+            ok=0
+            for attempt in $(seq 1 36); do
+              code=$(curl -L -s -o /tmp/r5-public -w '%{http_code}' "${BASE_URL}${file}?r5=$(date +%s)")
+              if test "$code" = 200 && test -s /tmp/r5-public; then ok=1; break; fi
+              sleep 10
+            done
+            test "$ok" = 1 || { echo "Public manual not observed: $file"; exit 1; }
+          done
+
+      - name: Upload full R5 QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: estate-tutorial-r5-print-manual-qa
+          path: |
+            qa-r5
+            DPRO_TUTORIAL_ESTATE_QUICK_START_V1.0.pdf
+            DPRO_TUTORIAL_ESTATE_QUICK_START_V1.0.png
+            DPRO_TUTORIAL_ESTATE_DETAILED_MANUAL_V1.0.pdf
+            DPRO_TUTORIAL_ESTATE_DETAILED_MANUAL_V1.0.png
+          if-no-files-found: warn
+          retention-days: 30
