@@ -50,7 +50,8 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p qa-results/tutorial-r4
-          cat > /tmp/estate-r4-guide-qa.mjs <<'NODE'
+          trap 'rm -f estate-r4-guide-qa.mjs' EXIT
+          cat > estate-r4-guide-qa.mjs <<'NODE'
           import { chromium } from 'playwright';
           import fs from 'node:fs';
 
@@ -205,7 +206,7 @@ jobs:
             await browser.close();
           }
           NODE
-          node /tmp/estate-r4-guide-qa.mjs
+          node estate-r4-guide-qa.mjs
 
       - name: Upload R4 QA evidence
         if: always()
