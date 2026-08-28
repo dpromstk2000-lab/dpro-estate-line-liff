@@ -307,7 +307,7 @@
       return [...document.querySelectorAll(selector)].find(el => {
         const style = getComputedStyle(el);
         const rect = el.getBoundingClientRect();
-        return style.display !== 'none' && style.visibility !== 'hidden' && el.getClientRects().length > 0 && rect.width > 1 && rect.height > 1;
+        return style.display !== 'none' && style.visibility !== 'hidden' && el.getClientRects().length > 0 && rect.width > 1 && rect.height > 1 && rect.right > 0 && rect.left < window.innerWidth;
       }) || null;
     } catch (_) { return null; }
   }
