@@ -217,7 +217,7 @@ jobs:
           await renderPdf(detailHtml, process.env.DETAIL_PDF);
 
           fs.writeFileSync('qa-r5/r5-build-evidence.json', JSON.stringify({
-            schema:'DPRO_TUTORIAL_ESTATE_R5_PRINT_MANUAL_BUILD_V1_1',
+            schema:'DPRO_TUTORIAL_ESTATE_R5_PRINT_MANUAL_BUILD_V1_2',
             sourceHead:process.env.GITHUB_SHA || '',
             base,
             first10Count:steps.length,
@@ -243,8 +243,12 @@ jobs:
           set -euo pipefail
           pdftoppm -png -r 150 "$QUICK_PDF" qa-r5/quick-pages/page >/dev/null 2>&1
           pdftoppm -png -r 150 "$DETAIL_PDF" qa-r5/detail-pages/page >/dev/null 2>&1
-          cp qa-r5/quick-pages/page-1.png "$QUICK_PNG"
-          cp qa-r5/detail-pages/page-1.png "$DETAIL_PNG"
+          quick_first=$(find qa-r5/quick-pages -name 'page-*.png' | sort -V | head -n1)
+          detail_first=$(find qa-r5/detail-pages -name 'page-*.png' | sort -V | head -n1)
+          test -n "$quick_first"
+          test -n "$detail_first"
+          cp "$quick_first" "$QUICK_PNG"
+          cp "$detail_first" "$DETAIL_PNG"
           quick_count=$(find qa-r5/quick-pages -name 'page-*.png' | wc -l)
           detail_count=$(find qa-r5/detail-pages -name 'page-*.png' | wc -l)
           test "$quick_count" -eq 1
@@ -256,9 +260,13 @@ jobs:
         run: |
           set -euo pipefail
           guide_url="${BASE_URL}guide-center.html?demo=1"
-          actual=$(zbarimg --quiet --raw qa-r5/quick-pages/page-1.png | head -n1)
+          quick_first=$(find qa-r5/quick-pages -name 'page-*.png' | sort -V | head -n1)
+          mapfile -t detail_pages < <(find qa-r5/detail-pages -name 'page-*.png' | sort -V)
+          test -n "$quick_first"
+          test "${#detail_pages[@]}" -eq 11
+          actual=$(zbarimg --quiet --raw "$quick_first" | head -n1)
           test "$actual" = "$guide_url"
-          detail_cover=$(zbarimg --quiet --raw qa-r5/detail-pages/page-1.png | head -n1)
+          detail_cover=$(zbarimg --quiet --raw "${detail_pages[0]}" | head -n1)
           test "$detail_cover" = "$guide_url"
           expected=(
             "${BASE_URL}index.html?demo=1"
@@ -274,8 +282,7 @@ jobs:
           )
           : > qa-r5/qr-decode.txt
           for i in $(seq 1 10); do
-            page=$((i+1))
-            png=$(printf 'qa-r5/detail-pages/page-%d.png' "$page")
+            png="${detail_pages[$i]}"
             actual=$(zbarimg --quiet --raw "$png" | head -n1)
             exp="${expected[$((i-1))]}"
             printf 'STEP %02d\t%s\n' "$i" "$actual" >> qa-r5/qr-decode.txt
