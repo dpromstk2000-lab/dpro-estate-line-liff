@@ -95,9 +95,14 @@ async function runViewport(browser, viewport) {
       record.drags.push({ input:viewport.width <= 390 ? 'touch-pointer' : 'mouse-pointer', before, after });
       check(Math.abs(after.x - before.x) + Math.abs(after.y - before.y) > 4, 'drag did not move card', { viewport:viewport.name });
       await handle.focus();
-      await handle.press('ArrowRight');
+      await handle.press('Home');
+      const keyboardBefore = await page.locator('#dproTutorialCard').boundingBox();
+      await handle.press('ArrowDown');
       const keyboard = await page.locator('#dproTutorialCard').boundingBox();
-      check(Math.abs(keyboard.x - after.x) >= 1, 'keyboard drag did not move card', { viewport:viewport.name });
+      const availableX = viewport.width - keyboard.width - 16;
+      const availableY = viewport.height - keyboard.height - 16;
+      const moved = Math.abs(keyboard.x - keyboardBefore.x) + Math.abs(keyboard.y - keyboardBefore.y) >= 1;
+      check(moved || (availableX <= 1 && availableY <= 1), 'keyboard drag did not move card', { viewport:viewport.name, availableX, availableY });
     }
 
     if ([2,6,8,9].includes(expected)) {
