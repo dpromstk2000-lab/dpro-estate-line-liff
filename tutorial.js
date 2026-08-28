@@ -320,9 +320,11 @@
         if (el) {
           targetElement = el;
           document.getElementById('dproTutorialTargetStatus').textContent = i === 0 ? '案内位置を表示しています。' : '代替位置で案内しています。';
-          if (!isMostlyVisible(el)) el.scrollIntoView({ behavior:'auto', block:'center', inline:'nearest' });
+          if (!isMostlyVisible(el)) scrollTargetIntoView(el);
           refreshHighlight();
           requestAnimationFrame(() => requestAnimationFrame(refreshHighlight));
+          setTimeout(refreshHighlight, 120);
+          setTimeout(refreshHighlight, 320);
           log('target', { selector:step.targets[i], fallbackIndex:i, resolved:true });
           clearTargetWait();
           return;
@@ -354,6 +356,20 @@
   function isMostlyVisible(el) {
     const r = el.getBoundingClientRect();
     return r.bottom > 60 && r.top < window.innerHeight - 60 && r.right > 0 && r.left < window.innerWidth;
+  }
+
+  function scrollTargetIntoView(el) {
+    const html = document.documentElement;
+    const body = document.body;
+    const previousHtml = html.style.scrollBehavior;
+    const previousBody = body.style.scrollBehavior;
+    html.style.scrollBehavior = 'auto';
+    body.style.scrollBehavior = 'auto';
+    el.scrollIntoView({ behavior:'auto', block:'center', inline:'nearest' });
+    requestAnimationFrame(() => {
+      html.style.scrollBehavior = previousHtml;
+      body.style.scrollBehavior = previousBody;
+    });
   }
 
   function refreshHighlight() {
