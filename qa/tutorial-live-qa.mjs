@@ -70,7 +70,8 @@ async function runViewport(browser, viewport) {
 
   for (let expected=1; expected<=10; expected += 1) {
     await page.locator('#dproTutorialCard').waitFor({ state:'visible' });
-    await page.waitForTimeout(350);
+    await page.locator('#dproTutorialHighlight').waitFor({ state:'visible', timeout:4000 }).catch(() => {});
+    await page.waitForTimeout(120);
     const data = await snapshot(page, viewport, `${viewport.name}-step-${expected}`);
     record.steps.push(data);
     check(data.state?.currentStep === expected, 'step state mismatch', { viewport:viewport.name, expected, actual:data.state?.currentStep });
