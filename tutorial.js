@@ -320,8 +320,9 @@
         if (el) {
           targetElement = el;
           document.getElementById('dproTutorialTargetStatus').textContent = i === 0 ? '案内位置を表示しています。' : '代替位置で案内しています。';
-          if (!isMostlyVisible(el)) el.scrollIntoView({ behavior:reducedMotion() ? 'auto' : 'smooth', block:'center', inline:'nearest' });
+          if (!isMostlyVisible(el)) el.scrollIntoView({ behavior:'auto', block:'center', inline:'nearest' });
           refreshHighlight();
+          requestAnimationFrame(() => requestAnimationFrame(refreshHighlight));
           log('target', { selector:step.targets[i], fallbackIndex:i, resolved:true });
           clearTargetWait();
           return;
