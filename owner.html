@@ -995,7 +995,7 @@
       const r=findReservation(id)||(state.dashboard?.today_reservations||[]).find(x=>String(x.id)===String(id)); if(!r||!r.customer?.id){toast('顧客情報が不足しています。','error');return;}
       await runAction(()=>api('/api/admin/followups',{method:'POST',body:{customer_id:r.customer.id,reservation_id:r.id,followup_type:`${days}日後フォロー`,followup_date:addDays(todayYmd(),days),followup_time:'10:00',priority:'通常',memo:`${r.customer.customer_name||'お客様'}様へ${days}日後に内見後フォロー。`,message_template_key:'property_suggestion'}}),`${days}日後フォローを作成しました。`);
     }
-    async function completeFollowup(id){ await runAction(()=>api('/api/admin/followups',{method:'PATCH',body:{followup_id:id,complete:true,status:'対応済み'}}),'追客を対応済みにしました。'); }
+    async function completeFollowup(id){if(!confirm("この追客を対応済みにしますか？対応済みにすると通常の追客一覧から外れます。"))return; await runAction(()=>api('/api/admin/followups',{method:'PATCH',body:{followup_id:id,complete:true,status:'対応済み'}}),'追客を対応済みにしました。'); }
     async function touchCustomer(id){ await runAction(()=>api('/api/admin/customers',{method:'PATCH',body:{customer_id:id,touch_contact:true}}),'最終連絡日を更新しました。'); if(state.loaded.customers)await loadCustomers(false); }
     async function updatePropertyStatus(id,status,viewing){
       if(status==='成約済み'&&!confirm('成約済みにするとお客様画面から非公開になります。変更しますか？'))return;
