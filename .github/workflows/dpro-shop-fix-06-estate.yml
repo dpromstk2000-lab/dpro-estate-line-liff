@@ -1,0 +1,90 @@
+name: "DPRO SHOP Fix 06 ESTATE"
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/dpro-shop-fix-06-estate.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: "dpro-shop-fix-06-estate"
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify audited source SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          check() {
+            path="$1"; expected="$2"
+            test -f "$path" || { echo "Missing target: $path"; exit 31; }
+            got="$(git hash-object "$path")"
+            echo "$path  $got"
+            test "$got" = "$expected" || { echo "SOURCE SHA MISMATCH: $path expected=$expected got=$got"; exit 32; }
+          }
+          check 'owner.html' '03bcf05a346943b187eca997d3ced3c2eb916366'
+
+      - name: Apply narrow confirmed fix
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re, sys
+          
+          def read(path):
+              return Path(path).read_text(encoding="utf-8")
+          
+          def write(path, text):
+              Path(path).write_text(text, encoding="utf-8")
+          
+          def replace_once(text, old, new, label):
+              n=text.count(old)
+              if n != 1:
+                  raise SystemExit(f"{label}: expected 1 exact match, found {n}")
+              return text.replace(old,new,1)
+          
+          def sub_once(text, pattern, repl, label, flags=0):
+              new,n=re.subn(pattern,repl,text,count=1,flags=flags)
+              if n != 1:
+                  raise SystemExit(f"{label}: expected 1 regex match, found {n}")
+              return new
+          
+          p='owner.html'; t=read(p)
+          t=sub_once(t,r'async function completeFollowup\(id\)\{', 'async function completeFollowup(id){if(!confirm("この追客を対応済みにしますか？対応済みにすると通常の追客一覧から外れます。"))return;', 'ESTATE completeFollowup guard')
+          write(p,t)
+          PY
+
+      - name: Validate source diff
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check
+          git diff --stat
+          git diff -- "owner.html"
+          if git diff --quiet -- "owner.html"; then
+            echo "No source change was produced."
+            exit 41
+          fi
+
+      - name: Commit fix to main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "owner.html"
+          git diff --cached --check
+          git commit -m "Fix estate follow-up completion guard"
+          git push origin HEAD:main
