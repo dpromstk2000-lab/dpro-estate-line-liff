@@ -1,0 +1,86 @@
+name: DPRO CHAT B R2 ESTATE Public Guide Safety
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repository guard
+        shell: bash
+        run: |
+          test "$GITHUB_REPOSITORY" = "dpromstk2000-lab/dpro-estate-line-liff"
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Apply minimal R2 fix
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('guide-center.html'); s=p.read_text(encoding='utf-8')
+          def rep(a,b):
+              global s
+              if a not in s: raise SystemExit('expected copy not found: '+a[:120])
+              s=s.replace(a,b)
+          repls=[
+          ('<title>DPRO ESTATE｜Guide Center</title>','<title>DPRO ESTATE｜操作ガイド</title>'),
+          ('<div class="kicker">DPRO TUTORIAL V1.1 / ESTATE / R4</div>','<div class="kicker">DPRO ESTATE / 操作ガイド</div>'),
+          ('<h1 id="guideTitle" tabindex="-1">Guide Center</h1>','<h1 id="guideTitle" tabindex="-1">操作ガイド</h1>'),
+          ('不動産・賃貸のFirst10を、R3と同じ正本・同じ進行状態のまま確認できます。ここでは業務データを作成・更新しません。','不動産・賃貸の最初の10項目を、同じ進行状況のまま確認できます。ここから業務データを作成・更新することはありません。'),
+          ('<small>TUTORIAL STATUS</small>','<small>進行状況</small>'),
+          ('R3のチュートリアル状態を読み込んでいます。','操作ガイドの進行状況を読み込んでいます。'),
+          ('aria-label="First10操作"','aria-label="操作ガイドの操作"'),
+          ('>First10を開始</button>','>最初から開始</button>'),
+          ('First10は画面案内のみです。','操作ガイドは画面案内のみです。'),
+          ('<small>CANONICAL FIRST10</small>','<small>はじめに</small>'),
+          ('<h2>First10｜全10ステップ</h2>','<h2>最初の10項目</h2>'),
+          ('この一覧はR3の <code>tutorial.js</code> にある同一データから描画します。Guide Center側に別のFirst10定義は持ちません。','この一覧は操作ガイドの共通情報から表示します。'),
+          ('aria-label="First10 10ステップ"','aria-label="最初の10項目"'),
+          ('<small>SUPPLEMENTARY GUIDES / OUTSIDE FIRST10</small>','<small>補助ガイド</small>'),
+          ('以下はFirst10の10件には数えません。必要な画面だけ個別に確認できます。','以下は必要な画面だけ個別に確認できます。'),
+          ('Guide Centerから書込みテストやデモ生成を自動実行しません。','操作ガイドから書込みテストやデモ生成を自動実行しません。'),
+          ('保存・コード変更はFirst10外です。','保存・コード変更はこの操作ガイドの対象外です。'),
+          ('<div class="footer">DPRO ESTATE GUIDE CENTER / STANDARD V1.1 / BUSINESS MUTATION 0</div>','<div class="footer">DPRO ESTATE / 操作ガイド</div>'),
+          ("<span>STEP '+String(step.number).padStart(2,'0')+' / 10</span>","<span>手順 '+String(step.number).padStart(2,'0')+' / 10</span>"),
+          ("title.textContent = 'First10 '+state.currentStep+' / 10 から再開できます';","title.textContent = '操作ガイド '+state.currentStep+' / 10 から再開できます';"),
+          ("copy.textContent = 'R3と同じ保存状態を使用します。';","copy.textContent = '保存済みの進行状況を使用します。';"),
+          ("title.textContent = 'First10 完了済み';","title.textContent = '操作ガイド完了済み';"),
+          ("copy.textContent = '必要なら最初からReplayできます。';","copy.textContent = '必要なら最初からもう一度確認できます。';"),
+          ("title.textContent = 'First10 スキップ済み';","title.textContent = '操作ガイドをスキップ済み';"),
+          ("copy.textContent = '最初からReplayすると再度確認できます。';","copy.textContent = '最初から再度確認できます。';"),
+          ("title.textContent = 'First10 未開始';","title.textContent = '操作ガイド未開始';"),
+          ("copy.textContent = 'STEP 1から安全な画面案内を開始します。';","copy.textContent = '手順1から安全な画面案内を開始します。';")
+          ]
+          for a,b in repls: rep(a,b)
+          p.write_text(s,encoding='utf-8')
+          PY
+
+      - name: Static safety QA
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          s=Path('guide-center.html').read_text(encoding='utf-8')
+          for x in ['DPRO TUTORIAL V1.1 / ESTATE / R4','TUTORIAL STATUS','CANONICAL FIRST10','SUPPLEMENTARY GUIDES / OUTSIDE FIRST10','BUSINESS MUTATION 0','First10｜全10ステップ',"<span>STEP '+String(step.number)"]:
+              assert x not in s, x
+          for x in ['最初から開始','途中から再開','最初からやり直す','操作ガイド完了済み','手順1から安全な画面案内']:
+              assert x in s, x
+          assert 'tutorial.js' in s and 'DPRO_ESTATE_TUTORIAL' in s
+          PY
+          git diff --check
+
+      - name: Commit forward-only fix
+        shell: bash
+        run: |
+          git config user.name "DPRO CHAT B R2"
+          git config user.email "actions@users.noreply.github.com"
+          git rm ".github/workflows/dpro-chat-b-r2-public-guide-safety.yml"
+          git add guide-center.html
+          git commit -m "DPRO CHAT B R2: public guide and demo safety"
+          git push
